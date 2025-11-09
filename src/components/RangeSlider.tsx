@@ -1,0 +1,270 @@
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import {
+  PanGestureHandler,
+  GestureHandlerRootView,
+  State,
+  PanGestureHandlerGestureEvent,
+  PanGestureHandlerStateChangeEvent,
+} from 'react-native-gesture-handler';
+import LinearGradient from 'react-native-linear-gradient';
+import { useTheme } from '../hooks/useTheme';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const SLIDER_WIDTH = SCREEN_WIDTH - 46; // Account for padding
+
+interface RangeSliderProps {
+  min: number;
+  max: number;
+  value: { min: number; max: number };
+  onValueChange: (value: { min: number; max: number }) => void;
+  step?: number;
+  minRange?: number;
+  label?: string;
+}
+
+const RangeSlider: React.FC<RangeSliderProps> = ({
+  min,
+  max,
+  value,
+  onValueChange,
+  step = 1,
+  minRange = 1,
+  label,
+}) => {
+  const { mode } = useTheme();
+  const isDark = mode === 'dark';
+  const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
+  const panRef = useRef(null);
+
+  const getPosition = (val: number) => {
+    return ((val - min) / (max - min)) * SLIDER_WIDTH;
+  };
+
+  const getValue = (position: number) => {
+    const ratio = position / SLIDER_WIDTH;
+    const val = min + ratio * (max - min);
+    return Math.round(val / step) * step;
+  };
+
+  const handleGestureEvent = (
+    event: PanGestureHandlerGestureEvent,
+    thumb: 'min' | 'max',
+  ) => {
+    if (isDragging !== thumb) return;
+
+    const { translationX } = event.nativeEvent;
+    const currentPosition = getPosition(
+      thumb === 'min' ? value.min : value.max,
+    );
+    const newPosition = Math.max(
+      0,
+      Math.min(SLIDER_WIDTH, currentPosition + translationX),
+    );
+    const newValue = getValue(newPosition);
+
+    if (thumb === 'min') {
+      const newMin = Math.max(min, Math.min(newValue, value.max - minRange));
+      onValueChange({ ...value, min: newMin });
+    } else {
+      const newMax = Math.min(max, Math.max(newValue, value.min + minRange));
+      onValueChange({ ...value, max: newMax });
+    }
+  };
+
+  const handleStateChange = (
+    event: PanGestureHandlerStateChangeEvent,
+    thumb: 'min' | 'max',
+  ) => {
+    const { state } = event.nativeEvent;
+
+    if (state === State.BEGAN) {
+      setIsDragging(thumb);
+    } else if (state === State.END || state === State.CANCELLED) {
+      setIsDragging(null);
+    }
+  };
+
+  const minPosition = getPosition(value.min);
+  const maxPosition = getPosition(value.max);
+
+  return (
+    <GestureHandlerRootView style={styles.container}>
+      {label && (
+        <Text style={[styles.label, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+          {label}
+        </Text>
+      )}
+
+      <View style={styles.rangeLabels}>
+        <View style={styles.rangeLabel}>
+          <View style={styles.rangeLabelBox}>
+            <Text style={styles.rangeLabelText}>{value.min}</Text>
+          </View>
+          <View style={styles.rangeLabelArrow} />
+        </View>
+        <View style={styles.rangeLabel}>
+          <View style={styles.rangeLabelBox}>
+            <Text style={styles.rangeLabelText}>{value.max}</Text>
+          </View>
+          <View style={styles.rangeLabelArrow} />
+        </View>
+      </View>
+
+      <View style={styles.sliderContainer}>
+        <View style={styles.sliderTrack}>
+          <View
+            style={[
+              styles.sliderTrackInactive,
+              { backgroundColor: isDark ? '#2E2E2E' : '#F3F3F3' },
+            ]}
+          />
+          <LinearGradient
+            colors={['#9253FF', '#8239FF']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              styles.sliderTrackActive,
+              {
+                left: minPosition,
+                width: maxPosition - minPosition,
+              },
+            ]}
+          />
+
+          <PanGestureHandler
+            ref={panRef}
+            onGestureEvent={event => handleGestureEvent(event, 'min')}
+            onHandlerStateChange={event => handleStateChange(event, 'min')}
+            minDist={0}
+          >
+            <View
+              style={[
+                styles.sliderThumb,
+                { left: minPosition - 4.5 },
+                isDragging === 'min' && styles.sliderThumbActive,
+              ]}
+            >
+              <LinearGradient
+                colors={['#9253FF', '#8239FF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.sliderThumbGradient}
+              />
+            </View>
+          </PanGestureHandler>
+
+          <PanGestureHandler
+            onGestureEvent={event => handleGestureEvent(event, 'max')}
+            onHandlerStateChange={event => handleStateChange(event, 'max')}
+            minDist={0}
+          >
+            <View
+              style={[
+                styles.sliderThumb,
+                { left: maxPosition - 4.5 },
+                isDragging === 'max' && styles.sliderThumbActive,
+              ]}
+            >
+              <LinearGradient
+                colors={['#9253FF', '#8239FF']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.sliderThumbGradient}
+              />
+            </View>
+          </PanGestureHandler>
+        </View>
+      </View>
+    </GestureHandlerRootView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 10,
+  },
+  label: {
+    fontFamily: 'Comfortaa',
+    fontSize: 18,
+    fontWeight: '500',
+    lineHeight: 20.07,
+    letterSpacing: -0.54,
+    marginBottom: 11,
+  },
+  rangeLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 58,
+    marginBottom: 6,
+  },
+  rangeLabel: {
+    alignItems: 'center',
+  },
+  rangeLabelBox: {
+    backgroundColor: '#F2F2F2',
+    borderRadius: 3,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    minWidth: 28,
+    alignItems: 'center',
+  },
+  rangeLabelText: {
+    fontFamily: 'Sofia Pro',
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 14,
+    letterSpacing: -0.42,
+    color: '#8945FF',
+  },
+  rangeLabelArrow: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 3.5,
+    borderRightWidth: 3.5,
+    borderTopWidth: 5,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#F2F2F2',
+    marginTop: -1,
+  },
+  sliderContainer: {
+    position: 'relative',
+  },
+  sliderTrack: {
+    position: 'relative',
+    height: 3,
+    width: SLIDER_WIDTH,
+    borderRadius: 1,
+  },
+  sliderTrackInactive: {
+    position: 'absolute',
+    width: '100%',
+    height: 3,
+    borderRadius: 1,
+  },
+  sliderTrackActive: {
+    position: 'absolute',
+    height: 3,
+    borderRadius: 1,
+  },
+  sliderThumb: {
+    position: 'absolute',
+    width: 9,
+    height: 9,
+    borderRadius: 4.5,
+    top: -3,
+  },
+  sliderThumbActive: {
+    transform: [{ scale: 1.2 }],
+  },
+  sliderThumbGradient: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 4.5,
+  },
+});
+
+export default RangeSlider;
