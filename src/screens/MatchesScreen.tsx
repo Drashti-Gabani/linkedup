@@ -73,14 +73,13 @@ const MatchesScreen: React.FC = () => {
     NativeStackNavigationProp<MainStackParamList>
   >;
   const navigation = useNavigation<MatchesScreenNavigationProp>();
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors } = useTheme();
 
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       {/* Header */}
@@ -89,14 +88,14 @@ const MatchesScreen: React.FC = () => {
         <TouchableOpacity
           style={[
             styles.headerButton,
-            { backgroundColor: isDark ? '#2D2D2D' : '#FFF4F6' },
+            { backgroundColor: colors.headerButtonBackground },
           ]}
           onPress={() => navigation.goBack()}
         >
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
             <Path
               d="M10 8l-4 4 4 4"
-              stroke={isDark ? '#FFFFFF' : '#000000'}
+              stroke={colors.headerButtonIcon}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -109,7 +108,7 @@ const MatchesScreen: React.FC = () => {
           <Text
             style={[
               styles.headerTitle,
-              { color: isDark ? '#FFFFFF' : '#000000' },
+              { color: colors.heading },
             ]}
           >
             All Matches
@@ -123,14 +122,14 @@ const MatchesScreen: React.FC = () => {
         <TouchableOpacity
           style={[
             styles.headerButton,
-            { backgroundColor: isDark ? '#2D2D2D' : '#FFF4F6' },
+            { backgroundColor: colors.headerButtonBackground },
           ]}
           onPress={() => navigation.navigate('Settings')}
         >
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
             <Path
               d="M3 7h6M3 12h6M3 17h6M15 7l6 6M15 13l6-6"
-              stroke={isDark ? '#FFFFFF' : '#000000'}
+              stroke={colors.headerButtonIcon}
               strokeWidth={2}
               strokeLinecap="round"
             />

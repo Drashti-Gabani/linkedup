@@ -32,8 +32,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   minRange = 1,
   label,
 }) => {
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, gradients } = useTheme();
   const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
   const panRef = useRef(null);
 
@@ -91,23 +90,23 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   return (
     <GestureHandlerRootView style={styles.container}>
       {label && (
-        <Text style={[styles.label, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+        <Text style={[styles.label, { color: colors.heading }]}>
           {label}
         </Text>
       )}
 
       <View style={styles.rangeLabels}>
         <View style={styles.rangeLabel}>
-          <View style={styles.rangeLabelBox}>
-            <Text style={styles.rangeLabelText}>{value.min}</Text>
+          <View style={[styles.rangeLabelBox, { backgroundColor: colors.backgroundSecondary }]}>
+            <Text style={[styles.rangeLabelText, { color: colors.accent }]}>{value.min}</Text>
           </View>
-          <View style={styles.rangeLabelArrow} />
+          <View style={[styles.rangeLabelArrow, { borderTopColor: colors.backgroundSecondary }]} />
         </View>
         <View style={styles.rangeLabel}>
-          <View style={styles.rangeLabelBox}>
-            <Text style={styles.rangeLabelText}>{value.max}</Text>
+          <View style={[styles.rangeLabelBox, { backgroundColor: colors.backgroundSecondary }]}>
+            <Text style={[styles.rangeLabelText, { color: colors.accent }]}>{value.max}</Text>
           </View>
-          <View style={styles.rangeLabelArrow} />
+          <View style={[styles.rangeLabelArrow, { borderTopColor: colors.backgroundSecondary }]} />
         </View>
       </View>
 
@@ -116,11 +115,11 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
           <View
             style={[
               styles.sliderTrackInactive,
-              { backgroundColor: isDark ? '#2E2E2E' : '#F3F3F3' },
+              { backgroundColor: colors.sliderTrack },
             ]}
           />
           <LinearGradient
-            colors={['#9253FF', '#8239FF']}
+            colors={gradients.primary}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={[
@@ -146,7 +145,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
               ]}
             >
               <LinearGradient
-                colors={['#9253FF', '#8239FF']}
+                colors={gradients.primary}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.sliderThumbGradient}
@@ -167,7 +166,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
               ]}
             >
               <LinearGradient
-                colors={['#9253FF', '#8239FF']}
+                colors={gradients.primary}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.sliderThumbGradient}
@@ -202,7 +201,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   rangeLabelBox: {
-    backgroundColor: '#F2F2F2',
     borderRadius: 3,
     paddingVertical: 4,
     paddingHorizontal: 6,
@@ -215,7 +213,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 14,
     letterSpacing: -0.42,
-    color: '#8945FF',
   },
   rangeLabelArrow: {
     width: 0,
@@ -227,7 +224,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 5,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: '#F2F2F2',
     marginTop: -1,
   },
   sliderContainer: {

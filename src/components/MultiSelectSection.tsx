@@ -32,15 +32,7 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
   iconMap,
   renderIcon,
 }) => {
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
-
-  // Icon colors matching text colors from Figma design
-  // Selected: white (matches selected text)
-  const SELECTED_ICON_COLOR = '#FFFFFF';
-  // Unselected: gray matching text color (dark mode: #B2B2B2, light mode: #C6C6C6)
-  const UNSELECTED_ICON_COLOR_DARK = '#B2B2B2';
-  const UNSELECTED_ICON_COLOR_LIGHT = '#C6C6C6';
+  const { isDark, colors, gradients } = useTheme();
 
   const handleSelect = (value: string) => {
     // Always call onSelect - let the parent handle the logic
@@ -75,10 +67,10 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
       // Otherwise, treat it as an image source
       // Apply tint color matching text colors: white for selected, gray for unselected
       const tintColor = isSelected
-        ? SELECTED_ICON_COLOR
+        ? colors.iconSelected
         : isDark
-        ? UNSELECTED_ICON_COLOR_DARK
-        : UNSELECTED_ICON_COLOR_LIGHT;
+        ? colors.iconUnselectedDark
+        : colors.iconUnselectedLight;
 
       return (
         <Image
@@ -102,7 +94,7 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
         <Text
           style={[
             styles.sectionTitle,
-            { color: isDark ? '#FFFFFF' : '#000000' },
+            { color: colors.sectionTitle },
           ]}
         >
           {title}
@@ -122,14 +114,14 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
             >
               {isSelected ? (
                 <LinearGradient
-                  colors={['#A776FC', '#8239FF']}
+                  colors={gradients.secondary}
                   start={{ x: 0.91, y: 0.05 }}
                   end={{ x: 0.15, y: 0.95 }}
                   // style={styles.optionTag}
                 >
                   <View style={styles.optionTag}>
                     {icon && <View style={styles.iconContainer}>{icon}</View>}
-                    <Text style={[styles.optionText, { color: '#FFFFFF' }]}>
+                    <Text style={[styles.optionText, { color: colors.iconSelected }]}>
                       {option}
                     </Text>
                   </View>
@@ -139,9 +131,9 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
                   style={[
                     styles.optionTag,
                     {
-                      backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF',
+                      backgroundColor: colors.card,
                     },
-                    !isDark && styles.lightShadow,
+                    [styles.lightShadow, { shadowColor: colors.shadowLight }],
                   ]}
                 >
                   <View style={styles.optionContent}>
@@ -149,7 +141,7 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
                     <Text
                       style={[
                         styles.optionText,
-                        { color: isDark ? '#B2B2B2' : '#C6C6C6' },
+                        { color: colors.iconUnselected },
                       ]}
                     >
                       {option}
@@ -205,7 +197,6 @@ const styles = StyleSheet.create({
     height: 18,
   },
   lightShadow: {
-    shadowColor: '#A4A4A4',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 75,

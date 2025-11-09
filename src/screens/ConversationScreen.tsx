@@ -29,8 +29,7 @@ interface Message {
 
 const ConversationScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, gradients, isDark } = useTheme();
   const [messageText, setMessageText] = useState('');
 
   const handleBack = () => {
@@ -97,7 +96,7 @@ const ConversationScreen: React.FC = () => {
           style={[
             styles.messageTime,
             {
-              color: isDark ? '#6B6B6B' : '#AFAFAF',
+              color: colors.messageTime,
               alignSelf: item.sender === 'me' ? 'flex-end' : 'flex-start',
               marginBottom: hp('0.3%'),
             },
@@ -107,7 +106,7 @@ const ConversationScreen: React.FC = () => {
         </Text>
         {item.sender === 'me' ? (
           <LinearGradient
-            colors={['#A776FC', '#8239FF']}
+            colors={gradients.secondary}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             angle={242}
@@ -121,9 +120,9 @@ const ConversationScreen: React.FC = () => {
               styles.messageBubble,
               styles.otherMessage,
               {
-                backgroundColor: isDark ? '#2D2D2D' : '#FFFFFF',
+                backgroundColor: colors.messageBackground,
                 borderWidth: isDark ? 0 : 0.8,
-                borderColor: isDark ? 'transparent' : '#EEF0F2',
+                borderColor: isDark ? 'transparent' : colors.borderLight,
               },
             ]}
           >
@@ -131,7 +130,7 @@ const ConversationScreen: React.FC = () => {
               style={[
                 styles.messageText,
                 {
-                  color: isDark ? '#FFFFFF' : '#000000',
+                  color: colors.messageText,
                 },
               ]}
             >
@@ -148,13 +147,13 @@ const ConversationScreen: React.FC = () => {
       <View
         style={[
           styles.dividerLine,
-          { backgroundColor: isDark ? '#6B6B6B' : '#D2D2D2' },
+          { backgroundColor: colors.messageDivider },
         ]}
       />
       <Text
         style={[
           styles.matchedOnText,
-          { color: isDark ? '#6B6B6B' : '#AFAFAF' },
+          { color: colors.messageTime },
         ]}
       >
         YOU MATCHED WITH CATIE ON 7/6/19
@@ -162,7 +161,7 @@ const ConversationScreen: React.FC = () => {
       <View
         style={[
           styles.dividerLine,
-          { backgroundColor: isDark ? '#6B6B6B' : '#D2D2D2' },
+          { backgroundColor: colors.messageDivider },
         ]}
       />
     </View>
@@ -172,12 +171,12 @@ const ConversationScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={isDark ? '#181818' : '#FFFFFF'}
+        backgroundColor={colors.background}
       />
 
       {/* Header */}
@@ -186,13 +185,13 @@ const ConversationScreen: React.FC = () => {
           <View
             style={[
               styles.buttonContainer,
-              { backgroundColor: isDark ? '#2D2D2D' : '#FFF4F6' },
+              { backgroundColor: colors.headerButtonBackground },
             ]}
           >
             <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
               <Path
                 d="M15 18L9 12L15 6"
-                stroke={isDark ? '#878787' : '#000000'}
+                stroke={colors.headerButtonIcon}
                 strokeWidth={2}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -209,12 +208,12 @@ const ConversationScreen: React.FC = () => {
             style={styles.userAvatar}
           />
           <Text
-            style={[styles.userName, { color: isDark ? '#FFFFFF' : '#000000' }]}
+            style={[styles.userName, { color: colors.heading }]}
           >
             Catie
           </Text>
           {isDark && (
-            <Text style={[styles.lastActive, { color: '#B0B0B0' }]}>
+            <Text style={[styles.lastActive, { color: colors.textMuted }]}>
               ACTIVE 5M AGO
             </Text>
           )}
@@ -224,13 +223,13 @@ const ConversationScreen: React.FC = () => {
           <View
             style={[
               styles.buttonContainer,
-              { backgroundColor: isDark ? '#2D2D2D' : '#FFF4F6' },
+              { backgroundColor: colors.headerButtonBackground },
             ]}
           >
             <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
               <Path
                 d="M18 6L6 18M6 6L18 18"
-                stroke={isDark ? '#878787' : '#000000'}
+                stroke={colors.headerButtonIcon}
                 strokeWidth={3}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -260,18 +259,18 @@ const ConversationScreen: React.FC = () => {
           style={[
             styles.inputWrapper,
             {
-              backgroundColor: isDark ? '#262626' : '#FFFFFF',
-              borderColor: 'rgba(41, 41, 44, 0.12)',
+              backgroundColor: colors.inputBackground,
+              borderColor: colors.borderLight,
             },
           ]}
         >
           <TextInput
             style={[
               styles.textInput,
-              { color: isDark ? '#FFFFFF' : '#000000' },
+              { color: colors.fieldText },
             ]}
             placeholder="Message..."
-            placeholderTextColor={isDark ? '#FFFFFF' : '#AAA9AB'}
+            placeholderTextColor={colors.placeholder}
             value={messageText}
             onChangeText={setMessageText}
             multiline
@@ -279,7 +278,7 @@ const ConversationScreen: React.FC = () => {
           />
           <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
             <LinearGradient
-              colors={['#A776FC', '#8239FF']}
+              colors={gradients.secondary}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               angle={242}

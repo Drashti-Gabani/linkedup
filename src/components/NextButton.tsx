@@ -4,6 +4,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 import Svg, { Path } from 'react-native-svg';
 import { hp, wp } from '../utils/responsive';
+import { useTheme } from '../hooks/useTheme';
 
 interface NextButtonProps {
   onPress: () => void;
@@ -20,6 +21,8 @@ const NextButton: React.FC<NextButtonProps> = ({
   textLabel = 'Next',
   style,
 }) => {
+  const { gradients, colors } = useTheme();
+  
   const getSize = () => {
     switch (size) {
       case 'small':
@@ -57,7 +60,7 @@ const NextButton: React.FC<NextButtonProps> = ({
             maskElement={<Text style={styles.textMask}>{textLabel}</Text>}
           >
             <LinearGradient
-              colors={['#A776FC', '#8239FF']}
+              colors={gradients.secondary}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.gradient}
@@ -77,7 +80,7 @@ const NextButton: React.FC<NextButtonProps> = ({
         }}
       >
         <LinearGradient
-          colors={['#A776FC', '#8239FF']}
+          colors={gradients.secondary}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           angle={242}
@@ -98,7 +101,7 @@ const NextButton: React.FC<NextButtonProps> = ({
           >
             <Path
               d="M1 6.31034H11.6207M11.6207 6.31034L6.31034 1M11.6207 6.31034L6.31034 11.6207"
-              stroke="#FFFFFF"
+              stroke={colors.iconSelected}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

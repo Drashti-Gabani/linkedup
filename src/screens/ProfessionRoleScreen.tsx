@@ -27,9 +27,8 @@ const PROFESSIONAL_ROLES = [
 ];
 
 const ProfessionRoleScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selectedRole, setSelectedRole] = useState<string | null>(
     'Board of Director',
@@ -58,11 +57,11 @@ const ProfessionRoleScreen: React.FC = () => {
           <View style={styles.header}>
             <View style={styles.highlight} />
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Profession Role
             </Text>
-            <Text style={[styles.subtitle, { color: '#BEBEBE' }]}>
+            <Text style={[styles.subtitle, { color: colors.subheading }]}>
               Select which role you work in
             </Text>
           </View>
@@ -83,7 +82,7 @@ const ProfessionRoleScreen: React.FC = () => {
               maskElement={<Text style={styles.inputLabelMask}>Others</Text>}
             >
               <LinearGradient
-                colors={['#9253FF', '#8239FF']}
+                colors={gradients.primary}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.inputLabelGradient}
@@ -95,16 +94,16 @@ const ProfessionRoleScreen: React.FC = () => {
             <View
               style={[
                 styles.inputContainer,
-                { backgroundColor: isDark ? '#2E2E2E' : '#F5F7F9' },
+                { backgroundColor: colors.inputBackground },
               ]}
             >
               <TextInput
                 style={[
                   styles.input,
-                  { color: isDark ? '#FFFFFF' : '#000000' },
+                  { color: colors.fieldText },
                 ]}
                 placeholder="Enter your role"
-                placeholderTextColor="#A8A8A8"
+                placeholderTextColor={colors.placeholder}
                 value={customRole}
                 onChangeText={setCustomRole}
               />

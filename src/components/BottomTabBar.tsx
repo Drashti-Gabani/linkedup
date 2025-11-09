@@ -23,15 +23,25 @@ const TABS: TabItem[] = [
   { id: 'settings', label: 'Settings', icon: tabIcons.settings },
 ];
 
-const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onTabPress }) => {
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+const BottomTabBar: React.FC<BottomTabBarProps> = ({
+  activeTab,
+  onTabPress,
+}) => {
+  const { colors, gradients, isDark } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#181818' : '#FFFFFF', borderTopColor: isDark ? '#3D3D3D' : '#F8F8F8' }]}>
-      {TABS.map((tab) => {
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.background,
+          borderTopColor: colors.borderTab,
+        },
+      ]}
+    >
+      {TABS.map(tab => {
         const isActive = activeTab === tab.id;
-        
+
         return (
           <TouchableOpacity
             key={tab.id}
@@ -40,39 +50,58 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({ activeTab, onTabPress }) =>
             activeOpacity={0.7}
           >
             <View style={styles.tabContent}>
-              {isActive && <View style={styles.activeBackground} />}
-              
+              {isActive && (
+                <View
+                  style={[
+                    styles.activeBackground,
+                    { backgroundColor: colors.backgroundActive },
+                  ]}
+                />
+              )}
+
               <View style={styles.iconContainer}>
                 <Image
                   source={tab.icon}
-                  style={[
-                    styles.icon,
-                    tab.id === 'home' && styles.homeIcon,
-                  ]}
+                  style={[styles.icon, tab.id === 'home' && styles.homeIcon]}
                   resizeMode="contain"
                 />
               </View>
 
               {isActive ? (
-                <MaskedView maskElement={<Text style={styles.labelMask}>{tab.label}</Text>}>
+                <MaskedView
+                  maskElement={
+                    <Text style={styles.labelMask}>{tab.label}</Text>
+                  }
+                >
                   <LinearGradient
-                    colors={['#A776FC', '#8239FF']}
+                    colors={gradients.secondary}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.labelGradient}
                   >
-                    <Text style={[styles.label, { opacity: 0 }]}>{tab.label}</Text>
+                    <Text style={[styles.label, { opacity: 0 }]}>
+                      {tab.label}
+                    </Text>
                   </LinearGradient>
                 </MaskedView>
               ) : (
-                <Text style={[styles.label, { color: isDark ? '#4A4A4A' : '#D7D9DD' }]}>
+                <Text
+                  style={[
+                    styles.label,
+                    {
+                      color: isDark
+                        ? colors.tabInactiveDark
+                        : colors.tabInactive,
+                    },
+                  ]}
+                >
                   {tab.label}
                 </Text>
               )}
 
               {isActive && (
                 <LinearGradient
-                  colors={['#A776FC', '#8239FF']}
+                  colors={gradients.secondary}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.activeIndicator}
@@ -111,7 +140,6 @@ const styles = StyleSheet.create({
     top: -8,
     width: 38,
     height: 36,
-    backgroundColor: '#FFF4F6',
     borderRadius: 10,
   },
   iconContainer: {

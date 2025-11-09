@@ -50,13 +50,7 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
   renderIcon,
   iconMap,
 }) => {
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
-
-  // Primary color for default/unselected icons (reusable globally)
-  const PRIMARY_COLOR = '#8239FF';
-  // White for selected icons (works in both light and dark modes)
-  const SELECTED_ICON_COLOR = '#FFFFFF';
+  const { colors, gradients } = useTheme();
 
   const getIcon = (
     option: string,
@@ -92,7 +86,7 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
             styles.optionIcon,
             { width: iconSize, height: iconSize },
             {
-              tintColor: isSelected ? SELECTED_ICON_COLOR : PRIMARY_COLOR,
+              tintColor: isSelected ? colors.iconSelected : colors.iconPrimary,
             },
           ]}
           resizeMode="contain"
@@ -105,9 +99,7 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
 
   return (
     <View style={styles.section}>
-      <Text
-        style={[styles.sectionTitle, { color: isDark ? '#FFFFFF' : '#000000' }]}
-      >
+      <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
         {title}
       </Text>
       <View style={styles.optionsContainer}>
@@ -124,15 +116,16 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
             >
               <LinearGradient
                 colors={
-                  isSelected
-                    ? ['#A776FC', '#8239FF']
-                    : isDark
-                    ? ['#2E2E2E', '#2E2E2E']
-                    : ['#F5F5F5', '#F5F5F5']
+                  isSelected ? gradients.secondary : [colors.card, colors.card]
                 }
                 start={{ x: 0.9, y: 0.1 }}
                 end={{ x: 0.1, y: 0.9 }}
-                style={[!isDark && !isSelected && styles.lightShadow]}
+                style={[
+                  !isSelected && [
+                    styles.lightShadow,
+                    { shadowColor: colors.shadowMedium },
+                  ],
+                ]}
               >
                 <View style={styles.optionGradient}>
                   {icon && <View style={styles.iconContainer}>{icon}</View>}
@@ -140,7 +133,9 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
                     style={[
                       styles.optionLabel,
                       {
-                        color: isSelected ? '#FFFFFF' : '#A8A8A8',
+                        color: isSelected
+                          ? colors.iconSelected
+                          : colors.textSecondary,
                       },
                     ]}
                   >
@@ -148,10 +143,15 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
                   </Text>
                   {isSelected && (
                     <Svg width={20} height={20} viewBox="0 0 24 24" fill="none">
-                      <Circle cx="12" cy="12" r="11" fill="white" />
+                      <Circle
+                        cx="12"
+                        cy="12"
+                        r="11"
+                        fill={colors.iconSelected}
+                      />
                       <Path
                         d="M7 12L10.5 15.5L17 9"
-                        stroke="#8239FF"
+                        stroke={colors.iconPrimary}
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -206,7 +206,6 @@ const styles = StyleSheet.create({
     height: 18,
   },
   lightShadow: {
-    shadowColor: '#D0D0D0',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.12,
     shadowRadius: 4,

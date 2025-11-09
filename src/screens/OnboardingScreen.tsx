@@ -79,7 +79,7 @@ const OnboardingScreen: React.FC = () => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [activeIndex, setActiveIndex] = useState(1);
   const scrollX = useRef(new Animated.Value(0)).current;
-  const { colors, mode } = useTheme();
+  const { colors, isDark } = useTheme();
 
   const slides: Slide[] = [
     {
@@ -111,8 +111,6 @@ const OnboardingScreen: React.FC = () => {
     const index = Math.round(offsetX / slideWidth);
     setActiveIndex(Math.max(0, Math.min(index, slides.length - 1)));
   };
-
-  const isDark = mode === 'dark';
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -167,7 +165,7 @@ const OnboardingScreen: React.FC = () => {
                 ? [styles.activeDot, { backgroundColor: colors.accent }]
                 : [
                     styles.inactiveDot,
-                    { backgroundColor: isDark ? '#363636' : '#EDEDED' },
+                    { backgroundColor: colors.backgroundSecondary },
                   ],
             ]}
           />

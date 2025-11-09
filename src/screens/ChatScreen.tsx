@@ -29,8 +29,7 @@ type ChatScreenNavigationProp = CompositeNavigationProp<
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<ChatScreenNavigationProp>();
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, isDark } = useTheme();
 
   const handleBack = () => {
     navigation.goBack();
@@ -55,7 +54,7 @@ const ChatScreen: React.FC = () => {
             <Text
               style={[
                 styles.messageName,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.heading },
               ]}
             >
               {item.name}
@@ -64,7 +63,7 @@ const ChatScreen: React.FC = () => {
           <Text
             style={[
               styles.messageText,
-              { color: isDark ? '#FFFFFF' : '#000000' },
+              { color: colors.textPrimary },
             ]}
           >
             {item.message}
@@ -127,12 +126,12 @@ const ChatScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={isDark ? '#181818' : '#FFFFFF'}
+        backgroundColor={colors.background}
       />
 
       {/* Header */}
@@ -142,13 +141,13 @@ const ChatScreen: React.FC = () => {
             <View
               style={[
                 styles.buttonContainer,
-                { backgroundColor: isDark ? '#2D2D2D' : '#FFF4F6' },
+                { backgroundColor: colors.headerButtonBackground },
               ]}
             >
               <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
                 <Path
                   d="M15 18L9 12L15 6"
-                  stroke={isDark ? '#878787' : '#000000'}
+                  stroke={colors.headerButtonIcon}
                   strokeWidth={2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -162,7 +161,7 @@ const ChatScreen: React.FC = () => {
           <Text
             style={[
               styles.inboxTitle,
-              { color: isDark ? '#FFFFFF' : '#000000' },
+              { color: colors.heading },
             ]}
           >
             Inbox
@@ -170,7 +169,7 @@ const ChatScreen: React.FC = () => {
           <Text
             style={[
               styles.messageCount,
-              { color: isDark ? '#AFAFAF' : '#AFAFAF' },
+              { color: colors.textMuted },
             ]}
           >
             33 messages
@@ -185,7 +184,7 @@ const ChatScreen: React.FC = () => {
         <View
           style={[
             styles.searchInput,
-            { backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF' },
+            { backgroundColor: colors.searchBackground },
           ]}
         >
           <Svg
@@ -197,7 +196,7 @@ const ChatScreen: React.FC = () => {
           >
             <Path
               d="M21 21L16.514 16.506L21 21ZM19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z"
-              stroke={isDark ? '#A8A8A8' : 'rgba(0, 0, 0, 0.4)'}
+              stroke={colors.searchIcon}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -206,10 +205,10 @@ const ChatScreen: React.FC = () => {
           <TextInput
             style={[
               styles.searchText,
-              { color: isDark ? '#A8A8A8' : 'rgba(0, 0, 0, 0.4)' },
+              { color: colors.searchIcon },
             ]}
             placeholder="Search"
-            placeholderTextColor={isDark ? '#A8A8A8' : 'rgba(0, 0, 0, 0.4)'}
+            placeholderTextColor={colors.placeholder}
           />
         </View>
       </View>
@@ -219,7 +218,7 @@ const ChatScreen: React.FC = () => {
         <Text
           style={[
             styles.sectionTitle,
-            { color: isDark ? '#FFFFFF' : '#000000' },
+            { color: colors.heading },
           ]}
         >
           Messages

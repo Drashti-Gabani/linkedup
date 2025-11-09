@@ -18,8 +18,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const UserProfileScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors } = useTheme();
   const [isAboutExpanded, setIsAboutExpanded] = useState(false);
 
   const userData = {
@@ -139,25 +138,21 @@ const UserProfileScreen: React.FC = () => {
         <View
           style={[
             styles.contentContainer,
-            { backgroundColor: isDark ? '#1A1A1A' : '#FFFFFF' },
+            { backgroundColor: colors.contentContainer },
           ]}
         >
           {/* Name Section */}
           <View style={styles.nameSection}>
             <View style={styles.nameContent}>
               <Text
-                style={[styles.name, { color: isDark ? '#FFFFFF' : '#000000' }]}
+                style={[styles.name, { color: colors.name }]}
               >
                 {userData.name}, {userData.age}
               </Text>
               <Text
                 style={[
                   styles.occupation,
-                  {
-                    color: isDark
-                      ? 'rgba(255, 255, 255, 0.7)'
-                      : 'rgba(0, 0, 0, 0.7)',
-                  },
+                  { color: colors.occupation },
                 ]}
               >
                 {userData.occupation}
@@ -166,13 +161,13 @@ const UserProfileScreen: React.FC = () => {
             <TouchableOpacity
               style={[
                 styles.sendButton,
-                { backgroundColor: isDark ? '#313131' : '#FFFFFF' },
+                { backgroundColor: colors.buttonBackgroundSecondary },
               ]}
             >
               <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
                 <Path
                   d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"
-                  stroke="#8945FF"
+                  stroke={colors.distanceBadge}
                   strokeWidth={2}
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -196,7 +191,7 @@ const UserProfileScreen: React.FC = () => {
               <Text
                 style={[
                   styles.sectionTitle,
-                  { color: isDark ? '#FFFFFF' : '#000000' },
+                  { color: colors.sectionTitle },
                 ]}
               >
                 Location
@@ -204,24 +199,20 @@ const UserProfileScreen: React.FC = () => {
               <Text
                 style={[
                   styles.sectionContent,
-                  {
-                    color: isDark
-                      ? 'rgba(255, 255, 255, 0.7)'
-                      : 'rgba(0, 0, 0, 0.7)',
-                  },
+                  { color: colors.sectionContentMuted },
                 ]}
               >
                 {userData.location}
               </Text>
             </View>
-            <View style={styles.distanceBadge}>
+            <View style={[styles.distanceBadge, { backgroundColor: colors.distanceBadgeBackground }]}>
               <Svg width={12} height={12} viewBox="0 0 12 12" fill="none">
                 <Path
                   d="M6 1C3.8 1 2 2.8 2 5c0 2.2 4 6 4 6s4-3.8 4-6c0-2.2-1.8-4-4-4zm0 5.5c-.8 0-1.5-.7-1.5-1.5S5.2 3.5 6 3.5 7.5 4.2 7.5 5 6.8 6.5 6 6.5z"
-                  fill="#8945FF"
+                  fill={colors.distanceBadge}
                 />
               </Svg>
-              <Text style={styles.distanceText}>{userData.distance}</Text>
+              <Text style={[styles.distanceText, { color: colors.distanceBadge }]}>{userData.distance}</Text>
             </View>
           </View>
 
@@ -230,7 +221,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               About
@@ -238,11 +229,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.aboutText,
-                {
-                  color: isDark
-                    ? 'rgba(255, 255, 255, 0.7)'
-                    : 'rgba(0, 0, 0, 0.7)',
-                },
+                { color: colors.sectionContentMuted },
               ]}
             >
               {isAboutExpanded ? fullAbout : shortAbout}
@@ -250,7 +237,7 @@ const UserProfileScreen: React.FC = () => {
             <TouchableOpacity
               onPress={() => setIsAboutExpanded(!isAboutExpanded)}
             >
-              <Text style={styles.readMore}>
+              <Text style={[styles.readMore, { color: colors.readMore }]}>
                 {isAboutExpanded ? 'Read less' : 'Read more'}
               </Text>
             </TouchableOpacity>
@@ -261,7 +248,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Interests
@@ -287,7 +274,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Personality Traits
@@ -307,13 +294,13 @@ const UserProfileScreen: React.FC = () => {
               <Text
                 style={[
                   styles.sectionTitle,
-                  { color: isDark ? '#FFFFFF' : '#000000' },
+                  { color: colors.sectionTitle },
                 ]}
               >
                 Gallery
               </Text>
               <TouchableOpacity>
-                <Text style={styles.readMore}>See all</Text>
+                <Text style={[styles.readMore, { color: colors.readMore }]}>See all</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.galleryGrid}>
@@ -357,7 +344,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Marital Status
@@ -372,7 +359,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Languages
@@ -391,17 +378,17 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.heading },
               ]}
             >
               Education
             </Text>
             <View style={styles.educationRow}>
               <Svg width={15} height={15} viewBox="0 0 15 15" fill="none">
-                <Path d="M7.5 1L1 4.5L7.5 8L14 4.5L7.5 1z" fill="#8945FF" />
+                <Path d="M7.5 1L1 4.5L7.5 8L14 4.5L7.5 1z" fill={colors.distanceBadge} />
                 <Path
                   d="M1 10.5L7.5 14L14 10.5"
-                  stroke="#8945FF"
+                  stroke={colors.distanceBadge}
                   strokeWidth={1.5}
                   strokeLinecap="round"
                 />
@@ -409,7 +396,7 @@ const UserProfileScreen: React.FC = () => {
               <Text
                 style={[
                   styles.institutionText,
-                  { color: isDark ? '#FFFFFF' : '#000000' },
+                  { color: colors.heading },
                 ]}
               >
                 {userData.education.institution}
@@ -425,7 +412,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Professional Role
@@ -440,7 +427,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Industry
@@ -459,7 +446,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Religion
@@ -474,7 +461,7 @@ const UserProfileScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.sectionTitle },
               ]}
             >
               Pets
@@ -625,7 +612,6 @@ const styles = StyleSheet.create({
   distanceBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(137, 69, 255, 0.1)',
     borderRadius: 7,
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -635,7 +621,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia Pro',
     fontSize: 12,
     fontWeight: '600',
-    color: '#8945FF',
     lineHeight: 18,
   },
   aboutText: {
@@ -649,7 +634,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia Pro',
     fontSize: 14,
     fontWeight: '400',
-    color: '#8945FF',
     lineHeight: 21,
   },
   tagsContainer: {

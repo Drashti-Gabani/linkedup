@@ -45,9 +45,8 @@ const GRID_POSITIONS = [
 ];
 
 const MediaScreen: React.FC = () => {
-  const { mode } = useTheme();
+  const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const photosRef = useRef(photos);
@@ -141,7 +140,7 @@ const MediaScreen: React.FC = () => {
       <SafeAreaView
         style={[
           styles.container,
-          { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+          { backgroundColor: colors.background },
         ]}
       >
         <BackButton onPress={() => navigation.goBack()} size="medium" />
@@ -153,8 +152,7 @@ const MediaScreen: React.FC = () => {
               style={[
                 styles.title,
                 {
-                  color: isDark ? '#FFFFFF' : '#444444',
-                  fontSize: isDark ? 26 : 32,
+                  color: colors.textTertiary,
                 },
               ]}
             >
@@ -163,7 +161,7 @@ const MediaScreen: React.FC = () => {
             <Text
               style={[
                 styles.subtitle,
-                { color: isDark ? '#888888' : '#B2B2B2' },
+                { color: colors.textSubtitle },
               ]}
             >
               Add your best photos to get a higher amount of daily matches.
@@ -184,7 +182,7 @@ const MediaScreen: React.FC = () => {
                 photoWidth={photoWidth}
                 photoHeight={photoHeight}
                 photoGap={photoGap}
-                isDark={isDark}
+                colors={colors}
                 photosLength={photos.length}
                 onImagePicker={handleImagePicker}
                 onSwap={swapPhotos}
@@ -202,7 +200,8 @@ const MediaScreen: React.FC = () => {
                   photoWidth={photoWidth}
                   photoHeight={photoHeight}
                   photoGap={photoGap}
-                  isDark={isDark}
+                  colors={colors}
+                  gradients={gradients}
                   onImagePicker={handleImagePicker}
                 />
               );
@@ -228,7 +227,7 @@ interface DraggablePhotoProps {
   photoWidth: number;
   photoHeight: number;
   photoGap: number;
-  isDark: boolean;
+  colors: any;
   photosLength: number;
   onImagePicker: (index: number) => void;
   onSwap: (fromIndex: number, toIndex: number) => void;
@@ -241,7 +240,7 @@ const DraggablePhoto: React.FC<DraggablePhotoProps> = ({
   photoWidth,
   photoHeight,
   photoGap,
-  isDark,
+  colors,
   photosLength,
   onImagePicker,
   onSwap,
@@ -392,7 +391,7 @@ const DraggablePhoto: React.FC<DraggablePhotoProps> = ({
           style={[
             styles.photoFilled,
             {
-              backgroundColor: isDark ? '#262626' : '#FFF3F5',
+              backgroundColor: colors.photoBackground,
               borderRadius: 25,
             },
           ]}
@@ -410,16 +409,14 @@ const DraggablePhoto: React.FC<DraggablePhotoProps> = ({
                 style={[
                   styles.coverImageBadgeContainer,
                   {
-                    backgroundColor: isDark
-                      ? 'rgba(0, 0, 0, 0.6)'
-                      : 'rgba(255, 255, 255, 0.95)',
+                    backgroundColor: colors.photoBadgeBackground,
                   },
                 ]}
               >
                 <Text
                   style={[
                     styles.coverImageBadgeText,
-                    { color: isDark ? '#FFFFFF' : '#8239FF' },
+                    { color: colors.photoBadgeText },
                   ]}
                 >
                   Cover Image
@@ -439,7 +436,8 @@ interface EmptyPhotoSlotProps {
   photoWidth: number;
   photoHeight: number;
   photoGap: number;
-  isDark: boolean;
+  colors: any;
+  gradients: any;
   onImagePicker: (index: number) => void;
 }
 
@@ -449,7 +447,8 @@ const EmptyPhotoSlot: React.FC<EmptyPhotoSlotProps> = ({
   photoWidth,
   photoHeight,
   photoGap,
-  isDark,
+  colors,
+  gradients,
   onImagePicker,
 }) => {
   const getPositionForIndex = (idx: number) => {
@@ -481,8 +480,8 @@ const EmptyPhotoSlot: React.FC<EmptyPhotoSlotProps> = ({
         style={[
           styles.photoEmpty,
           {
-            backgroundColor: isDark ? '#262626' : '#FFF3F5',
-            borderColor: '#515151',
+            backgroundColor: colors.photoBackground,
+            borderColor: colors.borderDark,
             borderRadius: 25,
           },
         ]}
@@ -494,16 +493,14 @@ const EmptyPhotoSlot: React.FC<EmptyPhotoSlotProps> = ({
               style={[
                 styles.coverImageBadgeContainer,
                 {
-                  backgroundColor: isDark
-                    ? 'rgba(0, 0, 0, 0.6)'
-                    : 'rgba(255, 255, 255, 0.95)',
+                  backgroundColor: colors.photoBadgeBackground,
                 },
               ]}
             >
               <Text
                 style={[
                   styles.coverImageBadgeText,
-                  { color: isDark ? '#FFFFFF' : '#8239FF' },
+                  { color: colors.photoBadgeText },
                 ]}
               >
                 Cover Image
@@ -515,37 +512,21 @@ const EmptyPhotoSlot: React.FC<EmptyPhotoSlotProps> = ({
         {/* Plus button - only show if not cover image */}
         {!isCover && (
           <View style={styles.plusButtonContainer}>
-            {isDark ? (
-              <View
-                style={[
-                  styles.plusButton,
-                  {
-                    backgroundColor: '#FFFFFF',
-                    shadowColor: '#000000',
-                    shadowOpacity: 0.25,
-                    shadowRadius: 8,
-                  },
-                ]}
-              >
-                <Text style={[styles.plusText, { color: '#262626' }]}>+</Text>
-              </View>
-            ) : (
-              <LinearGradient
-                colors={['#A776FC', '#8239FF']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[
-                  styles.plusButton,
-                  {
-                    shadowColor: '#FFDAE0',
-                    shadowOpacity: 1,
-                    shadowRadius: 22.5,
-                  },
-                ]}
-              >
-                <Text style={[styles.plusText, { color: '#FFF3F5' }]}>+</Text>
-              </LinearGradient>
-            )}
+            <LinearGradient
+              colors={gradients.secondary}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={[
+                styles.plusButton,
+                {
+                  shadowColor: colors.shadowPink,
+                  shadowOpacity: 1,
+                  shadowRadius: 22.5,
+                },
+              ]}
+            >
+              <Text style={[styles.plusText, { color: colors.photoBackground }]}>+</Text>
+            </LinearGradient>
           </View>
         )}
       </View>

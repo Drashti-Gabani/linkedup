@@ -32,9 +32,8 @@ const GENDER_ICONS = {
 };
 
 const GenderSelectionScreen: React.FC = () => {
-  const { mode } = useTheme();
+  const { colors, isDark } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [myGender, setMyGender] = useState<Gender>('male');
   const [partnerGender, setPartnerGender] = useState<Gender>('female');
@@ -56,7 +55,7 @@ const GenderSelectionScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       <BackButton onPress={() => navigation.goBack()} size="medium" />
@@ -67,12 +66,12 @@ const GenderSelectionScreen: React.FC = () => {
         {/* Heading */}
         <View style={styles.headingContainer}>
           <Text
-            style={[styles.heading, { color: isDark ? '#FFFFFF' : '#000000' }]}
+            style={[styles.heading, { color: colors.heading }]}
           >
             Match Preferences
           </Text>
-          {!isDark && <View style={styles.headingHighlight} />}
-          <Text style={[styles.subheading, { color: '#BEBEBE' }]}>
+          {!isDark && <View style={[styles.headingHighlight, { backgroundColor: colors.backgroundSecondary }]} />}
+          <Text style={[styles.subheading, { color: colors.subheading }]}>
             Select how you identify yourself & your partner
           </Text>
         </View>

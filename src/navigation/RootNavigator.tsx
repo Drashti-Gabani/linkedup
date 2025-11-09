@@ -108,7 +108,6 @@ const AuthNavigator: React.FC = () => {
 // Bottom Tab Navigator
 const TabNavigator: React.FC = () => {
   const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
 
   return (
     <Tab.Navigator
@@ -182,7 +181,7 @@ const RootNavigator: React.FC = () => {
 
   return (
     <RootStack.Navigator
-      initialRouteName={isAuthenticated ? 'Main' : 'Auth'}
+      initialRouteName={isAuthenticated ? 'Main' : 'Main'}
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',

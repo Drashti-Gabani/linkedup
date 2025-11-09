@@ -21,9 +21,8 @@ const EDUCATION_LEVELS = [
 ];
 
 const EducationScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selectedEducation, setSelectedEducation] = useState<string[]>([
     'Diploma',
@@ -59,11 +58,11 @@ const EducationScreen: React.FC = () => {
           {/* Header */}
           <View style={styles.header}>
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#444444' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Your Education
             </Text>
-            <Text style={[styles.subtitle, { color: '#B2B2B2' }]}>
+            <Text style={[styles.subtitle, { color: colors.textDisabled }]}>
               Your Highest Qualification
             </Text>
           </View>
@@ -87,7 +86,7 @@ const EducationScreen: React.FC = () => {
               }
             >
               <LinearGradient
-                colors={['#9253FF', '#8239FF']}
+                colors={gradients.primary}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.inputLabelGradient}
@@ -101,16 +100,16 @@ const EducationScreen: React.FC = () => {
             <View
               style={[
                 styles.inputContainer,
-                { backgroundColor: isDark ? '#2E2E2E' : '#F5F7F9' },
+                { backgroundColor: colors.inputBackground },
               ]}
             >
               <TextInput
                 style={[
                   styles.input,
-                  { color: isDark ? '#FFFFFF' : '#000000' },
+                  { color: colors.fieldText },
                 ]}
                 placeholder="Institute name"
-                placeholderTextColor="#A8A8A8"
+                placeholderTextColor={colors.placeholder}
                 value={instituteName}
                 onChangeText={setInstituteName}
               />

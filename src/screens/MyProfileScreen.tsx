@@ -23,8 +23,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 const MyProfileScreen: React.FC = () => {
   const navigation = useNavigation<MainStackNavigationProp>();
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors } = useTheme();
 
   const [firstName, setFirstName] = useState('Alexander');
   const [email, setEmail] = useState('jordan@defects.cc');
@@ -65,12 +64,7 @@ const MyProfileScreen: React.FC = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
-      ]}
-    >
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
@@ -87,7 +81,7 @@ const MyProfileScreen: React.FC = () => {
         </View>
 
         {/* Title */}
-        <Text style={[styles.title, { color: isDark ? '#000000' : '#000000' }]}>
+        <Text style={[styles.title, { color: colors.heading }]}>
           My Profile
         </Text>
 
@@ -124,54 +118,43 @@ const MyProfileScreen: React.FC = () => {
         <View
           style={[
             styles.contentContainer,
-            { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+            { backgroundColor: colors.background },
           ]}
         >
           <View style={styles.content}>
             {/* Editable Fields - Inline Editable */}
             <View style={styles.fieldContainer}>
-              <Text
-                style={[
-                  styles.fieldLabel,
-                  { color: isDark ? '#8945FF' : '#8239FF' },
-                ]}
-              >
+              <Text style={[styles.fieldLabel, { color: colors.fieldLabel }]}>
                 FIRST NAME
               </Text>
               <View
                 style={[
                   styles.field,
-                  { backgroundColor: isDark ? '#2D2D2D' : '#F5F7F9' },
+                  { backgroundColor: colors.fieldBackground },
                 ]}
               >
                 <View style={styles.iconContainer}>
                   <Svg width={12} height={14} viewBox="0 0 12 14" fill="none">
                     <Path
                       d="M6 7C7.933 7 9.5 5.433 9.5 3.5S7.933 0 6 0 2.5 1.567 2.5 3.5 4.067 7 6 7zm0 1.75c-2.662 0-8 1.337-8 4v1.75h16v-1.75c0-2.663-5.338-4-8-4z"
-                      stroke="#A8A8A8"
+                      stroke={colors.inputIcon}
                       strokeWidth={1.5}
                     />
                   </Svg>
                 </View>
                 {isEditingFirstName ? (
                   <TextInput
-                    style={[
-                      styles.fieldInput,
-                      { color: isDark ? '#FFFFFF' : '#000000' },
-                    ]}
+                    style={[styles.fieldInput, { color: colors.fieldText }]}
                     value={firstName}
                     onChangeText={setFirstName}
                     placeholder="First Name"
-                    placeholderTextColor="#A8A8A8"
+                    placeholderTextColor={colors.placeholder}
                     autoFocus
                     onBlur={() => setIsEditingFirstName(false)}
                   />
                 ) : (
                   <Text
-                    style={[
-                      styles.fieldInput,
-                      { color: isDark ? '#FFFFFF' : '#000000' },
-                    ]}
+                    style={[styles.fieldInput, { color: colors.fieldText }]}
                   >
                     {firstName}
                   </Text>
@@ -181,51 +164,38 @@ const MyProfileScreen: React.FC = () => {
                 style={styles.fieldEditButton}
                 onPress={() => setIsEditingFirstName(true)}
               >
-                <Text
-                  style={[
-                    styles.editText,
-                    { color: isDark ? '#8945FF' : '#8239FF' },
-                  ]}
-                >
+                <Text style={[styles.editText, { color: colors.fieldLabel }]}>
                   Edit
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.fieldContainer}>
-              <Text
-                style={[
-                  styles.fieldLabel,
-                  { color: isDark ? '#8945FF' : '#8239FF' },
-                ]}
-              >
+              <Text style={[styles.fieldLabel, { color: colors.fieldLabel }]}>
                 EMAIL
               </Text>
               <View
                 style={[
                   styles.field,
-                  { backgroundColor: isDark ? '#2D2D2D' : '#F5F7F9' },
+                  { backgroundColor: colors.fieldBackground },
                 ]}
               >
                 <View style={styles.iconContainer}>
                   <Svg width={15} height={12} viewBox="0 0 15 12" fill="none">
                     <Path
                       d="M13.5 0h-12C.675 0 .0075.675.0075 1.5L0 10.5C0 11.325.675 12 1.5 12h12c.825 0 1.5-.675 1.5-1.5v-9c0-.825-.675-1.5-1.5-1.5zm0 3l-6 3.75L1.5 3V1.5l6 3.75 6-3.75V3z"
-                      stroke="#A8A8A8"
+                      stroke={colors.inputIcon}
                       strokeWidth={1.5}
                     />
                   </Svg>
                 </View>
                 {isEditingEmail ? (
                   <TextInput
-                    style={[
-                      styles.fieldInput,
-                      { color: isDark ? '#FFFFFF' : '#000000' },
-                    ]}
+                    style={[styles.fieldInput, { color: colors.fieldText }]}
                     value={email}
                     onChangeText={setEmail}
                     placeholder="Email"
-                    placeholderTextColor="#A8A8A8"
+                    placeholderTextColor={colors.placeholder}
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoFocus
@@ -233,10 +203,7 @@ const MyProfileScreen: React.FC = () => {
                   />
                 ) : (
                   <Text
-                    style={[
-                      styles.fieldInput,
-                      { color: isDark ? '#FFFFFF' : '#000000' },
-                    ]}
+                    style={[styles.fieldInput, { color: colors.fieldText }]}
                   >
                     {email}
                   </Text>
@@ -246,60 +213,44 @@ const MyProfileScreen: React.FC = () => {
                 style={styles.fieldEditButton}
                 onPress={() => setIsEditingEmail(true)}
               >
-                <Text
-                  style={[
-                    styles.editText,
-                    { color: isDark ? '#8945FF' : '#8239FF' },
-                  ]}
-                >
+                <Text style={[styles.editText, { color: colors.fieldLabel }]}>
                   Edit
                 </Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.fieldContainer}>
-              <Text
-                style={[
-                  styles.fieldLabel,
-                  { color: isDark ? '#8945FF' : '#8239FF' },
-                ]}
-              >
+              <Text style={[styles.fieldLabel, { color: colors.fieldLabel }]}>
                 BIRTHDATE
               </Text>
               <View
                 style={[
                   styles.field,
-                  { backgroundColor: isDark ? '#2D2D2D' : '#F5F7F9' },
+                  { backgroundColor: colors.fieldBackground },
                 ]}
               >
                 <View style={styles.iconContainer}>
                   <Svg width={12} height={14} viewBox="0 0 12 14" fill="none">
                     <Path
                       d="M10.5 1h-1.125V0H8.25v1H3.75V0H2.625v1H1.5C.675 1 0 1.675 0 2.5v10C0 13.325.675 14 1.5 14h9c.825 0 1.5-.675 1.5-1.5v-10c0-.825-.675-1.5-1.5-1.5zm0 11.5h-9v-7h9v7z"
-                      stroke="#A8A8A8"
+                      stroke={colors.inputIcon}
                       strokeWidth={1.5}
                     />
                   </Svg>
                 </View>
                 {isEditingBirthdate ? (
                   <TextInput
-                    style={[
-                      styles.fieldInput,
-                      { color: isDark ? '#FFFFFF' : '#000000' },
-                    ]}
+                    style={[styles.fieldInput, { color: colors.fieldText }]}
                     value={birthdate}
                     onChangeText={setBirthdate}
                     placeholder="Birthdate"
-                    placeholderTextColor="#A8A8A8"
+                    placeholderTextColor={colors.placeholder}
                     autoFocus
                     onBlur={() => setIsEditingBirthdate(false)}
                   />
                 ) : (
                   <Text
-                    style={[
-                      styles.fieldInput,
-                      { color: isDark ? '#FFFFFF' : '#000000' },
-                    ]}
+                    style={[styles.fieldInput, { color: colors.fieldText }]}
                   >
                     {birthdate}
                   </Text>
@@ -309,12 +260,7 @@ const MyProfileScreen: React.FC = () => {
                 style={styles.fieldEditButton}
                 onPress={() => setIsEditingBirthdate(true)}
               >
-                <Text
-                  style={[
-                    styles.editText,
-                    { color: isDark ? '#8945FF' : '#8239FF' },
-                  ]}
-                >
+                <Text style={[styles.editText, { color: colors.fieldLabel }]}>
                   Edit
                 </Text>
               </TouchableOpacity>
@@ -341,21 +287,11 @@ const MyProfileScreen: React.FC = () => {
             {/* Gallery */}
             <View style={styles.gallerySection}>
               <View style={styles.gallerySectionHeader}>
-                <Text
-                  style={[
-                    styles.galleryTitle,
-                    { color: isDark ? '#FFFFFF' : '#000000' },
-                  ]}
-                >
+                <Text style={[styles.galleryTitle, { color: colors.heading }]}>
                   Gallery
                 </Text>
                 <TouchableOpacity onPress={() => console.log('Edit Gallery')}>
-                  <Text
-                    style={[
-                      styles.editText,
-                      { color: isDark ? '#8945FF' : '#8239FF' },
-                    ]}
-                  >
+                  <Text style={[styles.editText, { color: colors.fieldLabel }]}>
                     Edit
                   </Text>
                 </TouchableOpacity>

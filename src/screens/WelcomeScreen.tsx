@@ -19,9 +19,8 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import GradientText from '../components/GradientText';
 
 const WelcomeScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors, gradients, isDark } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
@@ -36,15 +35,11 @@ const WelcomeScreen: React.FC = () => {
     navigation.navigate('Login');
   };
 
-  const inputBgColor = isDark ? '#2E2E2E' : '#F5F7F9';
   const showText = true;
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
-      ]}
+      style={[styles.container, { backgroundColor: colors.background }]}
       edges={['top']}
     >
       <ScrollView
@@ -63,20 +58,29 @@ const WelcomeScreen: React.FC = () => {
 
         {/* Title Section */}
         <View style={styles.titleContainer}>
-          <Text
-            style={[
-              styles.welcomeTitle,
-              { color: isDark ? '#FFFFFF' : '#171717' },
-            ]}
-          >
+          <Text style={[styles.welcomeTitle, { color: colors.textPrimary }]}>
             Welcome
           </Text>
           <View style={styles.subtitleContainer}>
-            {!isDark && <View style={styles.subtitleHighlight} />}
-            <Text style={styles.subtitle}>
+            {!isDark && (
+              <View
+                style={[
+                  styles.subtitleHighlight,
+                  { backgroundColor: colors.underline },
+                ]}
+              />
+            )}
+            <Text style={[styles.subtitle, { color: colors.textMuted }]}>
               Sign up today for free!{' '}
-              <Text style={styles.subtitleSecondary}>or </Text>
-              <Text style={styles.loginLink} onPress={handleLogin}>
+              <Text
+                style={[styles.subtitleSecondary, { color: colors.textMuted }]}
+              >
+                or{' '}
+              </Text>
+              <Text
+                style={[styles.loginLink, { color: colors.textMuted }]}
+                onPress={handleLogin}
+              >
                 Login
               </Text>
             </Text>
@@ -87,20 +91,21 @@ const WelcomeScreen: React.FC = () => {
         <View style={styles.formContainer}>
           {/* First Name */}
           <View style={styles.inputGroup}>
-            <GradientText
-              colors={['#9253FF', '#8239FF']}
-              style={styles.inputLabel}
-            >
-              FIRST NAME
-            </GradientText>
+            <GradientText style={styles.inputLabel}>FIRST NAME</GradientText>
             <View
               style={[
                 styles.inputContainer,
-                { backgroundColor: inputBgColor },
+                { backgroundColor: colors.inputBackground },
                 firstName &&
                   (isDark
-                    ? styles.inputContainerFocusedDark
-                    : styles.inputContainerFocused),
+                    ? [
+                        styles.inputContainerFocusedDark,
+                        { borderColor: colors.accent },
+                      ]
+                    : [
+                        styles.inputContainerFocused,
+                        { borderColor: colors.border },
+                      ]),
               ]}
             >
               <Svg
@@ -112,14 +117,18 @@ const WelcomeScreen: React.FC = () => {
                 <Path
                   d="M6.5 7C8.433 7 10 5.433 10 3.5S8.433 0 6.5 0 3 1.567 3 3.5 4.567 7 6.5 7ZM6.5 8.75C4.083 8.75 0 9.958 0 12.25V14h13v-1.75c0-2.292-4.083-3.5-6.5-3.5Z"
                   fill={
-                    firstName ? (isDark ? '#A776FC' : '#9253FF') : '#A8A8A8'
+                    firstName
+                      ? isDark
+                        ? colors.accentSecondary
+                        : colors.accentPrimary
+                      : colors.inputIcon
                   }
                 />
               </Svg>
               <TextInput
-                style={[styles.input, { color: '#A8A8A8' }]}
+                style={[styles.input, { color: colors.inputText }]}
                 placeholder="Name"
-                placeholderTextColor="#A8A8A8"
+                placeholderTextColor={colors.placeholder}
                 value={firstName}
                 onChangeText={setFirstName}
               />
@@ -131,7 +140,7 @@ const WelcomeScreen: React.FC = () => {
               >
                 <Path
                   d="M1 1L4 4L7 1"
-                  stroke="#A8A8A8"
+                  stroke={colors.inputIcon}
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -142,20 +151,21 @@ const WelcomeScreen: React.FC = () => {
 
           {/* Email */}
           <View style={styles.inputGroup}>
-            <GradientText
-              colors={['#9253FF', '#8239FF']}
-              style={styles.inputLabel}
-            >
-              EMAIL
-            </GradientText>
+            <GradientText style={styles.inputLabel}>EMAIL</GradientText>
             <View
               style={[
                 styles.inputContainer,
-                { backgroundColor: inputBgColor },
+                { backgroundColor: colors.inputBackground },
                 email &&
                   (isDark
-                    ? styles.inputContainerFocusedDark
-                    : styles.inputContainerFocused),
+                    ? [
+                        styles.inputContainerFocusedDark,
+                        { borderColor: colors.accent },
+                      ]
+                    : [
+                        styles.inputContainerFocused,
+                        { borderColor: colors.border },
+                      ]),
               ]}
             >
               <Svg
@@ -166,13 +176,19 @@ const WelcomeScreen: React.FC = () => {
               >
                 <Path
                   d="M14.4 0H1.6C.72 0 .008.72.008 1.6L0 11.2C0 12.08.72 12.8 1.6 12.8h12.8c.88 0 1.6-.72 1.6-1.6V1.6C16 .72 15.28 0 14.4 0Zm0 3.2L8 7.2 1.6 3.2V1.6L8 5.6l6.4-4v1.6Z"
-                  fill={email ? (isDark ? '#A776FC' : '#9253FF') : '#A8A8A8'}
+                  fill={
+                    email
+                      ? isDark
+                        ? colors.accentSecondary
+                        : colors.accentPrimary
+                      : colors.inputIcon
+                  }
                 />
               </Svg>
               <TextInput
-                style={[styles.input, { color: '#A8A8A8' }]}
+                style={[styles.input, { color: colors.inputText }]}
                 placeholder="jordan@defects.cc"
-                placeholderTextColor="#A8A8A8"
+                placeholderTextColor={colors.placeholder}
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -186,7 +202,13 @@ const WelcomeScreen: React.FC = () => {
               >
                 <Path
                   d="M1 1L4 4L7 1"
-                  stroke={email ? (isDark ? '#8239FF' : '#A8A8A8') : '#A8A8A8'}
+                  stroke={
+                    email
+                      ? isDark
+                        ? colors.accent
+                        : colors.inputIcon
+                      : colors.inputIcon
+                  }
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -197,14 +219,12 @@ const WelcomeScreen: React.FC = () => {
 
           {/* Birthdate */}
           <View style={styles.inputGroup}>
-            <GradientText
-              colors={['#9253FF', '#8239FF']}
-              style={styles.inputLabel}
-            >
-              BIRTHDATE
-            </GradientText>
+            <GradientText style={styles.inputLabel}>BIRTHDATE</GradientText>
             <View
-              style={[styles.inputContainer, { backgroundColor: inputBgColor }]}
+              style={[
+                styles.inputContainer,
+                { backgroundColor: colors.inputBackground },
+              ]}
             >
               <Svg
                 width={13}
@@ -214,13 +234,13 @@ const WelcomeScreen: React.FC = () => {
               >
                 <Path
                   d="M11.375 1.75h-.875V.875a.875.875 0 00-1.75 0V1.75h-4.5V.875a.875.875 0 00-1.75 0V1.75h-.875A1.75 1.75 0 000 3.5v9.625A1.75 1.75 0 001.75 14.875h9.625a1.75 1.75 0 001.75-1.75V3.5a1.75 1.75 0 00-1.75-1.75ZM11.375 13.125H1.75V5.25h9.625v7.875Z"
-                  fill="#A8A8A8"
+                  fill={colors.inputIcon}
                 />
               </Svg>
               <TextInput
-                style={[styles.input, { color: '#A8A8A8' }]}
+                style={[styles.input, { color: colors.inputText }]}
                 placeholder="dd/mm/yy"
-                placeholderTextColor="#A8A8A8"
+                placeholderTextColor={colors.placeholder}
                 value={birthdate}
                 onChangeText={setBirthdate}
               />
@@ -232,7 +252,7 @@ const WelcomeScreen: React.FC = () => {
               >
                 <Path
                   d="M1 1L4 4L7 1"
-                  stroke="#A8A8A8"
+                  stroke={colors.inputIcon}
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -249,11 +269,12 @@ const WelcomeScreen: React.FC = () => {
             {
               fontSize: isDark ? 12 : 16,
               lineHeight: isDark ? 13.4 : 17.84,
+              color: colors.textMuted,
             },
           ]}
         >
           Your personal information is safe with us and we'll not show your date
-          of birth or email to other users{isDark ? '' : '.'}
+          of birth or email to other users.
         </Text>
 
         {/* Next Button Container */}
@@ -269,7 +290,7 @@ const WelcomeScreen: React.FC = () => {
                   maskElement={<Text style={styles.nextTextMask}>Next</Text>}
                 >
                   <LinearGradient
-                    colors={['#A776FC', '#8239FF']}
+                    colors={gradients.secondary}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 1 }}
                     style={styles.nextTextGradient}
@@ -285,7 +306,7 @@ const WelcomeScreen: React.FC = () => {
               style={styles.nextArrowButton}
             >
               <LinearGradient
-                colors={['#A776FC', '#8239FF']}
+                colors={gradients.secondary}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 angle={242}
@@ -294,7 +315,7 @@ const WelcomeScreen: React.FC = () => {
                 <Svg width={15} height={15} viewBox="0 0 13 13" fill="none">
                   <Path
                     d="M1 6.31034H11.6207M11.6207 6.31034L6.31034 1M11.6207 6.31034L6.31034 11.6207"
-                    stroke="#FFFFFF"
+                    stroke={colors.iconSelected}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -355,7 +376,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 173,
     height: 14,
-    backgroundColor: '#F2F2F2',
     top: 6,
   },
   subtitle: {
@@ -364,13 +384,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     textAlign: 'center',
-    color: '#A7A7A7',
   },
-  subtitleSecondary: {
-    color: '#A7A7A7',
-  },
+  subtitleSecondary: {},
   loginLink: {
-    color: '#A7A7A7',
     textDecorationLine: 'underline',
   },
   formContainer: {
@@ -401,12 +417,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'transparent',
   },
-  inputContainerFocused: {
-    borderColor: '#F5F7F9',
-  },
-  inputContainerFocusedDark: {
-    borderColor: '#8239FF',
-  },
+  inputContainerFocused: {},
+  inputContainerFocusedDark: {},
   inputIcon: {
     marginRight: 19,
   },
@@ -424,7 +436,6 @@ const styles = StyleSheet.create({
   privacyText: {
     fontFamily: 'Comfortaa',
     fontWeight: '400',
-    color: '#A7A7A7',
     textAlign: 'left',
     paddingHorizontal: wp('9.66%'),
     marginTop: hp('2.9%'),

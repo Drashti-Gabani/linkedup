@@ -18,50 +18,44 @@ const ProfileSectionCard: React.FC<ProfileSectionCardProps> = ({
   minHeight = 66,
   isAddtionalInfo = false,
 }) => {
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, gradients } = useTheme();
 
   const renderTag = (text: string, index: number) => {
-    // Different gradients for different tags (matching Figma)
-    const colors = ['#A776FC', '#8239FF'];
-
     return (
       <LinearGradient
         key={index}
-        colors={colors}
+        colors={gradients.secondary}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         angle={242}
         style={styles.tag}
       >
-        <Text style={styles.tagText}>{text}</Text>
+        <Text style={[styles.tagText, { color: colors.iconSelected }]}>
+          {text}
+        </Text>
       </LinearGradient>
     );
   };
 
   return (
     <View style={[styles.container, { minHeight }]}>
-      <Text style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}>
-        {title}
-      </Text>
+      <Text style={[styles.title, { color: colors.heading }]}>{title}</Text>
 
       {isAddtionalInfo && (
         <View style={styles.educationRow}>
           <Svg width={15} height={15} viewBox="0 0 15 15" fill="none">
-            <Path d="M7.5 1L1 4.5L7.5 8L14 4.5L7.5 1z" fill="#8945FF" />
+            <Path
+              d="M7.5 1L1 4.5L7.5 8L14 4.5L7.5 1z"
+              fill={colors.accentPrimary}
+            />
             <Path
               d="M1 10.5L7.5 14L14 10.5"
-              stroke="#8945FF"
+              stroke={colors.accentPrimary}
               strokeWidth={1.5}
               strokeLinecap="round"
             />
           </Svg>
-          <Text
-            style={[
-              styles.institutionText,
-              { color: isDark ? '#FFFFFF' : '#000000' },
-            ]}
-          >
+          <Text style={[styles.institutionText, { color: colors.heading }]}>
             Institute name shown here
           </Text>
         </View>
@@ -72,11 +66,7 @@ const ProfileSectionCard: React.FC<ProfileSectionCardProps> = ({
       </View>
       {onEdit && (
         <TouchableOpacity style={styles.editButton} onPress={onEdit}>
-          <Text
-            style={[styles.editText, { color: isDark ? '#8945FF' : '#8239FF' }]}
-          >
-            Edit
-          </Text>
+          <Text style={[styles.editText, { color: colors.accent }]}>Edit</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -106,7 +96,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Comfortaa-Bold',
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF',
     letterSpacing: -0.24,
     lineHeight: 13.38,
     paddingVertical: 12,

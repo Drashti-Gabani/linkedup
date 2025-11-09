@@ -32,9 +32,8 @@ const getFlagEmoji = (countryCode: CountryCode): string => {
 };
 
 const OTPScreen: React.FC = () => {
-  const { mode } = useTheme();
+  const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [countryCode, setCountryCode] = useState<CountryCode>('US');
@@ -61,7 +60,7 @@ const OTPScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
       edges={['top']}
     >
@@ -85,10 +84,10 @@ const OTPScreen: React.FC = () => {
             }
           >
             <LinearGradient
-              colors={isDark ? ['#A776FC', '#8239FF'] : ['#9253FF', '#8239FF']}
+              colors={gradients.secondary}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
-              angle={isDark ? 242 : 46}
+              angle={242}
               style={styles.headingGradient}
             >
               <Text style={[styles.heading, { color: 'transparent' }]}>
@@ -102,9 +101,7 @@ const OTPScreen: React.FC = () => {
             style={[
               styles.description,
               {
-                color: '#A7A7A7',
-                fontSize: wp('3.87%'), // 18px dark, 16px light
-                lineHeight: wp('6.4%'), // 26.5px for both
+                color: colors.textMuted,
               },
             ]}
           >
@@ -121,49 +118,33 @@ const OTPScreen: React.FC = () => {
               activeOpacity={0.8}
               onPress={() => setCountryPickerVisible(true)}
             >
-              {isDark ? (
-                <LinearGradient
-                  colors={['#A776FC', '#8239FF']}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  angle={242}
-                  style={styles.countryCode}
-                >
-                  <View style={styles.countryCodeContent}>
-                    <Text style={styles.flag}>{getCountryFlag()}</Text>
-                    <Text style={[styles.codeText, { color: '#FFFFFF' }]}>
-                      {getCallingCode()}
-                    </Text>
-                    <DropdownArrowIcon
-                      width={wp('2.66%')}
-                      height={wp('1.33%')}
-                      color="#FFFFFF"
-                    />
-                  </View>
-                </LinearGradient>
-              ) : (
-                <View
-                  style={[styles.countryCode, { backgroundColor: '#F2F2F2' }]}
-                >
-                  <View style={styles.countryCodeContent}>
-                    <Text style={styles.flag}>{getCountryFlag()}</Text>
-                    <Text style={styles.codeText}>{getCallingCode()}</Text>
-                    <DropdownArrowIcon
-                      width={wp('2.66%')}
-                      height={wp('1.33%')}
-                      color="#000000"
-                    />
-                  </View>
+              <LinearGradient
+                colors={gradients.secondary}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                angle={242}
+                style={styles.countryCode}
+              >
+                <View style={styles.countryCodeContent}>
+                  <Text style={styles.flag}>{getCountryFlag()}</Text>
+                  <Text style={[styles.codeText, { color: colors.iconSelected }]}>
+                    {getCallingCode()}
+                  </Text>
+                  <DropdownArrowIcon
+                    width={wp('2.66%')}
+                    height={wp('1.33%')}
+                    color={colors.iconSelected}
+                  />
                 </View>
-              )}
+              </LinearGradient>
             </TouchableOpacity>
             <TextInput
               style={[
                 styles.phoneInput,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.fieldText },
               ]}
               placeholder="800-111-2222"
-              placeholderTextColor="#96A7AF"
+              placeholderTextColor={colors.placeholder}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               keyboardType="phone-pad"
@@ -175,9 +156,7 @@ const OTPScreen: React.FC = () => {
             style={[
               styles.privacyNote,
               {
-                color: '#A7A7A7',
-                fontSize: wp('3.87%'), // 18px dark, 16px light
-                lineHeight: wp('5.4%'), // 26.5px for both
+                color: colors.textMuted,
               },
             ]}
           >
@@ -213,7 +192,7 @@ const OTPScreen: React.FC = () => {
           onSelect: onSelectCountry,
           visible: countryPickerVisible,
           onClose: () => setCountryPickerVisible(false),
-          theme: isDark ? DARK_THEME : undefined,
+          theme: undefined, // Use default theme, colors handled by app theme
         }}
         modalProps={{
           animationType: 'slide',
@@ -295,7 +274,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontWeight: '600',
     fontSize: wp('4.35%'), // 18px
-    color: '#9253FF',
   },
   dropdownIcon: {
     fontSize: wp('2.66%'),

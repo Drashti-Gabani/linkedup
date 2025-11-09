@@ -1,8 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, useColorScheme } from 'react-native';
+import { TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
 import { hp, wp } from '../utils/responsive';
+import { useTheme } from '../hooks/useTheme';
 
 interface BackButtonProps {
   onPress: () => void;
@@ -15,6 +16,8 @@ const BackButton: React.FC<BackButtonProps> = ({
   size = 'medium',
   style,
 }) => {
+  const { gradients, colors } = useTheme();
+  
   const getSize = () => {
     switch (size) {
       case 'small':
@@ -40,7 +43,7 @@ const BackButton: React.FC<BackButtonProps> = ({
       activeOpacity={0.7}
     >
       <LinearGradient
-        colors={['#A776FC', '#8239FF']}
+        colors={gradients.secondary}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         angle={242}
@@ -61,7 +64,7 @@ const BackButton: React.FC<BackButtonProps> = ({
         >
           <Path
             d="M11.6207 6.31026L0.999977 6.31026M0.999977 6.31026L6.31032 11.6206M0.999977 6.31026L6.31032 0.999916"
-            stroke="white"
+            stroke={colors.iconSelected}
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"

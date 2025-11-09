@@ -28,9 +28,8 @@ const RELIGIONS = [
 ];
 
 const LifestyleAndBeliefsScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [maritalStatus, setMaritalStatus] = useState('Single');
   const [hasKids, setHasKids] = useState(false);
@@ -44,7 +43,7 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
 
   const Checkbox = ({ checked }: { checked: boolean }) => (
     <View
-      style={[styles.checkbox, { borderColor: isDark ? '#B1B1B1' : '#B1B1B1' }]}
+      style={[styles.checkbox, { borderColor: colors.checkboxBorder }]}
     >
       {checked && <View style={styles.checkboxInner} />}
     </View>
@@ -54,7 +53,7 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       <BackButton onPress={() => navigation.goBack()} size="medium" />
@@ -65,14 +64,14 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
           <View style={styles.header}>
             <View style={styles.highlight} />
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Lifestyle & Beliefs
             </Text>
             <Text
               style={[
                 styles.subtitle,
-                { color: isDark ? '#BEBEBE' : '#BEBEBE' },
+                { color: colors.subheading },
               ]}
             >
               Increase the change to get right partner
@@ -113,7 +112,7 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
             <Text
               style={[
                 styles.sectionTitle,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.heading },
               ]}
             >
               Height
@@ -123,11 +122,11 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
                 <View
                   style={[
                     styles.heightTooltip,
-                    { backgroundColor: isDark ? '#F2F2F2' : '#F2F2F2' },
+                    { backgroundColor: colors.backgroundSecondary },
                   ]}
                 >
                   <LinearGradient
-                    colors={['#A776FC', '#8239FF']}
+                    colors={gradients.secondary}
                     style={styles.heightTextGradient}
                   >
                     <Text style={styles.heightValueText}>{`${height} cm`}</Text>
@@ -136,7 +135,7 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
                 <View
                   style={[
                     styles.tooltipArrow,
-                    { borderTopColor: isDark ? '#F2F2F2' : '#F2F2F2' },
+                    { borderTopColor: colors.backgroundSecondary },
                   ]}
                 />
               </View>
@@ -147,9 +146,9 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
                 step={1}
                 value={height}
                 onValueChange={setHeight}
-                minimumTrackTintColor={'#8239FF'}
-                maximumTrackTintColor={isDark ? '#2E2E2E' : '#F3F3F3'}
-                thumbTintColor={'#8239FF'}
+                minimumTrackTintColor={colors.sliderThumb}
+                maximumTrackTintColor={colors.sliderTrack}
+                thumbTintColor={colors.sliderThumb}
               />
             </View>
           </View>

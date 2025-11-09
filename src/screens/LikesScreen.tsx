@@ -60,22 +60,21 @@ const MOCK_LIKES = [
 
 const LikesScreen: React.FC = () => {
   const navigation = useNavigation<MainStackNavigationProp>();
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#181818' : '#FFFFFF' }]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <View style={styles.header}>
         {/* Back Button */}
         <TouchableOpacity
-          style={[styles.headerButton, { backgroundColor: isDark ? '#2D2D2D' : '#FFF4F6' }]}
+          style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}
           onPress={() => navigation.goBack()}
         >
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
             <Path
               d="M10 8l-4 4 4 4"
-              stroke={isDark ? '#FFFFFF' : '#000000'}
+              stroke={colors.headerButtonIcon}
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -85,7 +84,7 @@ const LikesScreen: React.FC = () => {
 
         {/* Title */}
         <View style={styles.headerTextContainer}>
-          <Text style={[styles.headerTitle, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+          <Text style={[styles.headerTitle, { color: colors.heading }]}>
             Liked
           </Text>
           <Text style={styles.headerSubtitle}>{MOCK_LIKES.length} Users</Text>
@@ -93,13 +92,13 @@ const LikesScreen: React.FC = () => {
 
         {/* Settings Button */}
         <TouchableOpacity
-          style={[styles.headerButton, { backgroundColor: isDark ? '#2D2D2D' : '#FFF4F6' }]}
+          style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}
           onPress={() => navigation.navigate('Settings')}
         >
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
             <Path
               d="M3 7h6M3 12h6M3 17h6M15 7l6 6M15 13l6-6"
-              stroke={isDark ? '#FFFFFF' : '#000000'}
+              stroke={colors.headerButtonIcon}
               strokeWidth={2}
               strokeLinecap="round"
             />

@@ -16,11 +16,10 @@ const ProfileFieldCard: React.FC<ProfileFieldCardProps> = ({
   icon,
   onEdit,
 }) => {
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors } = useTheme();
 
   const renderIcon = () => {
-    const iconColor = '#A8A8A8';
+    const iconColor = colors.inputIcon;
     
     switch (icon) {
       case 'user':
@@ -58,16 +57,16 @@ const ProfileFieldCard: React.FC<ProfileFieldCardProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, { color: isDark ? '#8945FF' : '#8239FF' }]}>
+      <Text style={[styles.label, { color: colors.fieldLabel }]}>
         {label}
       </Text>
-      <View style={[styles.field, { backgroundColor: isDark ? '#2D2D2D' : '#F5F7F9' }]}>
+      <View style={[styles.field, { backgroundColor: colors.fieldBackground }]}>
         <View style={styles.iconContainer}>{renderIcon()}</View>
-        <Text style={[styles.value, { color: '#A8A8A8' }]}>{value}</Text>
+        <Text style={[styles.value, { color: colors.placeholder }]}>{value}</Text>
       </View>
       {onEdit && (
         <TouchableOpacity style={styles.editButton} onPress={onEdit}>
-          <Text style={[styles.editText, { color: isDark ? '#8945FF' : '#8239FF' }]}>
+          <Text style={[styles.editText, { color: colors.fieldLabel }]}>
             Edit
           </Text>
         </TouchableOpacity>

@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ViewStyle } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { wp } from '../utils/responsive';
+import { useTheme } from '../hooks/useTheme';
 
 interface GradientButtonProps {
   onPress: () => void;
@@ -16,21 +17,23 @@ const GradientButton: React.FC<GradientButtonProps> = ({
   style,
   disabled = false,
 }) => {
+  const { gradients, colors } = useTheme();
+  
   return (
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={onPress}
-      style={[styles.button, style]}
+      style={[styles.button, { shadowColor: colors.shadowAccent }, style]}
       disabled={disabled}
     >
       <LinearGradient
-        colors={disabled ? ['#CCCCCC', '#999999'] : ['#9253FF', '#8239FF']}
+        colors={disabled ? gradients.disabled : gradients.primary}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={styles.gradient}
         angle={46}
       >
-        <Text style={styles.buttonText}>{text}</Text>
+        <Text style={[styles.buttonText, { color: colors.iconSelected }]}>{text}</Text>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -39,7 +42,6 @@ const GradientButton: React.FC<GradientButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 12,
-    shadowColor: '#9253FF',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 15,
@@ -56,7 +58,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     letterSpacing: -0.6,
-    color: '#FFFFFF',
     paddingVertical: 16,
   },
 });

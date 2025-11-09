@@ -32,9 +32,8 @@ const ALL_INDUSTRIES = [
 ];
 
 const IndustryScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selectedIndustries, setSelectedIndustries] = useState<string[]>([
     'Agriculture',
@@ -75,11 +74,11 @@ const IndustryScreen: React.FC = () => {
           <View style={styles.header}>
             <View style={styles.highlight} />
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#444444' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Industry
             </Text>
-            <Text style={[styles.subtitle, { color: '#B2B2B2' }]}>
+            <Text style={[styles.subtitle, { color: colors.textDisabled }]}>
               Where you work
             </Text>
           </View>
@@ -89,22 +88,22 @@ const IndustryScreen: React.FC = () => {
             style={[
               styles.searchContainer,
               {
-                backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF',
-                borderColor: isDark ? '#2E2E2E' : '#E8E6EA',
+                backgroundColor: colors.searchBackground,
+                borderColor: colors.searchBorder,
               },
             ]}
           >
             <Svg width={23} height={20} viewBox="0 0 23 20" fill="none">
               <Path
                 d="M9.5 16.5C13.6421 16.5 17 13.1421 17 9C17 4.85786 13.6421 1.5 9.5 1.5C5.35786 1.5 2 4.85786 2 9C2 13.1421 5.35786 16.5 9.5 16.5Z"
-                stroke={isDark ? '#A8A8A8' : 'rgba(0, 0, 0, 0.4)'}
+                stroke={colors.searchIcon}
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
               <Path
                 d="M21 18.5L15 13.5"
-                stroke={isDark ? '#A8A8A8' : 'rgba(0, 0, 0, 0.4)'}
+                stroke={colors.searchIcon}
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -113,10 +112,10 @@ const IndustryScreen: React.FC = () => {
             <TextInput
               style={[
                 styles.searchInput,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.fieldText },
               ]}
               placeholder="Search"
-              placeholderTextColor={isDark ? '#A8A8A8' : 'rgba(0, 0, 0, 0.4)'}
+              placeholderTextColor={colors.placeholder}
               value={searchQuery}
               onChangeText={setSearchQuery}
             />

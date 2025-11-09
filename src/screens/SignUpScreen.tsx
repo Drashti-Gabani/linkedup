@@ -23,18 +23,12 @@ import { useNavigation } from '@react-navigation/native';
 
 const SignUpScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, isDark } = useTheme();
 
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [birthdate, setBirthdate] = useState('');
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
-
-  const inputBgColor = isDark ? '#2E2E2E' : '#F7F8FA';
-  const titleColor = isDark ? '#FFFFFF' : '#171717';
-  const labelColor = '#7B61FF';
-  const inputTextColor = isDark ? '#FFFFFF' : '#171717';
 
   // Show checkmark when field has value
   const showFirstNameCheck = firstName.length > 0;
@@ -100,18 +94,37 @@ const SignUpScreen: React.FC = () => {
                 {/* Title Section */}
                 <View style={styles.titleSection}>
                   <View style={styles.titleWrapper}>
-                    <Text style={[styles.welcomeTitle, { color: titleColor }]}>
+                    <Text
+                      style={[
+                        styles.welcomeTitle,
+                        { color: colors.textPrimary },
+                      ]}
+                    >
                       Welcome
                     </Text>
-                    {!isDark && <View style={styles.underline} />}
+                    {!isDark && (
+                      <View
+                        style={[
+                          styles.underline,
+                          { backgroundColor: colors.underline },
+                        ]}
+                      />
+                    )}
                   </View>
 
                   <View style={styles.subtitleWrapper}>
-                    <Text style={styles.subtitleText}>
+                    <Text
+                      style={[styles.subtitleText, { color: colors.textMuted }]}
+                    >
                       Sign up today for free! or{' '}
                     </Text>
                     <TouchableOpacity onPress={handleLogin} activeOpacity={0.7}>
-                      <Text style={[styles.loginLink, { color: labelColor }]}>
+                      <Text
+                        style={[
+                          styles.loginLink,
+                          { color: colors.accentTertiary },
+                        ]}
+                      >
                         Login
                       </Text>
                     </TouchableOpacity>
@@ -122,25 +135,38 @@ const SignUpScreen: React.FC = () => {
                 <View style={styles.inputsContainer}>
                   {/* First Name Input */}
                   <View style={styles.inputGroup}>
-                    <Text style={[styles.labelText, { color: labelColor }]}>
+                    <Text
+                      style={[
+                        styles.labelText,
+                        { color: colors.accentTertiary },
+                      ]}
+                    >
                       FIRST NAME
                     </Text>
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: inputBgColor },
-                        focusedInput === 'firstName' &&
+                        { backgroundColor: colors.inputBackground },
+                        focusedInput === 'firstName' && [
                           styles.inputWrapperFocused,
+                          { borderColor: colors.accent },
+                        ],
                         !isDark &&
-                          focusedInput !== 'firstName' &&
-                          styles.inputWrapperLight,
+                          focusedInput !== 'firstName' && [
+                            styles.inputWrapperLight,
+                            { borderColor: colors.borderLight },
+                          ],
                       ]}
                     >
-                      <UserIcon width={13} height={14} color="#A8A8A8" />
+                      <UserIcon
+                        width={13}
+                        height={14}
+                        color={colors.inputIcon}
+                      />
                       <TextInput
-                        style={[styles.input, { color: inputTextColor }]}
+                        style={[styles.input, { color: colors.textPrimary }]}
                         placeholder="Name"
-                        placeholderTextColor="#A8A8A8"
+                        placeholderTextColor={colors.placeholder}
                         value={firstName}
                         onChangeText={setFirstName}
                         onFocus={() => setFocusedInput('firstName')}
@@ -154,24 +180,38 @@ const SignUpScreen: React.FC = () => {
 
                   {/* Email Input */}
                   <View style={styles.inputGroup}>
-                    <Text style={[styles.labelText, { color: labelColor }]}>
+                    <Text
+                      style={[
+                        styles.labelText,
+                        { color: colors.accentTertiary },
+                      ]}
+                    >
                       EMAIL
                     </Text>
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: inputBgColor },
-                        focusedInput === 'email' && styles.inputWrapperFocused,
+                        { backgroundColor: colors.inputBackground },
+                        focusedInput === 'email' && [
+                          styles.inputWrapperFocused,
+                          { borderColor: colors.accent },
+                        ],
                         !isDark &&
-                          focusedInput !== 'email' &&
-                          styles.inputWrapperLight,
+                          focusedInput !== 'email' && [
+                            styles.inputWrapperLight,
+                            { borderColor: colors.borderLight },
+                          ],
                       ]}
                     >
-                      <EmailIcon width={16} height={12} color="#A8A8A8" />
+                      <EmailIcon
+                        width={16}
+                        height={12}
+                        color={colors.inputIcon}
+                      />
                       <TextInput
-                        style={[styles.input, { color: inputTextColor }]}
+                        style={[styles.input, { color: colors.textPrimary }]}
                         placeholder="jordan@defects.cc"
-                        placeholderTextColor="#A8A8A8"
+                        placeholderTextColor={colors.placeholder}
                         value={email}
                         onChangeText={setEmail}
                         keyboardType="email-address"
@@ -187,25 +227,38 @@ const SignUpScreen: React.FC = () => {
 
                   {/* Birthdate Input */}
                   <View style={styles.inputGroup}>
-                    <Text style={[styles.labelText, { color: labelColor }]}>
+                    <Text
+                      style={[
+                        styles.labelText,
+                        { color: colors.accentTertiary },
+                      ]}
+                    >
                       BIRTHDATE
                     </Text>
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: inputBgColor },
-                        focusedInput === 'birthdate' &&
+                        { backgroundColor: colors.inputBackground },
+                        focusedInput === 'birthdate' && [
                           styles.inputWrapperFocused,
+                          { borderColor: colors.accent },
+                        ],
                         !isDark &&
-                          focusedInput !== 'birthdate' &&
-                          styles.inputWrapperLight,
+                          focusedInput !== 'birthdate' && [
+                            styles.inputWrapperLight,
+                            { borderColor: colors.borderLight },
+                          ],
                       ]}
                     >
-                      <CalendarIcon width={13} height={14} color="#A8A8A8" />
+                      <CalendarIcon
+                        width={13}
+                        height={14}
+                        color={colors.inputIcon}
+                      />
                       <TextInput
-                        style={[styles.input, { color: inputTextColor }]}
+                        style={[styles.input, { color: colors.textPrimary }]}
                         placeholder="dd/mm/yy"
-                        placeholderTextColor="#A8A8A8"
+                        placeholderTextColor={colors.placeholder}
                         value={birthdate}
                         onChangeText={setBirthdate}
                         onFocus={() => setFocusedInput('birthdate')}
@@ -219,7 +272,7 @@ const SignUpScreen: React.FC = () => {
                 </View>
 
                 {/* Privacy Notice */}
-                <Text style={[styles.privacyText, { color: colors.muted }]}>
+                <Text style={[styles.privacyText, { color: colors.textMuted }]}>
                   Your personal information is safe with us and we'll not show
                   your date of birth or email to other users.
                 </Text>
@@ -291,7 +344,6 @@ const styles = StyleSheet.create({
     width: wp('55%'),
     height: wp('72%'),
     borderRadius: 25,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -344,7 +396,6 @@ const styles = StyleSheet.create({
   underline: {
     width: 173,
     height: 14,
-    backgroundColor: '#F2F2F2',
     position: 'absolute',
     top: 21,
   },
@@ -357,7 +408,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Comfortaa',
     fontWeight: '600',
     fontSize: 16,
-    color: '#A7A7A7',
     lineHeight: 20,
     textAlign: 'center',
   },
@@ -395,7 +445,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 18,
     gap: 14,
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 3,
@@ -403,8 +452,6 @@ const styles = StyleSheet.create({
   },
   inputWrapperLight: {
     borderWidth: 1,
-    borderColor: '#F7F8FA',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 4,
@@ -412,7 +459,6 @@ const styles = StyleSheet.create({
   },
   inputWrapperFocused: {
     borderWidth: 1.5,
-    borderColor: '#9253FF',
   },
   input: {
     fontFamily: 'Comfortaa',

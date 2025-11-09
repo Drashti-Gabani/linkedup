@@ -23,8 +23,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
   onCancel,
   onConfirm,
 }) => {
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, gradients } = useTheme();
 
   return (
     <Modal
@@ -37,18 +36,18 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
         <View
           style={[
             styles.modalContainer,
-            { backgroundColor: isDark ? '#2D2D2D' : '#FFFFFF' },
+            { backgroundColor: colors.backgroundCard },
           ]}
         >
           <Text
-            style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}
+            style={[styles.title, { color: colors.heading }]}
           >
             Logout
           </Text>
           <Text
             style={[
               styles.message,
-              { color: isDark ? '#ADADAD' : '#666666' },
+              { color: colors.textMuted },
             ]}
           >
             Are you sure you want to logout?
@@ -59,14 +58,14 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
               style={[
                 styles.button,
                 styles.cancelButton,
-                { backgroundColor: isDark ? '#1A1A1A' : '#F5F7F9' },
+                { backgroundColor: colors.buttonBackgroundSecondary },
               ]}
               onPress={onCancel}
             >
               <Text
                 style={[
                   styles.buttonText,
-                  { color: isDark ? '#FFFFFF' : '#000000' },
+                  { color: colors.buttonText },
                 ]}
               >
                 Cancel
@@ -75,7 +74,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
 
             <TouchableOpacity style={styles.button} onPress={onConfirm}>
               <LinearGradient
-                colors={['#A776FC', '#8239FF']}
+                colors={gradients.secondary}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={styles.confirmButton}

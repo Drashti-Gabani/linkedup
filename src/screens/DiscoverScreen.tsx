@@ -87,8 +87,7 @@ type DiscoverScreenNavigationProp = CompositeNavigationProp<
 >;
 
 const DiscoverScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, isDark } = useTheme();
   const navigation = useNavigation<DiscoverScreenNavigationProp>();
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
 
@@ -133,26 +132,26 @@ const DiscoverScreen: React.FC = () => {
 
         {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}>
+          <Text style={[styles.title, { color: colors.heading }]}>
             Discover
           </Text>
 
           {/* Notification and Filter buttons */}
           <View style={styles.headerButtons}>
-            <TouchableOpacity style={[styles.headerButton, { backgroundColor: isDark ? '#2D2D2D' : '#F5F7F9' }]}>
+            <TouchableOpacity style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}>
               <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
                 <Path
                   d="M10 2C7.8 2 6 3.8 6 6v3l-2 2v4h12v-4l-2-2V6c0-2.2-1.8-4-4-4zm0 16c1.1 0 2-.9 2-2H8c0 1.1.9 2 2 2z"
-                  fill={isDark ? '#878787' : '#8239FF'}
+                  fill={colors.accent}
                 />
               </Svg>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.headerButton, { backgroundColor: isDark ? '#2D2D2D' : '#F5F7F9' }]}>
+            <TouchableOpacity style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}>
               <Svg width={22} height={22} viewBox="0 0 22 22" fill="none">
                 <Path
                   d="M3 11h6M3 6h6M3 16h6M13 11l6-6M13 11l6 6"
-                  stroke={isDark ? '#878787' : '#8239FF'}
+                  stroke={colors.accent}
                   strokeWidth={2}
                   strokeLinecap="round"
                 />

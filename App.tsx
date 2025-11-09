@@ -23,12 +23,12 @@ function App() {
 }
 
 function AppContent() {
-  const { colors, mode } = useTheme();
+  const { colors, isDark } = useTheme();
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <StatusBar
-        barStyle={mode === 'dark' ? 'light-content' : 'dark-content'}
+        barStyle={isDark ? 'light-content' : 'dark-content'}
       />
       <NavigationContainer>
         <RootNavigator />

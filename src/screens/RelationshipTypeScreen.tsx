@@ -12,9 +12,8 @@ import NextButton from '../components/NextButton';
 type RelationshipType = 'casual' | 'professional' | 'marriage' | null;
 
 const RelationshipTypeScreen: React.FC = () => {
-  const { mode } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selectedType, setSelectedType] = useState<RelationshipType>('casual');
 
@@ -74,10 +73,7 @@ const RelationshipTypeScreen: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
-      ]}
+      style={[styles.container, { backgroundColor: colors.background }]}
       edges={['top']}
     >
       {/* Back Button */}
@@ -90,12 +86,10 @@ const RelationshipTypeScreen: React.FC = () => {
       <View style={styles.content}>
         {/* Heading Section */}
         <View style={styles.headingContainer}>
-          <Text
-            style={[styles.heading, { color: isDark ? '#FFFFFF' : '#000000' }]}
-          >
+          <Text style={[styles.heading, { color: colors.heading }]}>
             The Relationship You're Looking For
           </Text>
-          <Text style={[styles.subheading, { color: '#BEBEBE' }]}>
+          <Text style={[styles.subheading, { color: colors.subheading }]}>
             Choose any one
           </Text>
         </View>
@@ -136,7 +130,7 @@ const RelationshipTypeScreen: React.FC = () => {
             </LinearGradient>
           </View>
 
-          <Text style={[styles.switchText, { color: '#A7A7A7' }]}>
+          <Text style={[styles.switchText, { color: colors.textMuted }]}>
             You can switch above options anytime from your Profile
           </Text>
         </View>

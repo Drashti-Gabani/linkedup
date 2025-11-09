@@ -17,9 +17,8 @@ import GradientButton from '../components/GradientButton';
 import BackButton from '../components/BackButton';
 
 const OTPVerifyScreen: React.FC = () => {
-  const { mode } = useTheme();
+  const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [otp, setOtp] = useState(['', '', '', '']);
   const inputRefs = useRef<Array<TextInput | null>>([]);
@@ -61,7 +60,7 @@ const OTPVerifyScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
       edges={['top']}
     >
@@ -85,10 +84,10 @@ const OTPVerifyScreen: React.FC = () => {
             }
           >
             <LinearGradient
-              colors={isDark ? ['#A776FC', '#8239FF'] : ['#9253FF', '#8239FF']}
+              colors={gradients.secondary}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
-              angle={isDark ? 242 : 46}
+              angle={242}
               style={styles.headingGradient}
             >
               <Text style={[styles.heading, { color: 'transparent' }]}>
@@ -102,16 +101,11 @@ const OTPVerifyScreen: React.FC = () => {
             style={[
               styles.description,
               {
-                color: '#A7A7A7',
-                fontFamily: isDark ? 'Sofia Pro' : 'Comfortaa',
-                fontSize: isDark ? wp('4.35%') : wp('3.87%'), // 18px dark, 16px light
-                lineHeight: isDark ? wp('6.4%') : wp('6.62%'), // ~26.5px for both
+                color: colors.textMuted,
               },
             ]}
           >
-            {isDark
-              ? 'Enter the 4 digit code sent to your device\nto verify your account.'
-              : 'Enter the 4 digit code sent to your device to verify your account.'}
+            Enter the 4 digit code sent to your device to verify your account.
           </Text>
         </View>
 
@@ -148,48 +142,22 @@ const OTPVerifyScreen: React.FC = () => {
                     <View
                       style={[
                         styles.otpBox,
-                        isDark
-                          ? styles.otpBoxEmptyDark
-                          : styles.otpBoxEmptyLight,
+                        styles.otpBoxEmptyLight,
+                        { backgroundColor: colors.otpBoxEmpty, borderColor: colors.otpBoxEmptyBorder },
                       ]}
                     >
-                      {isDark ? (
-                        <LinearGradient
-                          colors={['#2D2D2D', '#2B2B2B']}
-                          start={{ x: 0, y: 0 }}
-                          end={{ x: 1, y: 1 }}
-                          angle={52}
-                          style={styles.otpBoxGradient}
-                        >
-                          <TextInput
-                            ref={ref => {
-                              inputRefs.current[index] = ref;
-                            }}
-                            style={[styles.otpInput, { color: '#FFFFFF' }]}
-                            value={otp[index]}
-                            onChangeText={value =>
-                              handleOtpChange(value, index)
-                            }
-                            onKeyPress={e => handleKeyPress(e, index)}
-                            keyboardType="number-pad"
-                            maxLength={1}
-                            selectTextOnFocus
-                          />
-                        </LinearGradient>
-                      ) : (
-                        <TextInput
-                          ref={ref => {
-                            inputRefs.current[index] = ref;
-                          }}
-                          style={[styles.otpInput, { color: '#000000' }]}
-                          value={otp[index]}
-                          onChangeText={value => handleOtpChange(value, index)}
-                          onKeyPress={e => handleKeyPress(e, index)}
-                          keyboardType="number-pad"
-                          maxLength={1}
-                          selectTextOnFocus
-                        />
-                      )}
+                      <TextInput
+                        ref={ref => {
+                          inputRefs.current[index] = ref;
+                        }}
+                        style={[styles.otpInput, { color: colors.otpBoxText }]}
+                        value={otp[index]}
+                        onChangeText={value => handleOtpChange(value, index)}
+                        onKeyPress={e => handleKeyPress(e, index)}
+                        keyboardType="number-pad"
+                        maxLength={1}
+                        selectTextOnFocus
+                      />
                     </View>
                   )}
                 </View>
@@ -210,8 +178,8 @@ const OTPVerifyScreen: React.FC = () => {
 
           {/* Resend Code */}
           <TouchableOpacity onPress={handleResend} style={styles.resendButton}>
-            <Text style={[styles.resendText, { color: '#A7A7A7' }]}>
-              Didn't get a code? <Text style={styles.resendLink}>Resend</Text>
+            <Text style={[styles.resendText, { color: colors.textMuted }]}>
+              Didn't get a code? <Text style={[styles.resendLink, { color: colors.accent }]}>Resend</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -342,7 +310,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Comfortaa',
     fontWeight: '600',
     fontSize: wp('3.87%'),
-    color: '#8239FF',
   },
 });
 

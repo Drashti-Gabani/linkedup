@@ -27,9 +27,8 @@ const EXPERIENCE_RANGES = [
 ];
 
 const ProfessionalExperienceScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selectedRange, setSelectedRange] = useState<string | null>(
     '0 – 2 years',
@@ -62,11 +61,11 @@ const ProfessionalExperienceScreen: React.FC = () => {
           <View style={styles.header}>
             <View style={styles.highlight} />
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Professional Experience
             </Text>
-            <Text style={[styles.subtitle, { color: '#BEBEBE' }]}>
+            <Text style={[styles.subtitle, { color: colors.subheading }]}>
               Tell us about your Professional experience
             </Text>
           </View>
@@ -90,12 +89,12 @@ const ProfessionalExperienceScreen: React.FC = () => {
             <View
               style={[
                 styles.checkbox,
-                { borderColor: isDark ? '#B1B1B1' : '#B1B1B1' },
+                { borderColor: colors.checkboxBorder },
               ]}
             >
               {dontShow && <View style={styles.checkboxInner} />}
             </View>
-            <Text style={[styles.checkboxLabel, { color: '#B2B2B2' }]}>
+            <Text style={[styles.checkboxLabel, { color: colors.textDisabled }]}>
               Don't show
             </Text>
           </TouchableOpacity>
@@ -122,16 +121,16 @@ const ProfessionalExperienceScreen: React.FC = () => {
             <View
               style={[
                 styles.inputContainer,
-                { backgroundColor: isDark ? '#2E2E2E' : '#F5F7F9' },
+                { backgroundColor: colors.inputBackground },
               ]}
             >
               <TextInput
                 style={[
                   styles.input,
-                  { color: isDark ? '#FFFFFF' : '#000000' },
+                  { color: colors.fieldText },
                 ]}
                 placeholder="Enter your role"
-                placeholderTextColor="#A8A8A8"
+                placeholderTextColor={colors.placeholder}
                 value={companyEmail}
                 onChangeText={setCompanyEmail}
                 keyboardType="email-address"

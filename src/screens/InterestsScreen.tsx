@@ -35,9 +35,8 @@ const INTERESTS: Interest[] = [
 ];
 
 const InterestsScreen: React.FC = () => {
-  const { mode } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selectedInterests, setSelectedInterests] = useState<string[]>([
     'Movies',
@@ -68,7 +67,7 @@ const InterestsScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       <BackButton onPress={() => navigation.goBack()} size="medium" />
@@ -81,11 +80,11 @@ const InterestsScreen: React.FC = () => {
         {/* Header */}
         <View style={styles.header}>
           <Text
-            style={[styles.title, { color: isDark ? '#FFFFFF' : '#444444' }]}
+            style={[styles.title, { color: colors.heading }]}
           >
             Interests
           </Text>
-          <Text style={[styles.subtitle, { color: '#B2B2B2' }]}>
+          <Text style={[styles.subtitle, { color: colors.textDisabled }]}>
             Select a few of your interests to match with{'\n'}users who have
             similar things in common.
           </Text>

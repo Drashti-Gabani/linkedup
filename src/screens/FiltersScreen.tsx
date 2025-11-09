@@ -18,8 +18,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const FiltersScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, gradients } = useTheme();
 
   // State management
   const [location] = useState('Los Angeles, Califonia');
@@ -53,7 +52,7 @@ const FiltersScreen: React.FC = () => {
     <View
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#000000' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       {/* Background Card Preview */}
@@ -85,58 +84,50 @@ const FiltersScreen: React.FC = () => {
         {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.settingsButton}>
-            <View
-              style={[
-                styles.settingsIconBg,
-                { backgroundColor: isDark ? '#313131' : '#FFF4F6' },
-              ]}
-            >
-              <Svg width={6} height={16} viewBox="0 0 6 16" fill="none">
-                <Path
-                  d="M0 4h4M0 0h6M0 12h4M0 8h6"
-                  stroke="#000000"
-                  strokeWidth={1}
-                />
-              </Svg>
-            </View>
-          </View>
-          <Text
+          <View
             style={[
-              styles.headerTitle,
-              { color: isDark ? '#FFFFFF' : '#000000' },
+              styles.settingsIconBg,
+              { backgroundColor: colors.headerButtonBackground },
             ]}
           >
-            Discover
-          </Text>
+            <Svg width={6} height={16} viewBox="0 0 6 16" fill="none">
+              <Path
+                d="M0 4h4M0 0h6M0 12h4M0 8h6"
+                stroke={colors.headerButtonIcon}
+                strokeWidth={1}
+              />
+            </Svg>
+          </View>
+        </View>
+        <Text
+          style={[
+            styles.headerTitle,
+            { color: colors.heading },
+          ]}
+        >
+          Discover
+        </Text>
         </View>
 
         {/* Filter Pills */}
         <View style={styles.filterPills}>
           <LinearGradient
-            colors={['#A776FC', '#8239FF', '#FFFFFF00']}
+            colors={[...gradients.secondary, 'rgba(255, 255, 255, 0)']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             angle={242}
             style={styles.pill}
           >
-            {/* <Image
-              source={require('../../assets/images/guidelines/icon-honest.png')}
-              style={styles.pillIcon}
-            /> */}
             <Text style={styles.pillText}>Liked</Text>
           </LinearGradient>
 
           <LinearGradient
-            colors={['#A776FC', '#8239FF', '#FFFFFF00']}
+            colors={[...gradients.secondary, 'rgba(255, 255, 255, 0)']}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             angle={242}
             style={styles.pill}
           >
-            {/* <Image
-              source={require('../../assets/images/guidelines/icon-honest.png')}
-              style={styles.pillIcon}
-            /> */}
             <Text style={[styles.pillText, styles.pillTextLight]}>Rethink</Text>
           </LinearGradient>
         </View>
@@ -146,7 +137,7 @@ const FiltersScreen: React.FC = () => {
       <View
         style={[
           styles.filterModal,
-          { backgroundColor: isDark ? '#212121' : '#FFFFFF' },
+          { backgroundColor: colors.backgroundCard },
         ]}
       >
         {/* Modal Header */}
@@ -155,7 +146,7 @@ const FiltersScreen: React.FC = () => {
             <Svg width={13} height={13} viewBox="0 0 13 13" fill="none">
               <Path
                 d="M1 1l11 11M1 12L12 1"
-                stroke={isDark ? '#FFFFFF' : '#000000'}
+                stroke={colors.heading}
                 strokeWidth={2}
                 strokeLinecap="round"
               />
@@ -164,7 +155,7 @@ const FiltersScreen: React.FC = () => {
           <Text
             style={[
               styles.modalTitle,
-              { color: isDark ? '#FFFFFF' : '#000000' },
+              { color: colors.heading },
             ]}
           >
             Filters
@@ -173,7 +164,7 @@ const FiltersScreen: React.FC = () => {
             <Svg width={15} height={11} viewBox="0 0 15 11" fill="none">
               <Path
                 d="M1 5.5l4 4 9-9"
-                stroke="#8945FF"
+                stroke={colors.accent}
                 strokeWidth={3}
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -193,7 +184,7 @@ const FiltersScreen: React.FC = () => {
             <Text
               style={[
                 styles.filterLabel,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.heading },
               ]}
             >
               Location
@@ -202,18 +193,18 @@ const FiltersScreen: React.FC = () => {
               style={[
                 styles.filterInput,
                 {
-                  backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF',
-                  borderColor: '#DFDFDF',
+                  backgroundColor: colors.searchBackground,
+                  borderColor: colors.borderLight,
                 },
               ]}
             >
-              <Text style={[styles.filterInputText, { color: '#CFCFCF' }]}>
+              <Text style={[styles.filterInputText, { color: colors.textMuted }]}>
                 {location}
               </Text>
               <Svg width={14} height={15} viewBox="0 0 14 15" fill="none">
                 <Path
                   d="M7 1C4.2 1 2 3.2 2 6c0 3.75 5 8 5 8s5-4.25 5-8c0-2.8-2.2-5-5-5zm0 7c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"
-                  stroke="#CFCFCF"
+                  stroke={colors.textMuted}
                   strokeWidth={2}
                 />
               </Svg>
@@ -225,7 +216,7 @@ const FiltersScreen: React.FC = () => {
             <Text
               style={[
                 styles.filterLabel,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.heading },
               ]}
             >
               Gender
@@ -234,15 +225,15 @@ const FiltersScreen: React.FC = () => {
               style={[
                 styles.segmentedControl,
                 {
-                  backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF',
-                  borderColor: '#DFDFDF',
+                  backgroundColor: colors.searchBackground,
+                  borderColor: colors.borderLight,
                 },
               ]}
             >
               <TouchableOpacity
                 style={[
                   styles.segment,
-                  selectedGender === 'Male' && styles.segmentActive,
+                  selectedGender === 'Male' && { backgroundColor: colors.accent },
                 ]}
                 onPress={() => setSelectedGender('Male')}
               >
@@ -250,18 +241,18 @@ const FiltersScreen: React.FC = () => {
                   style={[
                     styles.segmentText,
                     {
-                      color: selectedGender === 'Male' ? '#FFFFFF' : '#CFCFCF',
+                      color: selectedGender === 'Male' ? colors.iconSelected : colors.textMuted,
                     },
                   ]}
                 >
                   Male
                 </Text>
               </TouchableOpacity>
-              <View style={styles.segmentDivider} />
+              <View style={[styles.segmentDivider, { backgroundColor: colors.borderLight }]} />
               <TouchableOpacity
                 style={[
                   styles.segment,
-                  selectedGender === 'Female' && styles.segmentActive,
+                  selectedGender === 'Female' && { backgroundColor: colors.accent },
                 ]}
                 onPress={() => setSelectedGender('Female')}
               >
@@ -270,18 +261,18 @@ const FiltersScreen: React.FC = () => {
                     styles.segmentText,
                     {
                       color:
-                        selectedGender === 'Female' ? '#FFFFFF' : '#CFCFCF',
+                        selectedGender === 'Female' ? colors.iconSelected : colors.textMuted,
                     },
                   ]}
                 >
                   Female
                 </Text>
               </TouchableOpacity>
-              <View style={styles.segmentDivider} />
+              <View style={[styles.segmentDivider, { backgroundColor: colors.borderLight }]} />
               <TouchableOpacity
                 style={[
                   styles.segment,
-                  selectedGender === 'Other' && styles.segmentActive,
+                  selectedGender === 'Other' && { backgroundColor: colors.accent },
                 ]}
                 onPress={() => setSelectedGender('Other')}
               >
@@ -289,7 +280,7 @@ const FiltersScreen: React.FC = () => {
                   style={[
                     styles.segmentText,
                     {
-                      color: selectedGender === 'Other' ? '#FFFFFF' : '#CFCFCF',
+                      color: selectedGender === 'Other' ? colors.iconSelected : colors.textMuted,
                     },
                   ]}
                 >
@@ -317,7 +308,7 @@ const FiltersScreen: React.FC = () => {
             <Text
               style={[
                 styles.filterLabel,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.heading },
               ]}
             >
               Drinking
@@ -326,8 +317,8 @@ const FiltersScreen: React.FC = () => {
               style={[
                 styles.segmentedControl,
                 {
-                  backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF',
-                  borderColor: '#DFDFDF',
+                  backgroundColor: colors.searchBackground,
+                  borderColor: colors.borderLight,
                 },
               ]}
             >
@@ -339,23 +330,23 @@ const FiltersScreen: React.FC = () => {
                 ]}
                 onPress={() => setDrinking('Yes')}
               >
-                <Text style={[styles.segmentText, { color: '#CFCFCF' }]}>
+                <Text style={[styles.segmentText, { color: colors.textMuted }]}>
                   Yes
                 </Text>
               </TouchableOpacity>
-              <View style={styles.segmentDivider} />
+              <View style={[styles.segmentDivider, { backgroundColor: colors.borderLight }]} />
               <TouchableOpacity
                 style={[
                   styles.segment,
                   styles.segmentHalf,
-                  drinking === 'No' && styles.segmentActive,
+                  drinking === 'No' && { backgroundColor: colors.accent },
                 ]}
                 onPress={() => setDrinking('No')}
               >
                 <Text
                   style={[
                     styles.segmentText,
-                    { color: drinking === 'No' ? '#FFFFFF' : '#CFCFCF' },
+                    { color: drinking === 'No' ? colors.iconSelected : colors.textMuted },
                   ]}
                 >
                   No
@@ -369,7 +360,7 @@ const FiltersScreen: React.FC = () => {
             <Text
               style={[
                 styles.filterLabel,
-                { color: isDark ? '#FFFFFF' : '#000000' },
+                { color: colors.heading },
               ]}
             >
               Language
@@ -379,11 +370,9 @@ const FiltersScreen: React.FC = () => {
                 styles.checkboxInput,
                 {
                   backgroundColor: languagePreference
-                    ? '#8640FF'
-                    : isDark
-                    ? '#2E2E2E'
-                    : '#FFFFFF',
-                  borderColor: '#DFDFDF',
+                    ? colors.accent
+                    : colors.searchBackground,
+                  borderColor: colors.borderLight,
                 },
               ]}
               onPress={() => setLanguagePreference(!languagePreference)}
@@ -391,7 +380,7 @@ const FiltersScreen: React.FC = () => {
               <Text
                 style={[
                   styles.checkboxInputText,
-                  { color: languagePreference ? '#FFFFFF' : '#CFCFCF' },
+                  { color: languagePreference ? colors.iconSelected : colors.textMuted },
                 ]}
               >
                 As per my preference
@@ -401,7 +390,7 @@ const FiltersScreen: React.FC = () => {
                   <Svg width={18} height={18} viewBox="0 0 18 18" fill="none">
                     <Path
                       d="M15 5L7 13L3 9"
-                      stroke="#FFFFFF"
+                      stroke={colors.iconSelected}
                       strokeWidth={2}
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -654,9 +643,6 @@ const styles = StyleSheet.create({
   segmentHalf: {
     flex: 0.5,
   },
-  segmentActive: {
-    backgroundColor: '#8945FF',
-  },
   segmentInactive: {
     backgroundColor: 'transparent',
   },
@@ -671,7 +657,6 @@ const styles = StyleSheet.create({
   segmentDivider: {
     width: 1,
     height: '100%',
-    backgroundColor: '#DFDFDF',
   },
   checkboxInput: {
     flexDirection: 'row',

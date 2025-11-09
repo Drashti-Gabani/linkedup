@@ -14,29 +14,31 @@ interface GuidelineCardProps {
   iconSource: any;
   title: string;
   description: string;
-  isDark: boolean;
+  colors: any;
+  gradients: any;
 }
 
 const GuidelineCard: React.FC<GuidelineCardProps> = ({
   iconSource,
   title,
   description,
-  isDark,
+  colors,
+  gradients,
 }) => {
   return (
     <View style={styles.cardWrapper}>
       <View
         style={[
           styles.card,
-          { backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF' },
+          { backgroundColor: colors.backgroundCard },
         ]}
       >
         <View style={styles.cardContent}>
-          <Text style={styles.cardTitle}>{title}</Text>
+          <Text style={[styles.cardTitle, { color: colors.accent }]}>{title}</Text>
           <Text
             style={[
               styles.cardDescription,
-              { color: isDark ? '#CCCCCC' : '#000000' },
+              { color: colors.textPrimary },
             ]}
           >
             {description}
@@ -44,7 +46,7 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
         </View>
         <View style={styles.iconBadge}>
           <LinearGradient
-            colors={['#9253FF', '#8239FF']}
+            colors={gradients.primary}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.iconBadgeGradient}
@@ -62,9 +64,8 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
 };
 
 const CommunityGuidelinesScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors, gradients } = useTheme();
   const navigation = useNavigation<MainStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const guidelines = [
     {
@@ -111,11 +112,11 @@ const CommunityGuidelinesScreen: React.FC = () => {
         <View style={styles.header}>
           <View style={styles.highlight} />
           <Text
-            style={[styles.title, { color: isDark ? '#FFFFFF' : '#444444' }]}
+            style={[styles.title, { color: colors.heading }]}
           >
             Welcome
           </Text>
-          <Text style={styles.subtitle}>
+          <Text style={[styles.subtitle, { color: colors.textDisabled }]}>
             We are glad for you to be here. Please, follow these guidelines
           </Text>
         </View>
@@ -127,13 +128,15 @@ const CommunityGuidelinesScreen: React.FC = () => {
               iconSource={guidelines[0].iconSource}
               title={guidelines[0].title}
               description={guidelines[0].description}
-              isDark={isDark}
+              colors={colors}
+              gradients={gradients}
             />
             <GuidelineCard
               iconSource={guidelines[2].iconSource}
               title={guidelines[2].title}
               description={guidelines[2].description}
-              isDark={isDark}
+              colors={colors}
+              gradients={gradients}
             />
           </View>
           <View style={styles.cardsColumn}>
@@ -141,13 +144,15 @@ const CommunityGuidelinesScreen: React.FC = () => {
               iconSource={guidelines[1].iconSource}
               title={guidelines[1].title}
               description={guidelines[1].description}
-              isDark={isDark}
+              colors={colors}
+              gradients={gradients}
             />
             <GuidelineCard
               iconSource={guidelines[3].iconSource}
               title={guidelines[3].title}
               description={guidelines[3].description}
-              isDark={isDark}
+              colors={colors}
+              gradients={gradients}
             />
           </View>
         </View>

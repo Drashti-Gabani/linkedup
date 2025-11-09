@@ -15,8 +15,7 @@ import GradientButton from '../components/GradientButton';
 export default function SettingsScreen() {
   const [pushNotifications, setPushNotifications] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const { colors, mode, setMode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, isDark, setMode } = useTheme();
 
   const handleLogout = () => {
     setShowLogoutModal(false);
@@ -97,8 +96,8 @@ export default function SettingsScreen() {
             <Switch
               value={pushNotifications}
               onValueChange={setPushNotifications}
-              trackColor={{ false: colors.border, true: '#8239FF' }}
-              thumbColor="#FFFFFF"
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor={colors.iconSelected}
             />
           </View>
 
@@ -111,8 +110,8 @@ export default function SettingsScreen() {
             <Switch
               value={isDark}
               onValueChange={v => setMode(v ? 'dark' : 'light')}
-              trackColor={{ false: colors.border, true: '#8239FF' }}
-              thumbColor="#FFFFFF"
+              trackColor={{ false: colors.border, true: colors.accent }}
+              thumbColor={colors.iconSelected}
             />
           </View>
         </View>

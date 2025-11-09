@@ -31,9 +31,8 @@ const SALARY_RANGES = [
 ];
 
 const MonthlyEarningScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selectedRange, setSelectedRange] = useState<string | null>(
     'Below 50,000',
@@ -75,11 +74,11 @@ const MonthlyEarningScreen: React.FC = () => {
           <View style={styles.header}>
             <View style={styles.highlight} />
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Monthly Earning
             </Text>
-            <Text style={[styles.subtitle, { color: '#BEBEBE' }]}>
+            <Text style={[styles.subtitle, { color: colors.subheading }]}>
               Select a range
             </Text>
           </View>
@@ -88,7 +87,7 @@ const MonthlyEarningScreen: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.currencySelector,
-              { backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF' },
+              { backgroundColor: colors.inputBackground },
             ]}
             onPress={() => setShowCurrencyPicker(true)}
             activeOpacity={0.7}
@@ -96,7 +95,7 @@ const MonthlyEarningScreen: React.FC = () => {
             <Text
               style={[
                 styles.currencySelectorText,
-                { color: isDark ? '#D0C9D6' : '#D0C9D6' },
+                { color: colors.inputIconSecondary },
               ]}
             >
               {selectedCurrency || 'Select Currency'}
@@ -104,7 +103,7 @@ const MonthlyEarningScreen: React.FC = () => {
             <Svg width={15} height={14} viewBox="0 0 15 14">
               <Polygon
                 points="7.5,14 0,0 15,0"
-                fill={isDark ? '#FFFFFF' : '#000000'}
+                fill={colors.fieldText}
               />
             </Svg>
           </TouchableOpacity>
@@ -128,12 +127,12 @@ const MonthlyEarningScreen: React.FC = () => {
             <View
               style={[
                 styles.checkbox,
-                { borderColor: isDark ? '#B1B1B1' : '#B1B1B1' },
+                { borderColor: colors.checkboxBorder },
               ]}
             >
               {dontShow && <View style={styles.checkboxInner} />}
             </View>
-            <Text style={[styles.checkboxLabel, { color: '#B2B2B2' }]}>
+            <Text style={[styles.checkboxLabel, { color: colors.textDisabled }]}>
               Don't show
             </Text>
           </TouchableOpacity>
@@ -170,11 +169,11 @@ const MonthlyEarningScreen: React.FC = () => {
         theme={{
           fontFamily: 'Sofia Pro',
           fontSize: 16,
-          backgroundColor: isDark ? '#2E2E2E' : '#FFFFFF',
-          onBackgroundTextColor: isDark ? '#FFFFFF' : '#000000',
-          primaryColor: '#8239FF',
-          primaryColorVariant: '#A776FC',
-          filterPlaceholderTextColor: '#C5C5C5',
+          backgroundColor: colors.inputBackground,
+          onBackgroundTextColor: colors.fieldText,
+          primaryColor: colors.accent,
+          primaryColorVariant: colors.accentSecondary,
+          filterPlaceholderTextColor: colors.placeholder,
         }}
       />
     </SafeAreaView>

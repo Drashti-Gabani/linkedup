@@ -18,8 +18,7 @@ import {
 
 const MatchScreen: React.FC = () => {
   const navigation = useNavigation();
-  const { mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, gradients, isDark } = useTheme();
 
   const handleKeepSwiping = () => {
     // Navigate back to discover screen
@@ -35,12 +34,12 @@ const MatchScreen: React.FC = () => {
     <SafeAreaView
       style={[
         styles.container,
-        { backgroundColor: isDark ? '#181818' : '#FFFFFF' },
+        { backgroundColor: colors.background },
       ]}
     >
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={isDark ? '#181818' : '#FFFFFF'}
+        backgroundColor={colors.background}
       />
 
       {/* Main Content Container */}
@@ -73,11 +72,7 @@ const MatchScreen: React.FC = () => {
             {/* Heart Overlay Image */}
             <View style={styles.heartOverlayContainer}>
               <Image
-                source={
-                  isDark
-                    ? require('../assets/images/hearts-overlay-dark.png')
-                    : require('../assets/images/hearts-overlay.png')
-                }
+                source={require('../assets/images/hearts-overlay.png')}
                 style={styles.heartOverlay}
                 resizeMode="contain"
               />
@@ -91,7 +86,7 @@ const MatchScreen: React.FC = () => {
             style={[
               styles.matchHeading,
               {
-                color: isDark ? '#FFFFFF' : '#9253FF',
+                color: colors.accent,
               },
             ]}
           >
@@ -100,7 +95,7 @@ const MatchScreen: React.FC = () => {
           <Text
             style={[
               styles.matchSubtext,
-              { color: isDark ? '#FFFFFF' : '#A7A7A7' },
+              { color: colors.textMuted },
             ]}
           >
             Don't keep your new match waiting!
@@ -115,12 +110,12 @@ const MatchScreen: React.FC = () => {
             onPress={handleSayHello}
           >
             <LinearGradient
-              colors={['#9253FF', '#8239FF']}
+              colors={gradients.primary}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.buttonGradient}
             >
-              <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>
+              <Text style={[styles.buttonText, { color: colors.iconSelected }]}>
                 Say Hello
               </Text>
             </LinearGradient>
@@ -132,11 +127,7 @@ const MatchScreen: React.FC = () => {
             onPress={handleKeepSwiping}
           >
             <LinearGradient
-              colors={
-                isDark
-                  ? ['rgba(167, 118, 252, 0.1)', 'rgba(167, 118, 252, 0.1)']
-                  : ['#FFF4F6', '#FFF4F6']
-              }
+              colors={[colors.headerButtonBackground, colors.headerButtonBackground]}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
               style={styles.buttonGradient}
@@ -145,7 +136,7 @@ const MatchScreen: React.FC = () => {
                 style={[
                   styles.buttonText,
                   {
-                    color: isDark ? '#FFFFFF' : '#A776FC',
+                    color: colors.accent,
                   },
                 ]}
               >

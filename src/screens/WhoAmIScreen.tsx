@@ -38,9 +38,8 @@ const PETS_OPTIONS = [
 ];
 
 const WhoAmIScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [personalityTraits, setPersonalityTraits] = useState<string[]>([
     'Funny',
@@ -82,14 +81,14 @@ const WhoAmIScreen: React.FC = () => {
           <View style={styles.header}>
             <View style={styles.highlight} />
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Who am I
             </Text>
             <Text
               style={[
                 styles.subtitle,
-                { color: isDark ? '#BEBEBE' : '#BEBEBE' },
+                { color: colors.subheading },
               ]}
             >
               Select what explains you

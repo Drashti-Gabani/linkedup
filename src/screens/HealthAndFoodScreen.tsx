@@ -34,9 +34,8 @@ const DRINKING_OPTIONS = [
 const SMOKING_OPTIONS = ['Regular', 'Sometimes', 'Quitting'];
 
 const HealthAndFoodScreen: React.FC = () => {
-  const { colors, mode } = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const isDark = mode === 'dark';
 
   const [selections, setSelections] = useState<SelectionState>({
     workout: 'Regularly',
@@ -65,14 +64,14 @@ const HealthAndFoodScreen: React.FC = () => {
           {/* Header */}
           <View style={styles.header}>
             <Text
-              style={[styles.title, { color: isDark ? '#FFFFFF' : '#000000' }]}
+              style={[styles.title, { color: colors.heading }]}
             >
               Health and Food
             </Text>
             <Text
               style={[
                 styles.subtitle,
-                { color: isDark ? '#BEBEBE' : '#BEBEBE' },
+                { color: colors.subheading },
               ]}
             >
               Select what you like in diet

@@ -20,15 +20,11 @@ import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const { colors, mode } = useTheme();
-  const isDark = mode === 'dark';
+  const { colors, isDark } = useTheme();
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  const inputBgColor = isDark ? '#2E2E2E' : '#F5F7F9';
-  const titleColor = isDark ? '#FFFFFF' : '#171717';
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -65,16 +61,15 @@ const LoginScreen: React.FC = () => {
           {/* Title Section */}
           <View style={styles.titleSection}>
             <View style={styles.titleWrapper}>
-              <Text style={[styles.loginTitle, { color: titleColor }]}>
+              <Text style={[styles.loginTitle, { color: colors.textPrimary }]}>
                 Login
               </Text>
-              {!isDark && <View style={styles.underline} />}
+              {!isDark && <View style={[styles.underline, { backgroundColor: colors.underline }]} />}
             </View>
 
             <View style={styles.signUpWrapper}>
-              <Text style={styles.signUpText}>Don't have an account? </Text>
+              <Text style={[styles.signUpText, { color: colors.textMuted }]}>Don't have an account? </Text>
               <GradientText
-                colors={['#9253FF', '#8239FF']}
                 style={styles.signUpLink}
               >
                 Sign Up
@@ -87,7 +82,6 @@ const LoginScreen: React.FC = () => {
             {/* Phone Number Input */}
             <View style={styles.inputGroup}>
               <GradientText
-                colors={['#9253FF', '#8239FF']}
                 style={styles.labelText}
               >
                 Phone Number
@@ -95,15 +89,15 @@ const LoginScreen: React.FC = () => {
               <View
                 style={[
                   styles.inputWrapper,
-                  { backgroundColor: inputBgColor },
-                  !isDark && styles.inputWrapperLight,
+                  { backgroundColor: colors.inputBackground },
+                  !isDark && [styles.inputWrapperLight, { borderColor: colors.border }],
                 ]}
               >
-                <UserIcon width={13} height={14} color="#A8A8A8" />
+                <UserIcon width={13} height={14} color={colors.inputIcon} />
                 <TextInput
-                  style={[styles.input, { color: '#A8A8A8' }]}
+                  style={[styles.input, { color: colors.inputText }]}
                   placeholder="Phone number"
-                  placeholderTextColor="#A8A8A8"
+                  placeholderTextColor={colors.placeholder}
                   value={phoneNumber}
                   onChangeText={setPhoneNumber}
                   keyboardType="phone-pad"
@@ -117,7 +111,6 @@ const LoginScreen: React.FC = () => {
             {/* Password Input */}
             <View style={styles.inputGroup}>
               <GradientText
-                colors={['#9253FF', '#8239FF']}
                 style={styles.labelText}
               >
                 Password
@@ -125,14 +118,14 @@ const LoginScreen: React.FC = () => {
               <View
                 style={[
                   styles.inputWrapper,
-                  { backgroundColor: inputBgColor },
-                  !isDark && styles.inputWrapperLight,
+                  { backgroundColor: colors.inputBackground },
+                  !isDark && [styles.inputWrapperLight, { borderColor: colors.border }],
                 ]}
               >
                 <TextInput
-                  style={[styles.input, { color: '#A8A8A8', flex: 1 }]}
+                  style={[styles.input, { color: colors.inputText, flex: 1 }]}
                   placeholder="Password"
-                  placeholderTextColor="#A8A8A8"
+                  placeholderTextColor={colors.placeholder}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!isPasswordVisible}
@@ -141,7 +134,7 @@ const LoginScreen: React.FC = () => {
                   onPress={() => setIsPasswordVisible(!isPasswordVisible)}
                   style={styles.eyeIconButton}
                 >
-                  <EyeIcon width={24} height={24} color="#D0C9D6" />
+                  <EyeIcon width={24} height={24} color={colors.inputIconSecondary} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -223,7 +216,6 @@ const styles = StyleSheet.create({
   underline: {
     width: 80,
     height: 11,
-    backgroundColor: '#F2F2F2',
     position: 'absolute',
     top: 21,
   },
@@ -236,7 +228,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Comfortaa',
     fontWeight: '600',
     fontSize: 15,
-    color: '#A7A7A7',
     lineHeight: 20,
   },
   signUpLink: {
@@ -274,7 +265,6 @@ const styles = StyleSheet.create({
   },
   inputWrapperLight: {
     borderWidth: 1,
-    borderColor: '#F5F7F9',
   },
   input: {
     fontFamily: 'Comfortaa',
