@@ -14,6 +14,7 @@ import { CompositeNavigationProp } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainTabParamList, MainStackParamList } from '../navigation/types';
+import { hp } from '../utils/responsive';
 
 // Mock data - replace with real data from your API
 const MOCK_MATCHES = [
@@ -76,12 +77,7 @@ const MatchesScreen: React.FC = () => {
   const { colors } = useTheme();
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
-    >
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <View style={styles.header}>
         {/* Back Button */}
@@ -105,12 +101,7 @@ const MatchesScreen: React.FC = () => {
 
         {/* Title */}
         <View style={styles.headerTextContainer}>
-          <Text
-            style={[
-              styles.headerTitle,
-              { color: colors.heading },
-            ]}
-          >
+          <Text style={[styles.headerTitle, { color: colors.heading }]}>
             All Matches
           </Text>
           <Text style={styles.headerSubtitle}>
@@ -169,8 +160,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 25,
-    paddingTop: 47,
-    paddingBottom: 31,
+    paddingTop: hp(8),
+    paddingBottom: hp(4),
   },
   headerButton: {
     width: 48,

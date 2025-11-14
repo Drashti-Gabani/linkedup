@@ -149,18 +149,21 @@ const DiscoverScreen: React.FC = () => {
             Discover
           </Text>
 
-          {/* Notification and Filter buttons */}
+          {/* Star (Likes) and Filter buttons */}
           <View style={styles.headerButtons}>
             <TouchableOpacity
               style={[
                 styles.headerButton,
                 { backgroundColor: colors.headerButtonBackground },
               ]}
+              onPress={() => navigation.navigate('Likes')}
+              activeOpacity={0.7}
             >
               <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
                 <Path
-                  d="M10 2C7.8 2 6 3.8 6 6v3l-2 2v4h12v-4l-2-2V6c0-2.2-1.8-4-4-4zm0 16c1.1 0 2-.9 2-2H8c0 1.1.9 2 2 2z"
+                  d="M10 1.5L12.5 7.5L19 8.5L14.5 13L15.5 19.5L10 16.5L4.5 19.5L5.5 13L1 8.5L7.5 7.5L10 1.5Z"
                   fill={colors.headerButtonIcon}
+                  fillRule="evenodd"
                 />
               </Svg>
             </TouchableOpacity>
@@ -170,13 +173,38 @@ const DiscoverScreen: React.FC = () => {
                 styles.headerButton,
                 { backgroundColor: colors.headerButtonBackground },
               ]}
+              onPress={handleAdjustFilters}
+              activeOpacity={0.7}
             >
-              <Svg width={22} height={22} viewBox="0 0 22 22" fill="none">
+              <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
+                {/* Filter icon - matches Figma design: two vertical lines with horizontal lines */}
                 <Path
-                  d="M3 11h6M3 6h6M3 16h6M13 11l6-6M13 11l6 6"
+                  d="M6 16L6 0"
                   stroke={colors.headerButtonIcon}
                   strokeWidth={2}
                   strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <Path
+                  d="M8 10L4 10"
+                  stroke={colors.headerButtonIcon}
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <Path
+                  d="M12 16L12 0"
+                  stroke={colors.headerButtonIcon}
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <Path
+                  d="M14 14L10 14"
+                  stroke={colors.headerButtonIcon}
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </Svg>
             </TouchableOpacity>

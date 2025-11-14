@@ -9,8 +9,10 @@ import {
   Image,
   StatusBar,
   SafeAreaView,
+  Modal,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, Circle } from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
@@ -31,6 +33,7 @@ const ConversationScreen: React.FC = () => {
   const navigation = useNavigation();
   const { colors, gradients, isDark } = useTheme();
   const [messageText, setMessageText] = useState('');
+  const [showMenuTooltip, setShowMenuTooltip] = useState(false);
 
   const handleBack = () => {
     navigation.goBack();
@@ -42,6 +45,22 @@ const ConversationScreen: React.FC = () => {
       console.log('Send message:', messageText);
       setMessageText('');
     }
+  };
+
+  const handleMenuPress = () => {
+    setShowMenuTooltip(true);
+  };
+
+  const handleBlock = () => {
+    setShowMenuTooltip(false);
+    // Handle block action
+    console.log('Block user');
+  };
+
+  const handleDelete = () => {
+    setShowMenuTooltip(false);
+    // Handle delete conversation action
+    console.log('Delete conversation');
   };
 
   const messages: Message[] = [
@@ -145,34 +164,20 @@ const ConversationScreen: React.FC = () => {
   const renderMatchedOn = () => (
     <View style={styles.matchedOnContainer}>
       <View
-        style={[
-          styles.dividerLine,
-          { backgroundColor: colors.messageDivider },
-        ]}
+        style={[styles.dividerLine, { backgroundColor: colors.messageDivider }]}
       />
-      <Text
-        style={[
-          styles.matchedOnText,
-          { color: colors.messageTime },
-        ]}
-      >
+      <Text style={[styles.matchedOnText, { color: colors.messageTime }]}>
         YOU MATCHED WITH CATIE ON 7/6/19
       </Text>
       <View
-        style={[
-          styles.dividerLine,
-          { backgroundColor: colors.messageDivider },
-        ]}
+        style={[styles.dividerLine, { backgroundColor: colors.messageDivider }]}
       />
     </View>
   );
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
@@ -207,9 +212,7 @@ const ConversationScreen: React.FC = () => {
             }}
             style={styles.userAvatar}
           />
-          <Text
-            style={[styles.userName, { color: colors.heading }]}
-          >
+          <Text style={[styles.userName, { color: colors.heading }]}>
             Catie
           </Text>
           {isDark && (
@@ -219,7 +222,7 @@ const ConversationScreen: React.FC = () => {
           )}
         </View>
 
-        <TouchableOpacity style={styles.unmatchButton}>
+        <TouchableOpacity style={styles.menuButton} onPress={handleMenuPress}>
           <View
             style={[
               styles.buttonContainer,
@@ -227,17 +230,77 @@ const ConversationScreen: React.FC = () => {
             ]}
           >
             <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
-              <Path
-                d="M18 6L6 18M6 6L18 18"
-                stroke={colors.headerButtonIcon}
-                strokeWidth={3}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
+              {/* Three dots menu icon - larger and more visible */}
+              <Circle cx="12" cy="6" r="2.5" fill={colors.headerButtonIcon} />
+              <Circle cx="12" cy="12" r="2.5" fill={colors.headerButtonIcon} />
+              <Circle cx="12" cy="18" r="2.5" fill={colors.headerButtonIcon} />
             </Svg>
           </View>
         </TouchableOpacity>
       </View>
+
+      {/* Menu Tooltip */}
+      <Modal
+        transparent
+        visible={showMenuTooltip}
+        animationType="fade"
+        onRequestClose={() => setShowMenuTooltip(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowMenuTooltip(false)}>
+          <View style={styles.tooltipOverlay}>
+            <TouchableWithoutFeedback>
+              <View
+                style={[
+                  styles.tooltipContainer,
+                  {
+                    backgroundColor: colors.backgroundCard,
+                    shadowColor: colors.shadow,
+                    borderWidth: isDark ? 0 : 1,
+                    borderColor: isDark ? 'transparent' : colors.borderLight,
+                  },
+                ]}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.tooltipButton,
+                    {
+                      borderBottomWidth: 1,
+                      borderBottomColor: isDark
+                        ? 'rgba(255, 255, 255, 0.1)'
+                        : '#EEF0F2',
+                    },
+                  ]}
+                  onPress={handleBlock}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.tooltipButtonText,
+                      { color: colors.heading },
+                    ]}
+                  >
+                    Block
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.tooltipButton}
+                  onPress={handleDelete}
+                  activeOpacity={0.7}
+                >
+                  <Text
+                    style={[
+                      styles.tooltipButtonText,
+                      { color: colors.danger || '#EF4444' },
+                    ]}
+                  >
+                    Delete
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
 
       {/* Matched On Section */}
       {renderMatchedOn()}
@@ -260,17 +323,17 @@ const ConversationScreen: React.FC = () => {
             styles.inputWrapper,
             {
               backgroundColor: colors.inputBackground,
-              borderColor: colors.borderLight,
+              borderColor: colors.messageInputBorder,
             },
           ]}
         >
           <TextInput
             style={[
               styles.textInput,
-              { color: colors.fieldText },
+              { color: isDark ? colors.inputText : colors.fieldText },
             ]}
             placeholder="Message..."
-            placeholderTextColor={colors.placeholder}
+            placeholderTextColor={colors.messageInputPlaceholder}
             value={messageText}
             onChangeText={setMessageText}
             multiline
@@ -316,7 +379,7 @@ const styles = StyleSheet.create({
     height: hp('6%'),
     marginTop: hp('1%'),
   },
-  unmatchButton: {
+  menuButton: {
     width: wp('11.6%'),
     height: hp('6%'),
     marginTop: hp('1%'),
@@ -452,7 +515,6 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     paddingTop: 9,
     paddingBottom: 8.67,
-    height: 62.67,
     minHeight: 62.67,
   },
   textInput: {
@@ -460,7 +522,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia Pro',
     fontSize: 18,
     fontWeight: '400',
-    lineHeight: 27.846,
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
@@ -483,6 +544,36 @@ const styles = StyleSheet.create({
   sendIcon: {
     width: 40,
     height: 40,
+  },
+  tooltipOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+    paddingTop: hp('15%'),
+    paddingRight: wp('6%'),
+  },
+  tooltipContainer: {
+    minWidth: 160,
+    borderRadius: 15,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+    elevation: 10,
+    overflow: 'hidden',
+  },
+  tooltipButton: {
+    paddingVertical: hp('2.2%'),
+    paddingHorizontal: wp('6%'),
+    minHeight: 48,
+    justifyContent: 'center',
+  },
+  tooltipButtonText: {
+    fontFamily: 'Sofia Pro',
+    fontSize: 16,
+    fontWeight: '400',
+    textAlign: 'left',
+    letterSpacing: -0.32,
   },
 });
 

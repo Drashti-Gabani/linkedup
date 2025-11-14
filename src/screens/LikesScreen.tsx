@@ -11,6 +11,7 @@ import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import MatchCard from '../components/MatchCard';
 import { MainStackNavigationProp } from '../navigation/types';
+import { hp } from '../utils/responsive';
 
 // Mock data - replace with real data from your API
 const MOCK_LIKES = [
@@ -68,7 +69,10 @@ const LikesScreen: React.FC = () => {
       <View style={styles.header}>
         {/* Back Button */}
         <TouchableOpacity
-          style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}
+          style={[
+            styles.headerButton,
+            { backgroundColor: colors.headerButtonBackground },
+          ]}
           onPress={() => navigation.goBack()}
         >
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
@@ -92,7 +96,10 @@ const LikesScreen: React.FC = () => {
 
         {/* Settings Button */}
         <TouchableOpacity
-          style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}
+          style={[
+            styles.headerButton,
+            { backgroundColor: colors.headerButtonBackground },
+          ]}
           onPress={() => navigation.navigate('Settings')}
         >
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
@@ -109,7 +116,7 @@ const LikesScreen: React.FC = () => {
       {/* Likes Grid */}
       <FlatList
         data={MOCK_LIKES}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         numColumns={2}
         contentContainerStyle={styles.listContent}
         columnWrapperStyle={styles.columnWrapper}
@@ -137,8 +144,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 25,
-    paddingTop: 47,
-    paddingBottom: 40,
+    paddingTop: hp(8),
+    paddingBottom: hp(4),
   },
   headerButton: {
     width: 48,

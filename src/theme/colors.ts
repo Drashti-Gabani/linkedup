@@ -197,10 +197,12 @@ export const lightColors = {
   photoPlusText: baseColors.gray.dark300, // Plus button text (#262626)
 
   // Input colors
-  inputBackground: baseColors.gray.veryLight500,
+  inputBackground: baseColors.gray.veryLight200, // Message input background (#FFFFFF)
   inputText: baseColors.gray.light600,
   inputIcon: baseColors.gray.light600,
   inputIconSecondary: baseColors.gray.light200,
+  messageInputBorder: 'rgba(41, 41, 44, 0.12)', // Message input border color
+  messageInputPlaceholder: '#AAA9AB', // Message input placeholder (light mode)
 
   // Status colors
   success: baseColors.status.success,
@@ -355,10 +357,12 @@ export const darkColors = {
   photoPlusText: baseColors.gray.dark300, // Plus button text (#262626)
 
   // Input colors
-  inputBackground: baseColors.gray.dark200,
-  inputText: baseColors.gray.light600,
+  inputBackground: baseColors.gray.dark300, // Message input background (#262626)
+  inputText: baseColors.gray.veryLight200, // Message input text (white)
   inputIcon: baseColors.gray.light600,
   inputIconSecondary: baseColors.gray.light200,
+  messageInputBorder: 'rgba(41, 41, 44, 0.12)', // Message input border color
+  messageInputPlaceholder: baseColors.gray.veryLight200, // Message input placeholder (white for dark mode)
 
   // Status colors
   success: baseColors.status.success,
