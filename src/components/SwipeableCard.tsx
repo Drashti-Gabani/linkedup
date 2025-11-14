@@ -59,8 +59,12 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
       damping: 20,
       stiffness: 90,
     });
-    opacity.value = withTiming(0, { duration: 300 });
-    runOnJS(onSwipeLeft)();
+    opacity.value = withTiming(0, { duration: 400 }, finished => {
+      'worklet';
+      if (finished) {
+        runOnJS(onSwipeLeft)();
+      }
+    });
   };
 
   const handleLike = () => {
@@ -68,8 +72,12 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
       damping: 20,
       stiffness: 90,
     });
-    opacity.value = withTiming(0, { duration: 300 });
-    runOnJS(onSwipeRight)();
+    opacity.value = withTiming(0, { duration: 400 }, finished => {
+      'worklet';
+      if (finished) {
+        runOnJS(onSwipeRight)();
+      }
+    });
   };
 
   const handleSuperLike = () => {
@@ -77,8 +85,12 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
       damping: 20,
       stiffness: 90,
     });
-    opacity.value = withTiming(0, { duration: 300 });
-    runOnJS(onSuperLike)();
+    opacity.value = withTiming(0, { duration: 400 }, finished => {
+      'worklet';
+      if (finished) {
+        runOnJS(onSuperLike)();
+      }
+    });
   };
 
   // Combined gesture for card swipe and photo navigation
@@ -118,14 +130,18 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
       }
       // Horizontal swipe - accept/reject card
       else if (absX > absY && absX > SWIPE_THRESHOLD) {
-        const targetX =
-          event.translationX > 0 ? SCREEN_WIDTH * 1.5 : -SCREEN_WIDTH * 1.5;
+        const isRightSwipe = event.translationX > 0;
+        const targetX = isRightSwipe ? SCREEN_WIDTH * 1.5 : -SCREEN_WIDTH * 1.5;
         translateX.value = withSpring(targetX, {
           damping: 20,
           stiffness: 90,
         });
-        opacity.value = withTiming(0, { duration: 300 });
-        runOnJS(event.translationX > 0 ? onSwipeRight : onSwipeLeft)();
+        opacity.value = withTiming(0, { duration: 400 }, finished => {
+          'worklet';
+          if (finished) {
+            runOnJS(isRightSwipe ? onSwipeRight : onSwipeLeft)();
+          }
+        });
       }
       // Didn't meet threshold - bounce back
       else {
@@ -205,7 +221,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
               }}
             >
               {/* User info */}
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.userInfo}
                 onPress={onViewProfile}
                 activeOpacity={0.8}

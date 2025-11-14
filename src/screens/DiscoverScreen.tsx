@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  StatusBar,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
@@ -92,25 +98,27 @@ const DiscoverScreen: React.FC = () => {
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
 
   const handleSwipeLeft = () => {
-    console.log('Rejected:', MOCK_USERS[currentUserIndex].name);
-    if (currentUserIndex < MOCK_USERS.length - 1) {
-      setCurrentUserIndex(currentUserIndex + 1);
+    if (currentUserIndex < MOCK_USERS.length) {
+      console.log('Rejected:', MOCK_USERS[currentUserIndex].name);
     }
+    // Always increment to move to next card or show empty state
+    setCurrentUserIndex(currentUserIndex + 1);
   };
 
   const handleSwipeRight = () => {
-    console.log('Liked:', MOCK_USERS[currentUserIndex].name);
-    navigation.navigate('Likes');
-    if (currentUserIndex < MOCK_USERS.length - 1) {
-      setCurrentUserIndex(currentUserIndex + 1);
+    if (currentUserIndex < MOCK_USERS.length) {
+      console.log('Liked:', MOCK_USERS[currentUserIndex].name);
     }
+    // Always increment to move to next card or show empty state
+    setCurrentUserIndex(currentUserIndex + 1);
   };
 
   const handleSuperLike = () => {
-    console.log('Super Liked:', MOCK_USERS[currentUserIndex].name);
-    if (currentUserIndex < MOCK_USERS.length - 1) {
-      setCurrentUserIndex(currentUserIndex + 1);
+    if (currentUserIndex < MOCK_USERS.length) {
+      console.log('Super Liked:', MOCK_USERS[currentUserIndex].name);
     }
+    // Always increment to move to next card or show empty state
+    setCurrentUserIndex(currentUserIndex + 1);
   };
 
   const handleViewProfile = () => {
@@ -118,6 +126,11 @@ const DiscoverScreen: React.FC = () => {
   };
 
   const currentUser = MOCK_USERS[currentUserIndex];
+  const hasNoMoreCards = currentUserIndex >= MOCK_USERS.length;
+
+  const handleAdjustFilters = () => {
+    navigation.navigate('Filters');
+  };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -138,20 +151,30 @@ const DiscoverScreen: React.FC = () => {
 
           {/* Notification and Filter buttons */}
           <View style={styles.headerButtons}>
-            <TouchableOpacity style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}>
+            <TouchableOpacity
+              style={[
+                styles.headerButton,
+                { backgroundColor: colors.headerButtonBackground },
+              ]}
+            >
               <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
                 <Path
                   d="M10 2C7.8 2 6 3.8 6 6v3l-2 2v4h12v-4l-2-2V6c0-2.2-1.8-4-4-4zm0 16c1.1 0 2-.9 2-2H8c0 1.1.9 2 2 2z"
-                  fill={colors.accent}
+                  fill={colors.headerButtonIcon}
                 />
               </Svg>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.headerButton, { backgroundColor: colors.headerButtonBackground }]}>
+            <TouchableOpacity
+              style={[
+                styles.headerButton,
+                { backgroundColor: colors.headerButtonBackground },
+              ]}
+            >
               <Svg width={22} height={22} viewBox="0 0 22 22" fill="none">
                 <Path
                   d="M3 11h6M3 6h6M3 16h6M13 11l6-6M13 11l6 6"
-                  stroke={colors.accent}
+                  stroke={colors.headerButtonIcon}
                   strokeWidth={2}
                   strokeLinecap="round"
                 />
@@ -160,17 +183,83 @@ const DiscoverScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Card Stack */}
+        {/* Card Stack or Empty State */}
         <View style={styles.cardContainer}>
-          {currentUser && (
-            <SwipeableCard
-              key={currentUser.id}
-              user={currentUser}
-              onSwipeLeft={handleSwipeLeft}
-              onSwipeRight={handleSwipeRight}
-              onSuperLike={handleSuperLike}
-              onViewProfile={handleViewProfile}
-            />
+          {hasNoMoreCards ? (
+            <View style={styles.emptyStateContainer}>
+              {/* Heart Icon */}
+              <View
+                style={[
+                  styles.emptyIconContainer,
+                  { backgroundColor: colors.headerButtonBackground },
+                ]}
+              >
+                <Svg width={80} height={80} viewBox="0 0 80 80" fill="none">
+                  <Path
+                    d="M40 70C40 70 10 50 10 30C10 20 18 12 28 12C34 12 40 16 40 16C40 16 46 12 52 12C62 12 70 20 70 30C70 50 40 70 40 70Z"
+                    fill={colors.headerButtonIcon}
+                    fillOpacity={0.2}
+                  />
+                  <Path
+                    d="M40 65C40 65 15 47.5 15 30C15 22 21 16 29 16C34 16 40 19.5 40 19.5C40 19.5 46 16 51 16C59 16 65 22 65 30C65 47.5 40 65 40 65Z"
+                    stroke={colors.headerButtonIcon}
+                    strokeWidth={2.5}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </Svg>
+              </View>
+
+              {/* Title */}
+              <Text style={[styles.emptyTitle, { color: colors.heading }]}>
+                No More Profiles
+              </Text>
+
+              {/* Subtitle */}
+              <Text
+                style={[styles.emptySubtitle, { color: colors.textSecondary }]}
+              >
+                You've seen everyone in your area!{'\n'}
+                Try adjusting your filters to see more people.
+              </Text>
+
+              {/* Adjust Filters Button */}
+              <TouchableOpacity
+                style={[
+                  styles.filterButton,
+                  { backgroundColor: colors.headerButtonIcon },
+                ]}
+                onPress={handleAdjustFilters}
+                activeOpacity={0.8}
+              >
+                <Svg
+                  width={20}
+                  height={20}
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  style={styles.filterButtonIcon}
+                >
+                  <Path
+                    d="M3 11h6M3 6h6M3 16h6M13 11l6-6M13 11l6 6"
+                    stroke="#FFFFFF"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                  />
+                </Svg>
+                <Text style={styles.filterButtonText}>Adjust Filters</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            currentUser && (
+              <SwipeableCard
+                key={currentUser.id}
+                user={currentUser}
+                onSwipeLeft={handleSwipeLeft}
+                onSwipeRight={handleSwipeRight}
+                onSuperLike={handleSuperLike}
+                onViewProfile={handleViewProfile}
+              />
+            )
           )}
         </View>
       </SafeAreaView>
@@ -212,6 +301,61 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 20,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    paddingVertical: 60,
+  },
+  emptyIconContainer: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  emptyTitle: {
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 28,
+    letterSpacing: -0.84,
+    lineHeight: 31,
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  emptySubtitle: {
+    fontFamily: 'Sofia Pro',
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 24,
+    textAlign: 'center',
+    marginBottom: 40,
+  },
+  filterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 28,
+    paddingVertical: 16,
+    borderRadius: 25,
+    gap: 10,
+    shadowColor: '#8239FF',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  filterButtonIcon: {
+    marginRight: -2,
+  },
+  filterButtonText: {
+    fontFamily: 'Comfortaa-SemiBold',
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    letterSpacing: -0.32,
   },
 });
 

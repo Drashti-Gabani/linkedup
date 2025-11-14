@@ -43,6 +43,7 @@ const baseColors = {
 
     // Light grays (text, borders)
     light900: '#666666',
+    light850: '#878787', // Header button icon dark mode
     light800: '#888888', // Text subtitle
     light700: '#A7A7A7', // Text muted
     light600: '#A8A8A8', // Text secondary, placeholder
@@ -174,7 +175,7 @@ export const lightColors = {
 
   // Header button colors
   headerButtonBackground: baseColors.pink.dark, // Header button background (#FFF4F6)
-  headerButtonIcon: baseColors.gray.black, // Header button icon
+  headerButtonIcon: baseColors.purple.primary, // Header button icon (#8239FF for light mode)
 
   // Checkbox colors
   checkboxBorder: baseColors.gray.light500, // Checkbox border (#B1B1B1)
@@ -330,7 +331,7 @@ export const darkColors = {
 
   // Header button colors
   headerButtonBackground: baseColors.gray.medium600, // Header button background (#2D2D2D)
-  headerButtonIcon: baseColors.gray.veryLight200, // Header button icon (white)
+  headerButtonIcon: baseColors.gray.light850, // Header button icon (#878787 for dark mode)
 
   // Checkbox colors
   checkboxBorder: baseColors.gray.light500, // Checkbox border (#B1B1B1)

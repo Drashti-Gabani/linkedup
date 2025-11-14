@@ -41,7 +41,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
     >
       {TABS.map(tab => {
         const isActive = activeTab === tab.id;
-        
+
         return (
           <TouchableOpacity
             key={tab.id}
@@ -49,22 +49,76 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
             onPress={() => onTabPress(tab.id)}
             activeOpacity={0.7}
           >
-            <View style={styles.tabContent}>
-              {isActive && (
+            <View
+              style={[
+                styles.tabContent,
+                isActive && {
+                  shadowColor: colors.shadow,
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 4,
+                  elevation: 3,
+                },
+              ]}
+            >
+              {/* Shadow on the active tab {isActive && (
                 <View
                   style={[
                     styles.activeBackground,
                     { backgroundColor: colors.backgroundActive },
                   ]}
                 />
-              )}
-              
+              )} */}
+
               <View style={styles.iconContainer}>
-                <Image
-                  source={tab.icon}
-                  style={[styles.icon, tab.id === 'home' && styles.homeIcon]}
-                  resizeMode="contain"
-                />
+                {isActive ? (
+                  <MaskedView
+                    maskElement={
+                      <Image
+                        source={tab.icon}
+                        style={[
+                          styles.icon,
+                          tab.id === 'home' && styles.homeIcon,
+                        ]}
+                        resizeMode="contain"
+                      />
+                    }
+                  >
+                    <LinearGradient
+                      colors={gradients.primary}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 1, y: 0 }}
+                      style={[
+                        styles.iconGradient,
+                        tab.id === 'home' && styles.homeIconGradient,
+                      ]}
+                    >
+                      <Image
+                        source={tab.icon}
+                        style={[
+                          styles.icon,
+                          tab.id === 'home' && styles.homeIcon,
+                          { opacity: 0 },
+                        ]}
+                        resizeMode="contain"
+                      />
+                    </LinearGradient>
+                  </MaskedView>
+                ) : (
+                  <Image
+                    source={tab.icon}
+                    style={[
+                      styles.icon,
+                      tab.id === 'home' && styles.homeIcon,
+                      {
+                        tintColor: isDark
+                          ? colors.tabInactiveDark
+                          : colors.tabInactive,
+                      },
+                    ]}
+                    resizeMode="contain"
+                  />
+                )}
               </View>
 
               {isActive ? (
@@ -74,7 +128,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                   }
                 >
                   <LinearGradient
-                    colors={gradients.secondary}
+                    colors={gradients.primary}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                     style={styles.labelGradient}
@@ -101,7 +155,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
 
               {isActive && (
                 <LinearGradient
-                  colors={gradients.secondary}
+                  colors={gradients.primary}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.activeIndicator}
@@ -123,8 +177,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.7,
     paddingBottom: 10,
     paddingTop: 16,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
   },
   tabButton: {
     flex: 1,
@@ -153,6 +205,16 @@ const styles = StyleSheet.create({
     height: 22,
   },
   homeIcon: {
+    width: 28,
+    height: 19,
+  },
+  iconGradient: {
+    width: 22,
+    height: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  homeIconGradient: {
     width: 28,
     height: 19,
   },
