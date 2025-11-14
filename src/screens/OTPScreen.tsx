@@ -19,7 +19,7 @@ import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
-import GradientButton from '../components/GradientButton';
+import NextButton from '../components/NextButton';
 import DropdownArrowIcon from '../components/icons/DropdownArrowIcon';
 
 // Helper function to convert country code to flag emoji
@@ -67,7 +67,7 @@ const OTPScreen: React.FC = () => {
       {/* Back Button */}
       <BackButton
         onPress={() => navigation.goBack()}
-        style={styles.backButton}
+        size="medium"
       />
 
       {/* Main Content Container - using flexbox */}
@@ -118,25 +118,25 @@ const OTPScreen: React.FC = () => {
               activeOpacity={0.8}
               onPress={() => setCountryPickerVisible(true)}
             >
-              <LinearGradient
+                <LinearGradient
                 colors={gradients.secondary}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                angle={242}
-                style={styles.countryCode}
-              >
-                <View style={styles.countryCodeContent}>
-                  <Text style={styles.flag}>{getCountryFlag()}</Text>
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  angle={242}
+                  style={styles.countryCode}
+                >
+                  <View style={styles.countryCodeContent}>
+                    <Text style={styles.flag}>{getCountryFlag()}</Text>
                   <Text style={[styles.codeText, { color: colors.iconSelected }]}>
-                    {getCallingCode()}
-                  </Text>
-                  <DropdownArrowIcon
-                    width={wp('2.66%')}
-                    height={wp('1.33%')}
+                      {getCallingCode()}
+                    </Text>
+                    <DropdownArrowIcon
+                      width={wp('2.66%')}
+                      height={wp('1.33%')}
                     color={colors.iconSelected}
-                  />
-                </View>
-              </LinearGradient>
+                    />
+                  </View>
+                </LinearGradient>
             </TouchableOpacity>
             <TextInput
               style={[
@@ -165,17 +165,14 @@ const OTPScreen: React.FC = () => {
           </Text>
         </View>
 
-        {/* Bottom Section - Button */}
-        <View style={styles.bottomSection}>
-          <View style={styles.buttonWrapper}>
-            <GradientButton
-              onPress={() => navigation.navigate('OTPVerify')}
-              text="Continue"
-              style={styles.continueButton}
-            />
-          </View>
-        </View>
       </View>
+
+      <NextButton
+        onPress={() => navigation.navigate('OTPVerify')}
+        showText={true}
+        textLabel="Next"
+        size="medium"
+      />
 
       {/* Country Picker Modal */}
       <CountryPicker
@@ -206,10 +203,6 @@ const OTPScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  backButton: {
-    top: hp('8.15%'), // y: 73 in Figma
-    left: wp('9.66%'), // x: 40 in Figma - fixed for light mode alignment
   },
   mainContainer: {
     flex: 1,
@@ -242,6 +235,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     paddingTop: hp('1%'), // Small padding
+    paddingBottom: hp('15%'), // Space for fixed Next button
   },
   numberField: {
     flexDirection: 'row',
@@ -291,27 +285,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: hp('2.5%'), // ~22px spacing from number field (90px in Figma)
     width: wp('80.7%'), // 334px width
-  },
-  bottomSection: {
-    flex: 0,
-    paddingBottom: hp('10%'), // Further reduced to move button up more
-    alignItems: 'center',
-  },
-  buttonWrapper: {
-    width: wp('73.91%'), // 306px button width
-    borderRadius: wp('3.38%'), // 14px border radius
-    overflow: 'hidden',
-  },
-  continueButton: {
-    width: '100%',
-    paddingHorizontal: 0,
-    borderRadius: wp('3.38%'), // 14px border radius
-    height: hp('6.47%'), // 58px height
-    shadowColor: 'transparent',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    elevation: 0,
   },
 });
 

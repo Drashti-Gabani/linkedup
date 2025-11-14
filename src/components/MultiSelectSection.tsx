@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
+import { hp, wp } from '../utils/responsive';
 
 /**
  * Icon configuration interface for MultiSelectSection
@@ -54,7 +55,8 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
         isSelected && iconConfig.selected
           ? iconConfig.selected
           : iconConfig.default;
-      const iconSize = iconConfig.size || 18;
+      // Use consistent icon size (18px) to ensure uniform block sizing
+      const iconSize = 18;
 
       // If it's a React component, render it
       if (
@@ -65,12 +67,8 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
       }
 
       // Otherwise, treat it as an image source
-      // Apply tint color matching text colors: white for selected, gray for unselected
-      const tintColor = isSelected
-        ? colors.iconSelected
-        : isDark
-        ? colors.iconUnselectedDark
-        : colors.iconUnselectedLight;
+      // Apply tint color: white for selected, primary purple for unselected (as per Figma)
+      const tintColor = isSelected ? colors.iconSelected : colors.iconPrimary;
 
       return (
         <Image
@@ -91,12 +89,7 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
   return (
     <View style={styles.section}>
       {title && (
-        <Text
-          style={[
-            styles.sectionTitle,
-            { color: colors.sectionTitle },
-          ]}
-        >
+        <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
           {title}
         </Text>
       )}
@@ -104,6 +97,32 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
         {options.map(option => {
           const isSelected = selectedValues.includes(option);
           const icon = getIcon(option, isSelected);
+
+          // Compute unselected container style to avoid inline style warning
+          const unselectedContainerStyle = {
+            backgroundColor: isDark ? colors.card : colors.background,
+            borderWidth: isDark ? 0 : 1,
+            borderColor: isDark ? 'transparent' : colors.searchBorder,
+            shadowOpacity: isDark ? 0.2 : 0.3,
+            shadowColor: colors.shadowLight,
+            shadowRadius: isDark ? 75 : 6,
+            shadowOffset: { width: 0, height: isDark ? 4 : 3 },
+            elevation: isDark ? 4 : 5,
+          };
+
+          // Compute selected gradient style
+          const selectedGradientStyle = {
+            borderWidth: isDark ? 0 : 1,
+            borderColor: 'transparent',
+            shadowColor: colors.shadowPink,
+          };
+
+          // Compute text color
+          const textColor = isSelected
+            ? colors.iconSelected
+            : isDark
+            ? colors.textDisabled
+            : colors.textSecondary;
 
           return (
             <TouchableOpacity
@@ -115,34 +134,29 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
               {isSelected ? (
                 <LinearGradient
                   colors={gradients.secondary}
-                  start={{ x: 0.91, y: 0.05 }}
-                  end={{ x: 0.15, y: 0.95 }}
-                  // style={styles.optionTag}
+                  start={{ x: 0.8, y: 0 }}
+                  end={{ x: 0.2, y: 1 }}
+                  style={[styles.selectedGradient, selectedGradientStyle]}
                 >
                   <View style={styles.optionTag}>
                     {icon && <View style={styles.iconContainer}>{icon}</View>}
-                    <Text style={[styles.optionText, { color: colors.iconSelected }]}>
+                    <Text
+                      style={[styles.optionText, { color: textColor }]}
+                      numberOfLines={1}
+                    >
                       {option}
                     </Text>
                   </View>
                 </LinearGradient>
               ) : (
                 <View
-                  style={[
-                    styles.optionTag,
-                    {
-                      backgroundColor: colors.card,
-                    },
-                    [styles.lightShadow, { shadowColor: colors.shadowLight }],
-                  ]}
+                  style={[styles.unselectedContainer, unselectedContainerStyle]}
                 >
-                  <View style={styles.optionContent}>
+                  <View style={styles.optionTag}>
                     {icon && <View style={styles.iconContainer}>{icon}</View>}
                     <Text
-                      style={[
-                        styles.optionText,
-                        { color: colors.iconUnselected },
-                      ]}
+                      style={[styles.optionText, { color: textColor }]}
+                      numberOfLines={1}
                     >
                       {option}
                     </Text>
@@ -165,53 +179,50 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: -0.32,
     marginBottom: 12,
     textAlign: 'center',
   },
   optionsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 15,
+    gap: 10,
     justifyContent: 'flex-start',
+  },
+  optionButton: {
+    overflow: 'hidden',
+    borderRadius: 10,
+  },
+  selectedGradient: {
+    borderRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 75,
+    elevation: 8,
+  },
+  unselectedContainer: {
+    borderRadius: 10,
   },
   optionTag: {
     flexDirection: 'row',
-    paddingVertical: 12,
-    paddingHorizontal: 22,
+    paddingVertical: hp(1.7),
+    paddingHorizontal: wp(7),
     borderRadius: 10,
     gap: 14,
-  },
-  optionContent: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
   },
   iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   optionIcon: {
-    width: 18,
-    height: 18,
-  },
-  lightShadow: {
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 75,
-    elevation: 5,
+    // Icons will size naturally based on their content
   },
   optionText: {
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Sofia Pro',
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: '600',
     letterSpacing: -0.32,
-  },
-  optionButton: {
-    overflow: 'hidden',
-    borderRadius: 10,
-    marginBottom: 10,
+    flexShrink: 0,
   },
 });
 

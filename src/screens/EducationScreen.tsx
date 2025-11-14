@@ -10,6 +10,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import MultiSelectSection from '../components/MultiSelectSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import ScreenTitle from '../components/ScreenTitle';
 
 const EDUCATION_LEVELS = [
   'Diploma',
@@ -47,25 +48,17 @@ const EducationScreen: React.FC = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
+        bounces={false}
       >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
         <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <Text
-              style={[styles.title, { color: colors.heading }]}
-            >
-              Your Education
-            </Text>
-            <Text style={[styles.subtitle, { color: colors.textDisabled }]}>
-              Your Highest Qualification
-            </Text>
-          </View>
+          <ScreenTitle
+            title="Your Education"
+            subtitle="Your Highest Qualification"
+          />
 
           {/* Education Level Selection */}
           <View style={styles.educationSection}>
@@ -104,10 +97,7 @@ const EducationScreen: React.FC = () => {
               ]}
             >
               <TextInput
-                style={[
-                  styles.input,
-                  { color: colors.fieldText },
-                ]}
+                style={[styles.input, { color: colors.fieldText }]}
                 placeholder="Institute name"
                 placeholderTextColor={colors.placeholder}
                 value={instituteName}
@@ -117,18 +107,12 @@ const EducationScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Next Button Container */}
-        <View style={styles.nextButtonWrapper}>
-          <View style={styles.nextButtonInner}>
-            <NextButton
-              onPress={handleNext}
-              showText={true}
-              textLabel="Next"
-              size="medium"
-              style={styles.nextButtonOverride}
-            />
-          </View>
-        </View>
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -137,36 +121,13 @@ const EducationScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: hp('5%'),
-  },
-  scrollView: {
-    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: hp('12%'),
   },
   content: {
     paddingHorizontal: wp('8%'),
-    paddingTop: hp('12%'),
-    paddingBottom: hp('2%'),
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('4%'),
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 32,
-    fontWeight: '700',
-    letterSpacing: -0.64,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 16,
-    lineHeight: 26,
-    textAlign: 'center',
-    letterSpacing: -0.32,
   },
   educationSection: {
     marginBottom: hp('5%'),
@@ -202,20 +163,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     padding: 0,
-  },
-  nextButtonWrapper: {
-    paddingVertical: hp('3%'),
-    paddingHorizontal: wp('6%'),
-    alignItems: 'flex-end',
-  },
-  nextButtonInner: {
-    width: '100%',
-    alignItems: 'flex-end',
-  },
-  nextButtonOverride: {
-    position: 'relative',
-    bottom: 0,
-    right: 0,
   },
 });
 

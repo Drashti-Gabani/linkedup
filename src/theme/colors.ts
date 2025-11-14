@@ -71,9 +71,9 @@ const baseColors = {
 
   // Status colors
   status: {
-    success: '#22C55E',
-    warning: '#F59E0B',
-    danger: '#EF4444',
+  success: '#22C55E',
+  warning: '#F59E0B',
+  danger: '#EF4444',
   },
 
   // Overlay colors

@@ -49,5 +49,15 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Comfortaa-Regular.ttf</string>
+		<string>Comfortaa-Medium.ttf</string>
+		<string>Comfortaa-SemiBold.ttf</string>
+		<string>Comfortaa-Bold.ttf</string>
+		<string>SofiaPro-Regular.ttf</string>
+		<string>SofiaPro-SemiBold.ttf</string>
+		<string>Sk-Modernist-Regular.ttf</string>
+	</array>
 </dict>
 </plist>

@@ -41,7 +41,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
     >
       {TABS.map(tab => {
         const isActive = activeTab === tab.id;
-
+        
         return (
           <TouchableOpacity
             key={tab.id}
@@ -58,7 +58,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                   ]}
                 />
               )}
-
+              
               <View style={styles.iconContainer}>
                 <Image
                   source={tab.icon}

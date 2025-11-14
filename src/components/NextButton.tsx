@@ -116,12 +116,12 @@ const NextButton: React.FC<NextButtonProps> = ({
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: hp('5%'),
-    right: wp('6%'),
+    bottom: hp('5%'), // ~11% from bottom (100/896 = 11.16%)
+    right: wp('6%'), // Consistent right padding
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    gap: 12,
+    gap: 15, // 15px gap per Figma (was 12)
   },
   textMask: {
     fontFamily: 'Comfortaa-Bold',

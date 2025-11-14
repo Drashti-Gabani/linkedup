@@ -19,6 +19,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import SelectionSection from '../components/SelectionSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import ScreenTitle from '../components/ScreenTitle';
 
 const SALARY_RANGES = [
   'Below 50,000',
@@ -62,26 +63,18 @@ const MonthlyEarningScreen: React.FC = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
+        bounces={false}
       >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
         <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.highlight} />
-            <Text
-              style={[styles.title, { color: colors.heading }]}
-            >
-              Monthly Earning
-            </Text>
-            <Text style={[styles.subtitle, { color: colors.subheading }]}>
-              Select a range
-            </Text>
-          </View>
+          <ScreenTitle
+            title="Monthly Earning"
+            subtitle="Select a range"
+            highlightWidth={88}
+          />
 
           {/* Currency Selector */}
           <TouchableOpacity
@@ -101,10 +94,7 @@ const MonthlyEarningScreen: React.FC = () => {
               {selectedCurrency || 'Select Currency'}
             </Text>
             <Svg width={15} height={14} viewBox="0 0 15 14">
-              <Polygon
-                points="7.5,14 0,0 15,0"
-                fill={colors.fieldText}
-              />
+              <Polygon points="7.5,14 0,0 15,0" fill={colors.fieldText} />
             </Svg>
           </TouchableOpacity>
 
@@ -125,31 +115,24 @@ const MonthlyEarningScreen: React.FC = () => {
             activeOpacity={0.7}
           >
             <View
-              style={[
-                styles.checkbox,
-                { borderColor: colors.checkboxBorder },
-              ]}
+              style={[styles.checkbox, { borderColor: colors.checkboxBorder }]}
             >
               {dontShow && <View style={styles.checkboxInner} />}
             </View>
-            <Text style={[styles.checkboxLabel, { color: colors.textDisabled }]}>
+            <Text
+              style={[styles.checkboxLabel, { color: colors.textDisabled }]}
+            >
               Don't show
             </Text>
           </TouchableOpacity>
         </View>
 
-        {/* Next Button Container */}
-        <View style={styles.nextButtonWrapper}>
-          <View style={styles.nextButtonInner}>
-            <NextButton
-              onPress={handleNext}
-              showText={true}
-              textLabel="Next"
-              size="medium"
-              style={styles.nextButtonOverride}
-            />
-          </View>
-        </View>
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
       </ScrollView>
 
       {/* Currency Picker Modal */}
@@ -183,44 +166,13 @@ const MonthlyEarningScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: hp('5%'),
-  },
-  scrollView: {
-    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: hp('12%'),
   },
   content: {
     paddingHorizontal: wp('11%'),
-    paddingTop: hp('12%'),
-    paddingBottom: hp('2%'),
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('3%'),
-    position: 'relative',
-  },
-  highlight: {
-    position: 'absolute',
-    backgroundColor: '#F2F2F2',
-    width: 88,
-    height: 18,
-    top: '15%',
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 26,
-    fontWeight: '700',
-    letterSpacing: -0.52,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 17,
-    lineHeight: 28,
-    textAlign: 'center',
-    letterSpacing: -0.34,
   },
   currencySelector: {
     flexDirection: 'row',
@@ -269,20 +221,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 30,
     letterSpacing: -0.36,
-  },
-  nextButtonWrapper: {
-    paddingVertical: hp('3%'),
-    paddingHorizontal: wp('6%'),
-    alignItems: 'flex-end',
-  },
-  nextButtonInner: {
-    width: '100%',
-    alignItems: 'flex-end',
-  },
-  nextButtonOverride: {
-    position: 'relative',
-    bottom: 0,
-    right: 0,
   },
   pickerButton: {
     display: 'none',

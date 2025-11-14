@@ -8,6 +8,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import MultiSelectSection from '../components/MultiSelectSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import ScreenTitle from '../components/ScreenTitle';
 
 const PERSONALITY_TRAITS = [
   'Funny',
@@ -69,31 +70,18 @@ const WhoAmIScreen: React.FC = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
+        bounces={false}
       >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
         <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.highlight} />
-            <Text
-              style={[styles.title, { color: colors.heading }]}
-            >
-              Who am I
-            </Text>
-            <Text
-              style={[
-                styles.subtitle,
-                { color: colors.subheading },
-              ]}
-            >
-              Select what explains you
-            </Text>
-          </View>
+          <ScreenTitle
+            title="Who am I"
+            subtitle="Select what explains you"
+          />
 
           {/* Personality Traits */}
           <MultiSelectSection
@@ -112,18 +100,12 @@ const WhoAmIScreen: React.FC = () => {
           />
         </View>
 
-        {/* Next Button Container */}
-        <View style={styles.nextButtonWrapper}>
-          <View style={styles.nextButtonInner}>
-            <NextButton
-              onPress={handleNext}
-              showText={true}
-              textLabel="Next"
-              size="medium"
-              style={styles.nextButtonOverride}
-            />
-          </View>
-        </View>
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -132,58 +114,16 @@ const WhoAmIScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: hp('5%'),
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: hp('12%'),
   },
   content: {
     paddingHorizontal: wp('11%'),
-    paddingTop: hp('12%'),
-    paddingBottom: hp('2%'),
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('5%'),
-    position: 'relative',
-  },
-  highlight: {
-    position: 'absolute',
-    backgroundColor: '#F2F2F2',
-    width: 115,
-    height: 18,
-    top: '15%',
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 26,
-    fontWeight: '700',
-    letterSpacing: -0.52,
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 16,
-    lineHeight: 27,
-    textAlign: 'center',
-    letterSpacing: -0.32,
-  },
-  nextButtonWrapper: {
-    paddingVertical: hp('3%'),
-    paddingHorizontal: wp('6%'),
-    alignItems: 'flex-end',
-  },
-  nextButtonInner: {
-    width: '100%',
-    alignItems: 'flex-end',
-  },
-  nextButtonOverride: {
-    position: 'relative',
-    bottom: 0,
-    right: 0,
   },
 });
 

@@ -8,6 +8,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
 import SelectionSection from '../components/SelectionSection';
+import ScreenTitle from '../components/ScreenTitle';
 import { genderIcons } from '../assets/icons';
 
 type Gender = 'male' | 'female' | 'non-binary';
@@ -53,28 +54,18 @@ const GenderSelectionScreen: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
+        bounces={false}
       >
-        {/* Heading */}
-        <View style={styles.headingContainer}>
-          <Text
-            style={[styles.heading, { color: colors.heading }]}
-          >
-            Match Preferences
-          </Text>
-          {!isDark && <View style={[styles.headingHighlight, { backgroundColor: colors.backgroundSecondary }]} />}
-          <Text style={[styles.subheading, { color: colors.subheading }]}>
-            Select how you identify yourself & your partner
-          </Text>
-        </View>
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
+        <ScreenTitle
+          title="Match Preferences"
+          subtitle="Select how you identify yourself & your partner"
+        />
 
         {/* Gender Selection */}
         <View style={styles.selectionWrapper}>
@@ -87,7 +78,7 @@ const GenderSelectionScreen: React.FC = () => {
           />
         </View>
 
-        <View style={styles.selectionWrapper}>
+        <View style={[styles.selectionWrapper, { marginTop: 0 }]}>
           <SelectionSection
             title="Show me"
             options={GENDER_OPTIONS}
@@ -96,14 +87,14 @@ const GenderSelectionScreen: React.FC = () => {
             iconMap={GENDER_ICONS}
           />
         </View>
-      </ScrollView>
 
-      <NextButton
-        onPress={handleNext}
-        showText={true}
-        textLabel="Next"
-        size="medium"
-      />
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -113,43 +104,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: hp('15%'),
-  },
-  headingContainer: {
-    alignItems: 'center',
-    marginTop: hp('12.31%'),
-    position: 'relative',
-  },
-  heading: {
-    fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
-    fontSize: 26,
-    lineHeight: 32.14,
-    letterSpacing: -0.52,
-    textAlign: 'center',
-  },
-  headingHighlight: {
-    position: 'absolute',
-    width: 115,
-    height: 18,
-    backgroundColor: '#F2F2F2',
-    top: 14,
-    zIndex: -1,
-  },
-  subheading: {
-    fontFamily: 'Sofia Pro',
-    fontWeight: '400',
-    fontSize: 16,
-    lineHeight: 26.74,
-    letterSpacing: -0.32,
-    textAlign: 'center',
-    marginTop: 16,
-    width: wp('63.53%'),
+    paddingBottom: hp('12%'),
+    flexGrow: 1,
   },
   selectionWrapper: {
     width: wp('77.05%'),
     alignSelf: 'center',
-    marginTop: hp('3.05%'),
+    marginTop: hp('3%'),
   },
 });
 

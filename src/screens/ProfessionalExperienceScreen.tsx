@@ -17,6 +17,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import SelectionSection from '../components/SelectionSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import ScreenTitle from '../components/ScreenTitle';
 
 const EXPERIENCE_RANGES = [
   '0 – 2 years',
@@ -49,26 +50,19 @@ const ProfessionalExperienceScreen: React.FC = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
+        bounces={false}
       >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
         <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.highlight} />
-            <Text
-              style={[styles.title, { color: colors.heading }]}
-            >
-              Professional Experience
-            </Text>
-            <Text style={[styles.subtitle, { color: colors.subheading }]}>
-              Tell us about your Professional experience
-            </Text>
-          </View>
+          <ScreenTitle
+            title="Professional Experience"
+            subtitle="Tell us about your Professional experience"
+            highlightWidth={96}
+            highlightTop={30}
+          />
 
           {/* Experience Range Selection */}
           <View style={styles.experienceSection}>
@@ -87,14 +81,13 @@ const ProfessionalExperienceScreen: React.FC = () => {
             activeOpacity={0.7}
           >
             <View
-              style={[
-                styles.checkbox,
-                { borderColor: colors.checkboxBorder },
-              ]}
+              style={[styles.checkbox, { borderColor: colors.checkboxBorder }]}
             >
               {dontShow && <View style={styles.checkboxInner} />}
             </View>
-            <Text style={[styles.checkboxLabel, { color: colors.textDisabled }]}>
+            <Text
+              style={[styles.checkboxLabel, { color: colors.textDisabled }]}
+            >
               Don't show
             </Text>
           </TouchableOpacity>
@@ -125,10 +118,7 @@ const ProfessionalExperienceScreen: React.FC = () => {
               ]}
             >
               <TextInput
-                style={[
-                  styles.input,
-                  { color: colors.fieldText },
-                ]}
+                style={[styles.input, { color: colors.fieldText }]}
                 placeholder="Enter your role"
                 placeholderTextColor={colors.placeholder}
                 value={companyEmail}
@@ -140,18 +130,12 @@ const ProfessionalExperienceScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Next Button Container */}
-        <View style={styles.nextButtonWrapper}>
-          <View style={styles.nextButtonInner}>
-            <NextButton
-              onPress={handleNext}
-              showText={true}
-              textLabel="Next"
-              size="medium"
-              style={styles.nextButtonOverride}
-            />
-          </View>
-        </View>
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -160,45 +144,13 @@ const ProfessionalExperienceScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: hp('5%'),
-  },
-  scrollView: {
-    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: hp('12%'),
   },
   content: {
     paddingHorizontal: wp('11%'),
-    paddingTop: hp('12%'),
-    paddingBottom: hp('2%'),
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('4%'),
-    position: 'relative',
-  },
-  highlight: {
-    position: 'absolute',
-    backgroundColor: '#F2F2F2',
-    width: 96,
-    height: 18,
-    top: '30%',
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 26,
-    fontWeight: '700',
-    letterSpacing: -0.52,
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 17,
-    lineHeight: 28,
-    textAlign: 'center',
-    letterSpacing: -0.34,
   },
   experienceSection: {
     marginBottom: hp('2%'),
@@ -259,20 +211,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     padding: 0,
-  },
-  nextButtonWrapper: {
-    paddingVertical: hp('3%'),
-    paddingHorizontal: wp('6%'),
-    alignItems: 'flex-end',
-  },
-  nextButtonInner: {
-    width: '100%',
-    alignItems: 'flex-end',
-  },
-  nextButtonOverride: {
-    position: 'relative',
-    bottom: 0,
-    right: 0,
   },
 });
 

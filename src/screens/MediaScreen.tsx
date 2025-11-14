@@ -7,6 +7,7 @@ import {
   Image,
   Platform,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -30,6 +31,7 @@ import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import ScreenTitle from '../components/ScreenTitle';
 
 interface PhotoItem {
   uri: string;
@@ -138,83 +140,71 @@ const MediaScreen: React.FC = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView
-        style={[
-          styles.container,
-          { backgroundColor: colors.background },
-        ]}
+        style={[styles.container, { backgroundColor: colors.background }]}
       >
-        <BackButton onPress={() => navigation.goBack()} size="medium" />
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+          bounces={false}
+        >
+          <BackButton onPress={() => navigation.goBack()} size="medium" />
 
-        <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <Text
-              style={[
-                styles.title,
-                {
-                  color: colors.textTertiary,
-                },
-              ]}
+          <View style={styles.content}>
+            <ScreenTitle
+              title="Media"
+              subtitle="Add your best photos to get a higher amount of daily matches."
+            />
+
+            {/* Photo Grid - 2x2 layout matching Figma */}
+            <View
+              style={[styles.photoGrid, { width: photoWidth * 2 + photoGap }]}
             >
-              Media
-            </Text>
-            <Text
-              style={[
-                styles.subtitle,
-                { color: colors.textSubtitle },
-              ]}
-            >
-              Add your best photos to get a higher amount of daily matches.
-            </Text>
-          </View>
-
-          {/* Photo Grid - 2x2 layout matching Figma */}
-          <View
-            style={[styles.photoGrid, { width: photoWidth * 2 + photoGap }]}
-          >
-            {/* Render filled photo slots */}
-            {photos.map((photo, index) => (
-              <DraggablePhoto
-                key={photo.id}
-                photo={photo}
-                index={index}
-                isCover={index === 0}
-                photoWidth={photoWidth}
-                photoHeight={photoHeight}
-                photoGap={photoGap}
-                colors={colors}
-                photosLength={photos.length}
-                onImagePicker={handleImagePicker}
-                onSwap={swapPhotos}
-              />
-            ))}
-
-            {/* Render empty slots */}
-            {Array.from({ length: MAX_PHOTOS - photos.length }).map((_, i) => {
-              const slotIndex = photos.length + i;
-              return (
-                <EmptyPhotoSlot
-                  key={`empty-${i}`}
-                  index={slotIndex}
-                  isCover={slotIndex === 0}
+              {/* Render filled photo slots */}
+              {photos.map((photo, index) => (
+                <DraggablePhoto
+                  key={photo.id}
+                  photo={photo}
+                  index={index}
+                  isCover={index === 0}
                   photoWidth={photoWidth}
                   photoHeight={photoHeight}
                   photoGap={photoGap}
                   colors={colors}
-                  gradients={gradients}
+                  photosLength={photos.length}
                   onImagePicker={handleImagePicker}
+                  onSwap={swapPhotos}
                 />
-              );
-            })}
-          </View>
-        </View>
+              ))}
 
-        <NextButton
-          onPress={() => navigation.navigate('Interests')}
-          showText={true}
-          textLabel="Next"
-          size="medium"
-        />
+              {/* Render empty slots */}
+              {Array.from({ length: MAX_PHOTOS - photos.length }).map(
+                (_, i) => {
+                  const slotIndex = photos.length + i;
+                  return (
+                    <EmptyPhotoSlot
+                      key={`empty-${i}`}
+                      index={slotIndex}
+                      isCover={slotIndex === 0}
+                      photoWidth={photoWidth}
+                      photoHeight={photoHeight}
+                      photoGap={photoGap}
+                      colors={colors}
+                      gradients={gradients}
+                      onImagePicker={handleImagePicker}
+                    />
+                  );
+                },
+              )}
+            </View>
+          </View>
+
+          <NextButton
+            onPress={() => navigation.navigate('Interests')}
+            showText={true}
+            textLabel="Next"
+            size="medium"
+          />
+        </ScrollView>
       </SafeAreaView>
     </GestureHandlerRootView>
   );
@@ -516,16 +506,13 @@ const EmptyPhotoSlot: React.FC<EmptyPhotoSlotProps> = ({
               colors={gradients.secondary}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
-              style={[
-                styles.plusButton,
-                {
-                  shadowColor: colors.shadowPink,
-                  shadowOpacity: 1,
-                  shadowRadius: 22.5,
-                },
-              ]}
+              style={[styles.plusButton]}
             >
-              <Text style={[styles.plusText, { color: colors.photoBackground }]}>+</Text>
+              <Text
+                style={[styles.plusText, { color: colors.photoBackground }]}
+              >
+                +
+              </Text>
             </LinearGradient>
           </View>
         )}
@@ -538,31 +525,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  scrollContent: {
+    paddingBottom: hp('12%'),
+    flexGrow: 1,
+  },
   content: {
-    paddingHorizontal: wp('11.6%'), // ~48px on 414px screen
-    paddingTop: hp('10%'), // ~126px on 896px screen
     alignItems: 'center',
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('4.5%'), // ~40px gap from Figma
-    width: wp('69.6%'), // ~288px width from Figma
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
-    lineHeight: 38.5, // 1.48em
-    letterSpacing: -0.52, // -2%
-    textAlign: 'center',
-    marginBottom: hp('1.5%'),
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontWeight: '400',
-    fontSize: 18,
-    lineHeight: 29.5, // 1.64em
-    textAlign: 'center',
-    letterSpacing: -0.36, // -2%
   },
   photoGrid: {
     position: 'relative',

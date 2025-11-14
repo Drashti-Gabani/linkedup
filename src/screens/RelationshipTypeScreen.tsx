@@ -79,7 +79,7 @@ const RelationshipTypeScreen: React.FC = () => {
       {/* Back Button */}
       <BackButton
         onPress={() => navigation.goBack()}
-        style={styles.backButton}
+        size="medium"
       />
 
       {/* Main Content - using flexbox to fit in single screen */}
@@ -150,12 +150,6 @@ const RelationshipTypeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  backButton: {
-    position: 'absolute',
-    top: hp('5.95%'), // y: 54 in Figma (54/908 = 5.95%)
-    left: wp('6.52%'), // x: 27 in Figma (27/414 = 6.52%)
-    zIndex: 10,
   },
   content: {
     flex: 1,

@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
-import GradientButton from '../components/GradientButton';
+import NextButton from '../components/NextButton';
 import BackButton from '../components/BackButton';
 
 const OTPVerifyScreen: React.FC = () => {
@@ -67,7 +67,7 @@ const OTPVerifyScreen: React.FC = () => {
       {/* Back Button */}
       <BackButton
         onPress={() => navigation.goBack()}
-        style={styles.backButton}
+        size="medium"
       />
 
       {/* Main Content Container - using flexbox */}
@@ -166,17 +166,8 @@ const OTPVerifyScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Bottom Section - Button and Resend */}
-        <View style={styles.bottomSection}>
-          <View style={styles.buttonWrapper}>
-            <GradientButton
-              onPress={handleContinue}
-              text="Continue"
-              style={styles.continueButton}
-            />
-          </View>
-
-          {/* Resend Code */}
+        {/* Resend Code */}
+        <View style={styles.resendSection}>
           <TouchableOpacity onPress={handleResend} style={styles.resendButton}>
             <Text style={[styles.resendText, { color: colors.textMuted }]}>
               Didn't get a code? <Text style={[styles.resendLink, { color: colors.accent }]}>Resend</Text>
@@ -184,6 +175,13 @@ const OTPVerifyScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <NextButton
+        onPress={handleContinue}
+        showText={true}
+        textLabel="Next"
+        size="medium"
+      />
     </SafeAreaView>
   );
 };
@@ -191,9 +189,6 @@ const OTPVerifyScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  backButton: {
-    top: hp('8.15%'), // y: 73 in Figma
   },
   mainContainer: {
     flex: 1,
@@ -224,6 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-start',
     minHeight: hp('17.3%'), // Ensure minimum height for OTP boxes
+    paddingBottom: hp('10%'), // Space for resend text and fixed Next button
   },
   otpContainer: {
     flexDirection: 'row',
@@ -272,29 +268,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  bottomSection: {
-    flex: 0,
-    paddingBottom: hp('5%'), // Bottom padding
+  resendSection: {
     alignItems: 'center',
-    gap: hp('2.3%'), // ~20px gap between button and resend
-    paddingTop: hp('1%'), // Small top padding
-  },
-  buttonWrapper: {
-    width: wp('73.91%'), // 306px button width
-    borderRadius: wp('3.38%'), // 14px border radius
-    overflow: 'hidden',
-    marginBottom: hp('0.5%'), // Small margin
-  },
-  continueButton: {
-    width: '100%',
-    paddingHorizontal: 0,
-    borderRadius: wp('3.38%'), // 14px border radius
-    height: hp('6.47%'), // 58px height
-    shadowColor: 'transparent',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    elevation: 0,
+    paddingTop: hp('2%'),
   },
   resendButton: {
     alignItems: 'center',

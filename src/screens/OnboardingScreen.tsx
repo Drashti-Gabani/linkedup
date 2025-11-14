@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     width: wp('1.9%'),
   },
   subtext: {
-    fontFamily: 'SofiaPro-Regular',
+    fontFamily: 'Sofia Pro',
     fontWeight: '400',
     fontSize: wp('4.2%'),
     lineHeight: hp('3.9%'),

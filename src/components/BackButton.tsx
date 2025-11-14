@@ -17,7 +17,7 @@ const BackButton: React.FC<BackButtonProps> = ({
   style,
 }) => {
   const { gradients, colors } = useTheme();
-  
+
   const getSize = () => {
     switch (size) {
       case 'small':
@@ -78,8 +78,8 @@ const BackButton: React.FC<BackButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     position: 'absolute',
-    top: hp('4%'),
-    left: wp('6%'),
+    top: hp('2%'), // ~5.1% from top (46/896 = 5.13%)
+    left: wp('6.5%'), // ~6.5% from left (27/414 = 6.52%)
     zIndex: 10,
     justifyContent: 'center',
     alignItems: 'center',

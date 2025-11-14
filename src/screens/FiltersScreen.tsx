@@ -84,29 +84,29 @@ const FiltersScreen: React.FC = () => {
         {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.settingsButton}>
-          <View
-            style={[
-              styles.settingsIconBg,
+            <View
+              style={[
+                styles.settingsIconBg,
               { backgroundColor: colors.headerButtonBackground },
+              ]}
+            >
+              <Svg width={6} height={16} viewBox="0 0 6 16" fill="none">
+                <Path
+                  d="M0 4h4M0 0h6M0 12h4M0 8h6"
+                stroke={colors.headerButtonIcon}
+                  strokeWidth={1}
+                />
+              </Svg>
+            </View>
+          </View>
+          <Text
+            style={[
+              styles.headerTitle,
+            { color: colors.heading },
             ]}
           >
-            <Svg width={6} height={16} viewBox="0 0 6 16" fill="none">
-              <Path
-                d="M0 4h4M0 0h6M0 12h4M0 8h6"
-                stroke={colors.headerButtonIcon}
-                strokeWidth={1}
-              />
-            </Svg>
-          </View>
-        </View>
-        <Text
-          style={[
-            styles.headerTitle,
-            { color: colors.heading },
-          ]}
-        >
-          Discover
-        </Text>
+            Discover
+          </Text>
         </View>
 
         {/* Filter Pills */}

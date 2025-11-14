@@ -6,20 +6,18 @@ import {
   TextInput,
   Image,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
-import LinearGradient from 'react-native-linear-gradient';
-import MaskedView from '@react-native-masked-view/masked-view';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import GradientText from '../components/GradientText';
+import NextButton from '../components/NextButton';
 
 const WelcomeScreen: React.FC = () => {
-  const { colors, gradients, isDark } = useTheme();
+  const { colors, isDark } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
 
   const [firstName, setFirstName] = useState('');
@@ -35,8 +33,6 @@ const WelcomeScreen: React.FC = () => {
     navigation.navigate('Login');
   };
 
-  const showText = true;
-
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
@@ -46,6 +42,7 @@ const WelcomeScreen: React.FC = () => {
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        bounces={false}
       >
         {/* Decorative Images */}
         <View style={styles.imagesContainer}>
@@ -276,56 +273,14 @@ const WelcomeScreen: React.FC = () => {
           Your personal information is safe with us and we'll not show your date
           of birth or email to other users.
         </Text>
-
-        {/* Next Button Container */}
-        <View style={styles.nextButtonContainer}>
-          <View style={styles.nextButtonWrapper}>
-            {showText && (
-              <TouchableOpacity
-                onPress={handleNext}
-                activeOpacity={0.7}
-                style={styles.nextTextContainer}
-              >
-                <MaskedView
-                  maskElement={<Text style={styles.nextTextMask}>Next</Text>}
-                >
-                  <LinearGradient
-                    colors={gradients.secondary}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 1 }}
-                    style={styles.nextTextGradient}
-                  >
-                    <Text style={[styles.nextText, { opacity: 0 }]}>Next</Text>
-                  </LinearGradient>
-                </MaskedView>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              onPress={handleNext}
-              activeOpacity={0.7}
-              style={styles.nextArrowButton}
-            >
-              <LinearGradient
-                colors={gradients.secondary}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                angle={242}
-                style={styles.nextArrowGradient}
-              >
-                <Svg width={15} height={15} viewBox="0 0 13 13" fill="none">
-                  <Path
-                    d="M1 6.31034H11.6207M11.6207 6.31034L6.31034 1M11.6207 6.31034L6.31034 11.6207"
-                    stroke={colors.iconSelected}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
-        </View>
       </ScrollView>
+
+      <NextButton
+        onPress={handleNext}
+        showText={true}
+        textLabel="Next"
+        size="medium"
+      />
     </SafeAreaView>
   );
 };
@@ -339,7 +294,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: hp('10%'),
+    paddingBottom: hp('15%'), // Space for fixed Next button
   },
   imagesContainer: {
     position: 'absolute',
@@ -440,48 +395,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('9.66%'),
     marginTop: hp('2.9%'),
     marginBottom: hp('2.68%'),
-  },
-  nextButtonContainer: {
-    width: '100%',
-    alignItems: 'flex-end',
-    paddingHorizontal: wp('6%'),
-    marginTop: hp('2%'),
-    paddingBottom: hp('5%'),
-  },
-  nextButtonWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-  },
-  nextTextContainer: {
-    marginRight: 15,
-  },
-  nextTextMask: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 22,
-    fontWeight: '700',
-    letterSpacing: -0.66,
-    backgroundColor: 'transparent',
-  },
-  nextTextGradient: {
-    paddingVertical: 2,
-  },
-  nextText: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 22,
-    fontWeight: '700',
-    letterSpacing: -0.66,
-  },
-  nextArrowButton: {
-    width: 48,
-    height: 48,
-  },
-  nextArrowGradient: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

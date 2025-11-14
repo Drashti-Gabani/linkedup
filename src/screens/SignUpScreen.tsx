@@ -20,6 +20,7 @@ import CalendarIcon from '../components/icons/CalendarIcon';
 import CheckmarkIcon from '../components/icons/CheckmarkIcon';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
+import ScreenTitle from '../components/ScreenTitle';
 
 const SignUpScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
@@ -93,24 +94,11 @@ const SignUpScreen: React.FC = () => {
               <View style={styles.content}>
                 {/* Title Section */}
                 <View style={styles.titleSection}>
-                  <View style={styles.titleWrapper}>
-                    <Text
-                      style={[
-                        styles.welcomeTitle,
-                        { color: colors.textPrimary },
-                      ]}
-                    >
-                      Welcome
-                    </Text>
-                    {!isDark && (
-                      <View
-                        style={[
-                          styles.underline,
-                          { backgroundColor: colors.underline },
-                        ]}
-                      />
-                    )}
-                  </View>
+                  <ScreenTitle
+                    title="Welcome"
+                    titleSize="large"
+                    containerMarginBottom={hp('1%')}
+                  />
 
                   <View style={styles.subtitleWrapper}>
                     <Text
@@ -376,6 +364,8 @@ const styles = StyleSheet.create({
   titleSection: {
     alignItems: 'center',
     marginBottom: hp('4.5%'),
+    width: '100%',
+    paddingHorizontal: wp('2%'),
   },
   titleWrapper: {
     alignItems: 'center',
@@ -403,6 +393,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    flexWrap: 'wrap',
+    paddingHorizontal: wp('5%'),
+    maxWidth: '100%',
   },
   subtitleText: {
     fontFamily: 'Comfortaa',
@@ -427,10 +420,7 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontFamily: 'Comfortaa',
-    fontWeight: '500',
-    fontSize: 10,
-    lineHeight: 15,
-    letterSpacing: 0.5,
+    fontSize: 11,
     textTransform: 'uppercase',
     position: 'absolute',
     top: 0,

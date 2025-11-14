@@ -16,6 +16,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import SelectionSection from '../components/SelectionSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import ScreenTitle from '../components/ScreenTitle';
 
 const MARITAL_STATUSES = ['Single', 'Married', 'Divorced', 'Widowed'];
 const RELIGIONS = [
@@ -42,41 +43,22 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
   };
 
   const Checkbox = ({ checked }: { checked: boolean }) => (
-    <View
-      style={[styles.checkbox, { borderColor: colors.checkboxBorder }]}
-    >
+    <View style={[styles.checkbox, { borderColor: colors.checkboxBorder }]}>
       {checked && <View style={styles.checkboxInner} />}
     </View>
   );
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
         <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.highlight} />
-            <Text
-              style={[styles.title, { color: colors.heading }]}
-            >
-              Lifestyle & Beliefs
-            </Text>
-            <Text
-              style={[
-                styles.subtitle,
-                { color: colors.subheading },
-              ]}
-            >
-              Increase the change to get right partner
-            </Text>
-          </View>
+          <ScreenTitle
+            title="Lifestyle & Beliefs"
+            subtitle="Increase the change to get right partner"
+          />
 
           {/* Marital Status */}
           <SelectionSection
@@ -109,12 +91,7 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
 
           {/* Height Slider */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.heading },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.heading }]}>
               Height
             </Text>
             <View style={styles.sliderContainer}>
@@ -125,12 +102,7 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
                     { backgroundColor: colors.backgroundSecondary },
                   ]}
                 >
-                  <LinearGradient
-                    colors={gradients.secondary}
-                    style={styles.heightTextGradient}
-                  >
-                    <Text style={styles.heightValueText}>{`${height} cm`}</Text>
-                  </LinearGradient>
+                  <Text style={styles.heightValueText}>{`${height} cm`}</Text>
                 </View>
                 <View
                   style={[
@@ -153,14 +125,14 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
             </View>
           </View>
         </View>
-      </ScrollView>
 
-      <NextButton
-        onPress={handleNext}
-        showText={true}
-        textLabel="Next"
-        size="medium"
-      />
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -169,37 +141,10 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   content: {
     paddingHorizontal: wp('11%'),
-    paddingTop: hp('15%'),
-    paddingBottom: hp('15%'),
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('5%'),
-    position: 'relative',
-  },
-  highlight: {
-    position: 'absolute',
-    backgroundColor: '#F2F2F2',
-    width: 115,
-    height: 18,
-    top: '15%',
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 26,
-    fontWeight: '700',
-    letterSpacing: -0.52,
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 16,
-    lineHeight: 27,
-    textAlign: 'center',
-    letterSpacing: -0.32,
+    paddingBottom: hp('12%'),
+    flexGrow: 1,
   },
   checkboxSection: {
-    alignItems: 'center',
     marginBottom: hp('3%'),
   },
   section: {
@@ -216,7 +161,6 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 14,
   },
   checkbox: {
     width: 19,

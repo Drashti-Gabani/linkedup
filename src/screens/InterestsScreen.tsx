@@ -8,6 +8,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
 import MultiSelectSection from '../components/MultiSelectSection';
+import ScreenTitle from '../components/ScreenTitle';
 import { interestIconImages } from '../assets/images';
 
 interface Interest {
@@ -65,30 +66,19 @@ const InterestsScreen: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
+        bounces={false}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <Text
-            style={[styles.title, { color: colors.heading }]}
-          >
-            Interests
-          </Text>
-          <Text style={[styles.subtitle, { color: colors.textDisabled }]}>
-            Select a few of your interests to match with{'\n'}users who have
-            similar things in common.
-          </Text>
-        </View>
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
+        <ScreenTitle
+          title="Interests"
+          subtitle="Select a few of your interests to match with users who have similar things in common."
+        />
 
         {/* Interests Grid */}
         <MultiSelectSection
@@ -97,14 +87,14 @@ const InterestsScreen: React.FC = () => {
           onSelect={handleSelect}
           iconMap={iconMap}
         />
-      </ScrollView>
 
-      <NextButton
-        onPress={handleNext}
-        showText={true}
-        textLabel="Next"
-        size="medium"
-      />
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -118,27 +108,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: wp('5%'),
-    paddingTop: hp('14%'),
     paddingBottom: hp('12%'),
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('4%'),
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
-    fontSize: 32,
-    letterSpacing: -0.64,
-    marginBottom: 16,
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontWeight: '400',
-    fontSize: 18,
-    lineHeight: 30,
-    textAlign: 'center',
-    letterSpacing: -0.36,
+    flexGrow: 1,
   },
 });
 

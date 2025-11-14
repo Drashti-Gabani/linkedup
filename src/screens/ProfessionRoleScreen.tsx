@@ -10,6 +10,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import SelectionSection from '../components/SelectionSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import ScreenTitle from '../components/ScreenTitle';
 
 const PROFESSIONAL_ROLES = [
   'Board of Director',
@@ -45,26 +46,17 @@ const ProfessionRoleScreen: React.FC = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
+        bounces={false}
       >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
         <View style={styles.content}>
-          {/* Header */}
-          <View style={styles.header}>
-            <View style={styles.highlight} />
-            <Text
-              style={[styles.title, { color: colors.heading }]}
-            >
-              Profession Role
-            </Text>
-            <Text style={[styles.subtitle, { color: colors.subheading }]}>
-              Select which role you work in
-            </Text>
-          </View>
+          <ScreenTitle
+            title="Profession Role"
+            subtitle="Select which role you work in"
+          />
 
           {/* Role Selection */}
           <View style={styles.roleSection}>
@@ -98,10 +90,7 @@ const ProfessionRoleScreen: React.FC = () => {
               ]}
             >
               <TextInput
-                style={[
-                  styles.input,
-                  { color: colors.fieldText },
-                ]}
+                style={[styles.input, { color: colors.fieldText }]}
                 placeholder="Enter your role"
                 placeholderTextColor={colors.placeholder}
                 value={customRole}
@@ -111,18 +100,12 @@ const ProfessionRoleScreen: React.FC = () => {
           </View>
         </View>
 
-        {/* Next Button Container */}
-        <View style={styles.nextButtonWrapper}>
-          <View style={styles.nextButtonInner}>
-            <NextButton
-              onPress={handleNext}
-              showText={true}
-              textLabel="Next"
-              size="medium"
-              style={styles.nextButtonOverride}
-            />
-          </View>
-        </View>
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -131,44 +114,13 @@ const ProfessionRoleScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: hp('5%'),
-  },
-  scrollView: {
-    flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
+    paddingBottom: hp('12%'),
   },
   content: {
     paddingHorizontal: wp('11%'),
-    paddingTop: hp('12%'),
-    paddingBottom: hp('2%'),
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: hp('4%'),
-    position: 'relative',
-  },
-  highlight: {
-    position: 'absolute',
-    backgroundColor: '#F2F2F2',
-    width: 115,
-    height: 18,
-    top: '15%',
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 26,
-    fontWeight: '700',
-    letterSpacing: -0.52,
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 16,
-    lineHeight: 27,
-    textAlign: 'center',
-    letterSpacing: -0.32,
   },
   roleSection: {
     marginBottom: hp('2%'),
@@ -204,20 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     padding: 0,
-  },
-  nextButtonWrapper: {
-    paddingVertical: hp('3%'),
-    paddingHorizontal: wp('6%'),
-    alignItems: 'flex-end',
-  },
-  nextButtonInner: {
-    width: '100%',
-    alignItems: 'flex-end',
-  },
-  nextButtonOverride: {
-    position: 'relative',
-    bottom: 0,
-    right: 0,
   },
 });
 
