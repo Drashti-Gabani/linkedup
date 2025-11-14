@@ -99,14 +99,13 @@ const MonthlyEarningScreen: React.FC = () => {
           </TouchableOpacity>
 
           {/* Salary Range Selection */}
-          <View style={styles.salarySection}>
-            <SelectionSection
-              title=""
-              options={SALARY_RANGES}
-              selectedValue={selectedRange}
-              onSelect={setSelectedRange}
-            />
-          </View>
+
+          <SelectionSection
+            title=""
+            options={SALARY_RANGES}
+            selectedValue={selectedRange}
+            onSelect={setSelectedRange}
+          />
 
           {/* Don't Show Checkbox */}
           <TouchableOpacity
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp('12%'),
   },
   content: {
-    paddingHorizontal: wp('11%'),
+    paddingHorizontal: wp('10%'),
   },
   currencySelector: {
     flexDirection: 'row',
@@ -194,13 +193,9 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     color: '#D0C9D6',
   },
-  salarySection: {
-    marginBottom: hp('2%'),
-  },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: hp('1%'),
   },
   checkbox: {
     width: 19,

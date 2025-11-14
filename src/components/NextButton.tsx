@@ -126,7 +126,6 @@ const styles = StyleSheet.create({
   textMask: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 22,
-    fontWeight: '700',
     letterSpacing: -0.66,
     backgroundColor: 'transparent',
   },
@@ -136,7 +135,6 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 22,
-    fontWeight: '700',
     letterSpacing: -0.66,
   },
   arrowButton: {

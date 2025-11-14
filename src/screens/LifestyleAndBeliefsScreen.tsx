@@ -44,7 +44,11 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
 
   const Checkbox = ({ checked }: { checked: boolean }) => (
     <View style={[styles.checkbox, { borderColor: colors.checkboxBorder }]}>
-      {checked && <View style={styles.checkboxInner} />}
+      {checked && (
+        <View
+          style={[styles.checkboxInner, { backgroundColor: colors.accent }]}
+        />
+      )}
     </View>
   );
 
@@ -75,7 +79,9 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
               onPress={() => setHasKids(!hasKids)}
             >
               <Checkbox checked={hasKids} />
-              <Text style={[styles.checkboxLabel, { color: '#B2B2B2' }]}>
+              <Text
+                style={[styles.checkboxLabel, { color: colors.textDisabled }]}
+              >
                 I have kids
               </Text>
             </TouchableOpacity>
@@ -140,7 +146,7 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: {
-    paddingHorizontal: wp('11%'),
+    paddingHorizontal: wp('10%'),
     paddingBottom: hp('12%'),
     flexGrow: 1,
   },
@@ -154,7 +160,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 20,
-    fontWeight: '700',
     letterSpacing: -0.4,
     marginBottom: 12,
   },
@@ -174,7 +179,6 @@ const styles = StyleSheet.create({
   checkboxInner: {
     width: 11,
     height: 11,
-    backgroundColor: '#8239FF',
   },
   checkboxLabel: {
     fontFamily: 'Sofia Pro',
@@ -202,7 +206,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia Pro',
     fontWeight: '600',
     fontSize: 14,
-    color: '#8239FF', // This color will be masked
+    // color will be set dynamically via gradient mask
   },
   tooltipArrow: {
     width: 0,

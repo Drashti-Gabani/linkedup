@@ -193,7 +193,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 30,
-    fontWeight: '700',
     letterSpacing: -0.9,
     lineHeight: 33,
   },

@@ -155,7 +155,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 25,
-    fontWeight: '700',
     lineHeight: 27.88,
     letterSpacing: -0.5,
     textAlign: 'center',

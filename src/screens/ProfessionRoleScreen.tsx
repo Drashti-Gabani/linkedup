@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp('12%'),
   },
   content: {
-    paddingHorizontal: wp('11%'),
+    paddingHorizontal: wp('10%'),
   },
   roleSection: {
     marginBottom: hp('2%'),
@@ -131,8 +131,6 @@ const styles = StyleSheet.create({
   inputLabelMask: {
     fontFamily: 'Comfortaa-Medium',
     fontSize: 16,
-    fontWeight: '500',
-    letterSpacing: 0.8,
     backgroundColor: 'transparent',
   },
   inputLabelGradient: {
@@ -141,7 +139,6 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontFamily: 'Comfortaa-Medium',
     fontSize: 16,
-    fontWeight: '500',
     letterSpacing: 0.8,
   },
   inputContainer: {
@@ -154,7 +151,6 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: 'Comfortaa-Regular',
     fontSize: 16,
-    lineHeight: 20,
     padding: 0,
   },
 });

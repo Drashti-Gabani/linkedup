@@ -78,10 +78,7 @@ const WhoAmIScreen: React.FC = () => {
       >
         <BackButton onPress={() => navigation.goBack()} size="medium" />
         <View style={styles.content}>
-          <ScreenTitle
-            title="Who am I"
-            subtitle="Select what explains you"
-          />
+          <ScreenTitle title="Who am I" subtitle="Select what explains you" />
 
           {/* Personality Traits */}
           <MultiSelectSection
@@ -123,7 +120,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp('12%'),
   },
   content: {
-    paddingHorizontal: wp('11%'),
+    paddingHorizontal: wp('10%'),
   },
 });
 

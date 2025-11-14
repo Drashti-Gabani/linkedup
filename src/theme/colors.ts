@@ -16,6 +16,7 @@ const baseColors = {
     primaryLighter: '#A776FC', // Lightest variant for gradients
     primaryDark: '#843DFE', // Darker variant
     primaryDarker: '#853EFE', // Darkest variant
+    underline: '#D4BBFF', // Underline color for onboarding titles
   },
 
   // Neutral grays (grouped by similarity)
@@ -60,6 +61,8 @@ const baseColors = {
     veryLight400: '#F7F8FA', // Background tertiary, border light
     veryLight300: '#F8F8F8', // Background card, border tab
     veryLight200: '#FFFFFF', // White
+    dotInactiveLight: '#EDEDED', // Pagination dot inactive (light mode)
+    dotInactiveDark: '#363636', // Pagination dot inactive (dark mode)
   },
 
   // Pink/Red accent colors (for special UI elements)
@@ -71,9 +74,9 @@ const baseColors = {
 
   // Status colors
   status: {
-  success: '#22C55E',
-  warning: '#F59E0B',
-  danger: '#EF4444',
+    success: '#22C55E',
+    warning: '#F59E0B',
+    danger: '#EF4444',
   },
 
   // Overlay colors
@@ -114,6 +117,7 @@ export const lightColors = {
   accentPrimary: baseColors.purple.primaryLight,
   accentSecondary: baseColors.purple.primaryLighter,
   accentTertiary: baseColors.purple.primaryDark,
+  accentUnderline: baseColors.purple.underline, // Underline color for onboarding
 
   // Card and container colors
   card: baseColors.gray.veryLight500,
@@ -229,6 +233,13 @@ export const lightColors = {
   // Tab colors
   tabInactive: baseColors.gray.light100,
   tabInactiveDark: baseColors.gray.medium500,
+
+  // Pagination dot colors
+  dotInactive: baseColors.gray.dotInactiveLight, // #EDEDED for light mode
+
+  // Onboarding screen specific colors
+  signInText: baseColors.gray.light700, // #A7A7A7 - "Already have an account?" text
+  signInLink: baseColors.purple.primary, // #8239FF - "Sign In" link color
 };
 
 // Dark theme colors - using base palette
@@ -262,6 +273,7 @@ export const darkColors = {
   accentPrimary: baseColors.purple.primaryLight,
   accentSecondary: baseColors.purple.primaryLighter,
   accentTertiary: baseColors.purple.primaryDark,
+  accentUnderline: baseColors.purple.underline, // Underline color for onboarding
 
   // Card and container colors
   card: baseColors.gray.dark200,
@@ -379,6 +391,13 @@ export const darkColors = {
   // Tab colors
   tabInactive: baseColors.gray.medium500,
   tabInactiveDark: baseColors.gray.medium500,
+
+  // Pagination dot colors
+  dotInactive: baseColors.gray.dotInactiveDark, // #363636 for dark mode
+
+  // Onboarding screen specific colors
+  signInText: baseColors.gray.light700, // #A7A7A7 - "Already have an account?" text (same as light)
+  signInLink: baseColors.gray.veryLight200, // #8239FF - "Sign In" link color (same as light)
 };
 
 // Gradient colors - extracted from Figma

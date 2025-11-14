@@ -21,6 +21,7 @@ import CheckmarkIcon from '../components/icons/CheckmarkIcon';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import ScreenTitle from '../components/ScreenTitle';
+import { onboardingImages } from '../assets/images';
 
 const SignUpScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
@@ -66,23 +67,17 @@ const SignUpScreen: React.FC = () => {
           {/* Profile Photos Section - Overlapping Diagonal Layout */}
           <View style={styles.profilePhotosContainer}>
             <Image
-              source={{
-                uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=faces',
-              }}
+              source={onboardingImages.carousel1}
               style={[styles.profilePhoto, styles.profilePhotoLeft]}
               resizeMode="cover"
             />
             <Image
-              source={{
-                uri: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=400&fit=crop&crop=faces',
-              }}
+              source={onboardingImages.carousel3}
               style={[styles.profilePhoto, styles.profilePhotoCenter]}
               resizeMode="cover"
             />
             <Image
-              source={{
-                uri: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces',
-              }}
+              source={onboardingImages.carousel2}
               style={[styles.profilePhoto, styles.profilePhotoRight]}
               resizeMode="cover"
             />
@@ -375,7 +370,6 @@ const styles = StyleSheet.create({
   },
   welcomeTitle: {
     fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
     fontSize: 40,
     lineHeight: 32,
     textAlign: 'center',
@@ -398,15 +392,13 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
   },
   subtitleText: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '600',
+    fontFamily: 'Comfortaa-SemiBold',
     fontSize: 16,
     lineHeight: 20,
     textAlign: 'center',
   },
   loginLink: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '600',
+    fontFamily: 'Comfortaa-SemiBold',
     fontSize: 16,
     lineHeight: 20,
   },
@@ -419,7 +411,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   labelText: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Regular',
     fontSize: 11,
     textTransform: 'uppercase',
     position: 'absolute',
@@ -451,16 +443,14 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   input: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '600',
+    fontFamily: 'Comfortaa-SemiBold',
     fontSize: 16,
     lineHeight: 20,
     paddingVertical: 0,
     flex: 1,
   },
   privacyText: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '400',
+    fontFamily: 'Comfortaa-Regular',
     fontSize: 16,
     lineHeight: 17.84,
     textAlign: 'left',

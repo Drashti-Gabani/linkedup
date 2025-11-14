@@ -9,6 +9,7 @@ import { MainStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
 import GradientButton from '../components/GradientButton';
 import { guidelineIcons } from '../assets/images';
+import ScreenTitle from '../components/ScreenTitle';
 
 interface GuidelineCardProps {
   iconSource: any;
@@ -16,6 +17,7 @@ interface GuidelineCardProps {
   description: string;
   colors: any;
   gradients: any;
+  isDark: boolean;
 }
 
 const GuidelineCard: React.FC<GuidelineCardProps> = ({
@@ -24,21 +26,36 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
   description,
   colors,
   gradients,
+  isDark,
 }) => {
+  const cardBackgroundColor = isDark ? '#2E2E2E' : '#FFFFFF';
+  const cardShadowColor = 'rgba(164, 164, 164, 0.2)';
+
   return (
     <View style={styles.cardWrapper}>
       <View
         style={[
           styles.card,
-          { backgroundColor: colors.backgroundCard },
+          {
+            backgroundColor: cardBackgroundColor,
+            shadowColor: cardShadowColor,
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 1,
+            shadowRadius: 75,
+            elevation: 8,
+          },
         ]}
       >
         <View style={styles.cardContent}>
-          <Text style={[styles.cardTitle, { color: colors.accent }]}>{title}</Text>
+          <Text style={[styles.cardTitle, { color: colors.accent }]}>
+            {title}
+          </Text>
           <Text
             style={[
               styles.cardDescription,
-              { color: colors.textPrimary },
+              {
+                color: isDark ? '#C6C6C6' : '#000000',
+              },
             ]}
           >
             {description}
@@ -64,7 +81,7 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
 };
 
 const CommunityGuidelinesScreen: React.FC = () => {
-  const { colors, gradients } = useTheme();
+  const { colors, gradients, isDark } = useTheme();
   const navigation = useNavigation<MainStackNavigationProp>();
 
   const guidelines = [
@@ -101,24 +118,22 @@ const CommunityGuidelinesScreen: React.FC = () => {
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
     >
-      <BackButton onPress={() => navigation.goBack()} size="medium" />
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
+        bounces={false}
       >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
+
         {/* Header */}
         <View style={styles.header}>
-          <View style={styles.highlight} />
-          <Text
-            style={[styles.title, { color: colors.heading }]}
-          >
-            Welcome
-          </Text>
-          <Text style={[styles.subtitle, { color: colors.textDisabled }]}>
-            We are glad for you to be here. Please, follow these guidelines
-          </Text>
+          <ScreenTitle
+            title="Welcome"
+            titleSize="large"
+            subtitle="We are glad for you to be here. Please, follow these guidelines"
+            containerMarginBottom={hp('1%')}
+          />
         </View>
 
         {/* Guidelines Cards Grid */}
@@ -130,6 +145,7 @@ const CommunityGuidelinesScreen: React.FC = () => {
               description={guidelines[0].description}
               colors={colors}
               gradients={gradients}
+              isDark={isDark}
             />
             <GuidelineCard
               iconSource={guidelines[2].iconSource}
@@ -137,6 +153,7 @@ const CommunityGuidelinesScreen: React.FC = () => {
               description={guidelines[2].description}
               colors={colors}
               gradients={gradients}
+              isDark={isDark}
             />
           </View>
           <View style={styles.cardsColumn}>
@@ -146,6 +163,7 @@ const CommunityGuidelinesScreen: React.FC = () => {
               description={guidelines[1].description}
               colors={colors}
               gradients={gradients}
+              isDark={isDark}
             />
             <GuidelineCard
               iconSource={guidelines[3].iconSource}
@@ -153,6 +171,7 @@ const CommunityGuidelinesScreen: React.FC = () => {
               description={guidelines[3].description}
               colors={colors}
               gradients={gradients}
+              isDark={isDark}
             />
           </View>
         </View>
@@ -166,7 +185,6 @@ const CommunityGuidelinesScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: hp('5%'),
   },
   scrollView: {
     flex: 1,
@@ -177,7 +195,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
-    marginTop: hp('5%'),
+    marginTop: hp('10%'),
     marginBottom: hp('4%'),
     paddingHorizontal: wp('20%'),
     position: 'relative',
@@ -193,7 +211,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 32,
-    fontWeight: '700',
     letterSpacing: -0.64,
     marginBottom: 16,
     textAlign: 'center',
@@ -223,12 +240,6 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 15,
     minHeight: 140,
-    backgroundColor: '#F8F8F8',
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 3,
     position: 'relative',
     marginBottom: 10,
   },

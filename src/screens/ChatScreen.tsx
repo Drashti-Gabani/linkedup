@@ -268,9 +268,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inboxTitle: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Bold',
     fontSize: hp('3.4%'),
-    fontWeight: '700',
     lineHeight: hp('3.8%'),
     letterSpacing: -0.9,
     textAlign: 'center',
@@ -316,9 +315,8 @@ const styles = StyleSheet.create({
     paddingBottom: hp('2%'),
   },
   sectionTitle: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Bold',
     fontSize: hp('2.1%'),
-    fontWeight: '700',
     lineHeight: hp('2.7%'),
     marginBottom: hp('2.5%'),
   },

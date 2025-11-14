@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp('12%'),
   },
   content: {
-    paddingHorizontal: wp('8%'),
+    paddingHorizontal: wp('10%'),
   },
   searchContainer: {
     flexDirection: 'row',

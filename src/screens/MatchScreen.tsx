@@ -254,9 +254,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   buttonText: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Bold',
     fontSize: hp('2.2%'),
-    fontWeight: '700',
     lineHeight: hp('2.5%'),
     letterSpacing: -0.6,
     textAlign: 'center',

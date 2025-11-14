@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp('12%'),
   },
   content: {
-    paddingHorizontal: wp('8%'),
+    paddingHorizontal: wp('10%'),
   },
   educationSection: {
     marginBottom: hp('5%'),
@@ -138,7 +138,6 @@ const styles = StyleSheet.create({
   inputLabelMask: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '700',
     letterSpacing: 0.8,
     backgroundColor: 'transparent',
   },
@@ -148,7 +147,6 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '700',
     letterSpacing: 0.8,
   },
   inputContainer: {

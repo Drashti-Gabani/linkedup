@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 20,
-    fontWeight: '700',
     letterSpacing: -0.4,
     marginBottom: 16,
   },

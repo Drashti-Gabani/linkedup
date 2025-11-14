@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
+import { gradients } from '../theme/colors';
 import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
@@ -12,7 +20,7 @@ import NextButton from '../components/NextButton';
 type RelationshipType = 'casual' | 'professional' | 'marriage' | null;
 
 const RelationshipTypeScreen: React.FC = () => {
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
 
   const [selectedType, setSelectedType] = useState<RelationshipType>('casual');
@@ -39,17 +47,23 @@ const RelationshipTypeScreen: React.FC = () => {
       >
         {isSelected ? (
           <LinearGradient
-            colors={['#9253FF', '#8239FF']}
+            colors={gradients.primary}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             angle={46}
             style={[
               styles.typeButton,
+              {
+                borderRightColor: colors.accent,
+                borderColor: colors.accent,
+              },
               isFirst && styles.typeButtonLeft,
               isLast && styles.typeButtonRight,
             ]}
           >
-            <Text style={[styles.typeButtonText, { color: '#FFFFFF' }]}>
+            <Text
+              style={[styles.typeButtonText, { color: colors.iconSelected }]}
+            >
               {label}
             </Text>
           </LinearGradient>
@@ -58,11 +72,18 @@ const RelationshipTypeScreen: React.FC = () => {
             style={[
               styles.typeButton,
               styles.typeButtonInactive,
+              {
+                borderRightColor: colors.accent,
+                borderColor: colors.accent,
+                backgroundColor: isDark
+                  ? 'rgba(255, 255, 255, 0.1)'
+                  : 'rgba(255, 255, 255, 0.25)',
+              },
               isFirst && styles.typeButtonLeft,
               isLast && styles.typeButtonRight,
             ]}
           >
-            <Text style={[styles.typeButtonText, { color: '#8239FF' }]}>
+            <Text style={[styles.typeButtonText, { color: colors.accent }]}>
               {label}
             </Text>
           </View>
@@ -74,75 +95,89 @@ const RelationshipTypeScreen: React.FC = () => {
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
-      edges={['top']}
     >
-      {/* Back Button */}
-      <BackButton
-        onPress={() => navigation.goBack()}
-        size="medium"
-      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        bounces={false}
+      >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
 
-      {/* Main Content - using flexbox to fit in single screen */}
-      <View style={styles.content}>
-        {/* Heading Section */}
-        <View style={styles.headingContainer}>
-          <Text style={[styles.heading, { color: colors.heading }]}>
-            The Relationship You're Looking For
-          </Text>
-          <Text style={[styles.subheading, { color: colors.subheading }]}>
-            Choose any one
-          </Text>
-        </View>
-
-        {/* Relationship Type Buttons - positioned to overlap with card */}
-        <View style={styles.typeButtonsContainer}>
-          {renderTypeButton('casual', 'Casual', 'left')}
-          {renderTypeButton('professional', 'Professional', 'center')}
-          {renderTypeButton('marriage', 'Marriage', 'right')}
-        </View>
-
-        {/* Card Section - flex to fill remaining space, starts at same y as buttons */}
-        <View style={styles.cardSection}>
-          <View style={styles.card}>
-            <Image
-              source={require('../assets/images/relationship-card-bg.png')}
-              style={styles.cardBackground}
-              resizeMode="cover"
-            />
-            <LinearGradient
-              colors={['rgba(0, 0, 0, 0)', 'rgba(1, 7, 9, 0.85)']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 1 }}
-              style={styles.cardGradient}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.cardTitleContainer}>
-                  <Text style={styles.cardTitle}>All are Welcome</Text>
-                </View>
-                <Text style={styles.cardDescription}>
-                  - Meet New People, No Pressure – Connect without commitments
-                  {'\n\n'}- Exciting chats & explore common interests{'\n\n'}-
-                  Find Friends or Flings{'\n\n'}- Coffee? Movie? Casual meetups
-                  anytime
-                  {'\n\n'}- Enjoy the moment without long-term obligations
-                </Text>
-              </View>
-            </LinearGradient>
+        {/* Main Content - using flexbox to fit in single screen */}
+        <View style={styles.content}>
+          {/* Heading Section */}
+          <View style={styles.headingContainer}>
+            <Text style={[styles.heading, { color: colors.heading }]}>
+              The Relationship You're Looking For
+            </Text>
+            <Text style={[styles.subheading, { color: colors.subheading }]}>
+              Choose any one
+            </Text>
           </View>
 
-          <Text style={[styles.switchText, { color: colors.textMuted }]}>
-            You can switch above options anytime from your Profile
-          </Text>
-        </View>
-      </View>
+          {/* Relationship Type Buttons - positioned to overlap with card */}
+          <View style={styles.typeButtonsContainer}>
+            {renderTypeButton('casual', 'Casual', 'left')}
+            {renderTypeButton('professional', 'Professional', 'center')}
+            {renderTypeButton('marriage', 'Marriage', 'right')}
+          </View>
 
-      {/* Next Button - positioned absolutely at bottom right matching Figma */}
-      <NextButton
-        onPress={handleNext}
-        showText={true}
-        textLabel="Next"
-        size="medium"
-      />
+          {/* Card Section - flex to fill remaining space, starts at same y as buttons */}
+          <View style={styles.cardSection}>
+            <View style={styles.card}>
+              <Image
+                source={require('../assets/images/relationship-card-bg.png')}
+                style={styles.cardBackground}
+                resizeMode="cover"
+              />
+              <LinearGradient
+                colors={[
+                  'rgba(0, 0, 0, 0)',
+                  isDark ? 'rgba(0, 0, 0, 0.85)' : 'rgba(1, 7, 9, 0.85)',
+                ]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={styles.cardGradient}
+              >
+                <View style={styles.cardContent}>
+                  <View style={styles.cardTitleContainer}>
+                    <Text
+                      style={[styles.cardTitle, { color: colors.iconSelected }]}
+                    >
+                      All are Welcome
+                    </Text>
+                  </View>
+                  <Text
+                    style={[
+                      styles.cardDescription,
+                      { color: colors.iconSelected },
+                    ]}
+                  >
+                    - Meet New People, No Pressure – Connect without commitments
+                    {'\n\n'}- Exciting chats & explore common interests{'\n\n'}-
+                    Find Friends or Flings{'\n\n'}- Coffee? Movie? Casual
+                    meetups anytime
+                    {'\n\n'}- Enjoy the moment without long-term obligations
+                  </Text>
+                </View>
+              </LinearGradient>
+            </View>
+
+            <Text style={[styles.switchText, { color: colors.textMuted }]}>
+              You can switch above options anytime from your Profile
+            </Text>
+          </View>
+        </View>
+
+        {/* Next Button - positioned absolutely at bottom right matching Figma */}
+        <NextButton
+          onPress={handleNext}
+          showText={true}
+          textLabel="Next"
+          size="medium"
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -150,6 +185,13 @@ const RelationshipTypeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: hp('5%'),
   },
   content: {
     flex: 1,
@@ -164,11 +206,8 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
     fontSize: wp('6.28%'), // 26px
-    lineHeight: wp('7.05%'), // 32.14px (1.2359999143160307em * 26)
     textAlign: 'center',
-    letterSpacing: wp('-0.13%'), // -0.52px (-2% of 26px)
     marginBottom: hp('1.65%'), // 15px gap to subheading (79-64 = 15px)
     color: '#000000', // Will be overridden by inline style
   },
@@ -196,8 +235,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRightWidth: 1,
-    borderRightColor: '#8239FF',
-    borderColor: '#8239FF',
     borderWidth: 1,
   },
   typeButtonLeft: {
@@ -209,22 +246,20 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 0,
   },
   typeButtonInactive: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    // backgroundColor will be set dynamically
   },
   typeButtonText: {
     fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
     fontSize: wp('3.86%'), // 16px
-    lineHeight: wp('4.83%'), // 20px (1.25em)
     textAlign: 'center',
   },
   cardSection: {
     flex: 1,
     alignItems: 'center',
-    gap: hp('4.41%'), // 40px gap between card and switch text
+    gap: hp('2%'), // 40px gap between card and switch text
     width: wp('86.96%'), // 360px width
     alignSelf: 'center',
-    minHeight: 0, // Allow flex to shrink
+    marginBottom: hp('8%'),
   },
   card: {
     width: '100%',
@@ -257,18 +292,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: wp('5.8%'), // 24px
     lineHeight: wp('6.76%'), // 28.13px (1.171875em * 24)
-    color: '#FFFFFF',
   },
   cardDescription: {
     fontFamily: 'Sofia Pro',
     fontWeight: '300',
     fontSize: wp('3.38%'), // 14px
     lineHeight: wp('3.86%'), // 16px (1.1428571428571428em * 14)
-    color: '#FFFFFF',
   },
   switchText: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '400',
+    fontFamily: 'Comfortaa-Regular',
     fontSize: wp('4%'), // 16px
     textAlign: 'center',
   },

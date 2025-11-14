@@ -317,9 +317,7 @@ const styles = StyleSheet.create({
   },
   welcomeTitle: {
     fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
     fontSize: 40,
-    lineHeight: 32,
     textAlign: 'center',
     marginBottom: 21,
   },
@@ -335,9 +333,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: 'Comfortaa-SemiBold',
-    fontWeight: '600',
     fontSize: 16,
-    lineHeight: 20,
     textAlign: 'center',
   },
   subtitleSecondary: {},
@@ -355,9 +351,6 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontFamily: 'Comfortaa-Medium',
     fontSize: 10,
-    fontWeight: '500',
-    lineHeight: 15,
-    letterSpacing: 0.5,
     marginLeft: 17,
     marginBottom: 9,
   },
@@ -380,17 +373,14 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontFamily: 'Comfortaa-SemiBold',
-    fontWeight: '600',
     fontSize: 16,
-    lineHeight: 20,
     paddingVertical: 0,
   },
   inputChevron: {
     marginLeft: 8,
   },
   privacyText: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '400',
+    fontFamily: 'Comfortaa-Regular',
     textAlign: 'left',
     paddingHorizontal: wp('9.66%'),
     marginTop: hp('2.9%'),

@@ -144,17 +144,10 @@ const UserProfileScreen: React.FC = () => {
           {/* Name Section */}
           <View style={styles.nameSection}>
             <View style={styles.nameContent}>
-              <Text
-                style={[styles.name, { color: colors.name }]}
-              >
+              <Text style={[styles.name, { color: colors.name }]}>
                 {userData.name}, {userData.age}
               </Text>
-              <Text
-                style={[
-                  styles.occupation,
-                  { color: colors.occupation },
-                ]}
-              >
+              <Text style={[styles.occupation, { color: colors.occupation }]}>
                 {userData.occupation}
               </Text>
             </View>
@@ -189,10 +182,7 @@ const UserProfileScreen: React.FC = () => {
           >
             <View style={{ flex: 1 }}>
               <Text
-                style={[
-                  styles.sectionTitle,
-                  { color: colors.sectionTitle },
-                ]}
+                style={[styles.sectionTitle, { color: colors.sectionTitle }]}
               >
                 Location
               </Text>
@@ -205,32 +195,33 @@ const UserProfileScreen: React.FC = () => {
                 {userData.location}
               </Text>
             </View>
-            <View style={[styles.distanceBadge, { backgroundColor: colors.distanceBadgeBackground }]}>
+            <View
+              style={[
+                styles.distanceBadge,
+                { backgroundColor: colors.distanceBadgeBackground },
+              ]}
+            >
               <Svg width={12} height={12} viewBox="0 0 12 12" fill="none">
                 <Path
                   d="M6 1C3.8 1 2 2.8 2 5c0 2.2 4 6 4 6s4-3.8 4-6c0-2.2-1.8-4-4-4zm0 5.5c-.8 0-1.5-.7-1.5-1.5S5.2 3.5 6 3.5 7.5 4.2 7.5 5 6.8 6.5 6 6.5z"
                   fill={colors.distanceBadge}
                 />
               </Svg>
-              <Text style={[styles.distanceText, { color: colors.distanceBadge }]}>{userData.distance}</Text>
+              <Text
+                style={[styles.distanceText, { color: colors.distanceBadge }]}
+              >
+                {userData.distance}
+              </Text>
             </View>
           </View>
 
           {/* About Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               About
             </Text>
             <Text
-              style={[
-                styles.aboutText,
-                { color: colors.sectionContentMuted },
-              ]}
+              style={[styles.aboutText, { color: colors.sectionContentMuted }]}
             >
               {isAboutExpanded ? fullAbout : shortAbout}
             </Text>
@@ -245,12 +236,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Interests Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Interests
             </Text>
             <View style={styles.tagsContainer}>
@@ -271,12 +257,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Personality Traits Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Personality Traits
             </Text>
             <View style={styles.tagsContainer}>
@@ -292,15 +273,14 @@ const UserProfileScreen: React.FC = () => {
           <View style={styles.section}>
             <View style={styles.galleryHeader}>
               <Text
-                style={[
-                  styles.sectionTitle,
-                  { color: colors.sectionTitle },
-                ]}
+                style={[styles.sectionTitle, { color: colors.sectionTitle }]}
               >
                 Gallery
               </Text>
               <TouchableOpacity>
-                <Text style={[styles.readMore, { color: colors.readMore }]}>See all</Text>
+                <Text style={[styles.readMore, { color: colors.readMore }]}>
+                  See all
+                </Text>
               </TouchableOpacity>
             </View>
             <View style={styles.galleryGrid}>
@@ -341,12 +321,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Marital Status Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Marital Status
             </Text>
             <View style={styles.tagsContainer}>
@@ -356,12 +331,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Languages Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Languages
             </Text>
             <View style={styles.tagsContainer}>
@@ -375,17 +345,15 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Education Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.heading },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.heading }]}>
               Education
             </Text>
             <View style={styles.educationRow}>
               <Svg width={15} height={15} viewBox="0 0 15 15" fill="none">
-                <Path d="M7.5 1L1 4.5L7.5 8L14 4.5L7.5 1z" fill={colors.distanceBadge} />
+                <Path
+                  d="M7.5 1L1 4.5L7.5 8L14 4.5L7.5 1z"
+                  fill={colors.distanceBadge}
+                />
                 <Path
                   d="M1 10.5L7.5 14L14 10.5"
                   stroke={colors.distanceBadge}
@@ -393,12 +361,7 @@ const UserProfileScreen: React.FC = () => {
                   strokeLinecap="round"
                 />
               </Svg>
-              <Text
-                style={[
-                  styles.institutionText,
-                  { color: colors.heading },
-                ]}
-              >
+              <Text style={[styles.institutionText, { color: colors.heading }]}>
                 {userData.education.institution}
               </Text>
             </View>
@@ -409,12 +372,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Professional Role Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Professional Role
             </Text>
             <View style={styles.tagsContainer}>
@@ -424,12 +382,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Industry Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Industry
             </Text>
             <View style={styles.tagsContainer}>
@@ -443,12 +396,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Religion Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Religion
             </Text>
             <View style={styles.tagsContainer}>
@@ -458,12 +406,7 @@ const UserProfileScreen: React.FC = () => {
 
           {/* Pets Section */}
           <View style={styles.section}>
-            <Text
-              style={[
-                styles.sectionTitle,
-                { color: colors.sectionTitle },
-              ]}
-            >
+            <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               Pets
             </Text>
             <View style={styles.tagsContainer}>
@@ -573,14 +516,12 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 18,
-    fontWeight: '700',
     lineHeight: 27,
     marginBottom: 0,
   },
   occupation: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Regular',
     fontSize: 14,
-    fontWeight: '400',
     lineHeight: 21,
   },
   sendButton: {
@@ -648,10 +589,7 @@ const styles = StyleSheet.create({
   tagText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 12,
-    fontWeight: '700',
     color: '#FFFFFF',
-    letterSpacing: -0.24,
-    lineHeight: 13.38,
     paddingVertical: 12,
     paddingHorizontal: 22,
   },

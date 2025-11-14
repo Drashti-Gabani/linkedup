@@ -6,17 +6,21 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
-import GradientText from '../components/GradientText';
 import NextButton from '../components/NextButton';
 import UserIcon from '../components/icons/UserIcon';
 import EyeIcon from '../components/icons/EyeIcon';
 import CheckmarkIcon from '../components/icons/CheckmarkIcon';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
+import ScreenTitle from '../components/ScreenTitle';
+import { onboardingImages } from '../assets/images';
 
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
@@ -25,230 +29,318 @@ const LoginScreen: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
+
+  // Show checkmark when field has value
+  const showPhoneCheck = phoneNumber.length > 0;
+  const showPasswordCheck = password.length > 0;
+
+  const handleSignUp = () => {
+    navigation.navigate('SignUp');
+  };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Background Images Section */}
-      <View style={styles.imagesContainer}>
-        <Image
-          source={{
-            uri: 'https://api.builder.io/api/v1/image/assets/TEMP/9c09591d9ac73c636ccc177f3aceeb8e02010eb7?width=539',
-          }}
-          style={[styles.image, styles.imageLeft]}
-          resizeMode="cover"
-        />
-        <Image
-          source={{
-            uri: isDark
-              ? 'https://api.builder.io/api/v1/image/assets/TEMP/9f35b55846043c7cb2b1239ed1df98c0749774ab?width=631'
-              : 'https://api.builder.io/api/v1/image/assets/TEMP/17e09e4c285a2020923038573ea335a22e359699?width=631',
-          }}
-          style={[styles.image, styles.imageCenter]}
-          resizeMode="cover"
-        />
-        <Image
-          source={{
-            uri: 'https://api.builder.io/api/v1/image/assets/TEMP/6e78e50205bca901219564801e7aea1ba8157105?width=539',
-          }}
-          style={[styles.image, styles.imageRight]}
-          resizeMode="cover"
-        />
-      </View>
-
-      <SafeAreaView style={styles.safeArea} edges={['bottom']}>
-        {/* Content Section */}
-        <View style={styles.content}>
-          {/* Title Section */}
-          <View style={styles.titleSection}>
-            <View style={styles.titleWrapper}>
-              <Text style={[styles.loginTitle, { color: colors.textPrimary }]}>
-                Login
-              </Text>
-              {!isDark && <View style={[styles.underline, { backgroundColor: colors.underline }]} />}
-            </View>
-
-            <View style={styles.signUpWrapper}>
-              <Text style={[styles.signUpText, { color: colors.textMuted }]}>Don't have an account? </Text>
-              <GradientText
-                style={styles.signUpLink}
-              >
-                Sign Up
-              </GradientText>
-            </View>
+    <KeyboardAvoidingView
+      style={[
+        styles.keyboardAvoidingView,
+        { backgroundColor: colors.background },
+      ]}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+      >
+        <View
+          style={[styles.container, { backgroundColor: colors.background }]}
+        >
+          {/* Profile Photos Section - Overlapping Diagonal Layout */}
+          <View style={styles.profilePhotosContainer}>
+            <Image
+              source={onboardingImages.carousel1}
+              style={[styles.profilePhoto, styles.profilePhotoLeft]}
+              resizeMode="cover"
+            />
+            <Image
+              source={onboardingImages.carousel3}
+              style={[styles.profilePhoto, styles.profilePhotoCenter]}
+              resizeMode="cover"
+            />
+            <Image
+              source={onboardingImages.carousel2}
+              style={[styles.profilePhoto, styles.profilePhotoRight]}
+              resizeMode="cover"
+            />
           </View>
 
-          {/* Input Fields */}
-          <View style={styles.inputsContainer}>
-            {/* Phone Number Input */}
-            <View style={styles.inputGroup}>
-              <GradientText
-                style={styles.labelText}
-              >
-                Phone Number
-              </GradientText>
-              <View
-                style={[
-                  styles.inputWrapper,
-                  { backgroundColor: colors.inputBackground },
-                  !isDark && [styles.inputWrapperLight, { borderColor: colors.border }],
-                ]}
-              >
-                <UserIcon width={13} height={14} color={colors.inputIcon} />
-                <TextInput
-                  style={[styles.input, { color: colors.inputText }]}
-                  placeholder="Phone number"
-                  placeholderTextColor={colors.placeholder}
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                  keyboardType="phone-pad"
-                />
-                {phoneNumber.length > 0 && (
-                  <CheckmarkIcon width={8} height={6} />
-                )}
-              </View>
-            </View>
+          <View style={styles.contentWrapper}>
+            <SafeAreaView style={styles.safeArea}>
+              {/* Content Section */}
+              <View style={styles.content}>
+                {/* Title Section */}
+                <View style={styles.titleSection}>
+                  <ScreenTitle
+                    title="Login"
+                    titleSize="large"
+                    containerMarginBottom={hp('1%')}
+                  />
 
-            {/* Password Input */}
-            <View style={styles.inputGroup}>
-              <GradientText
-                style={styles.labelText}
-              >
-                Password
-              </GradientText>
-              <View
-                style={[
-                  styles.inputWrapper,
-                  { backgroundColor: colors.inputBackground },
-                  !isDark && [styles.inputWrapperLight, { borderColor: colors.border }],
-                ]}
-              >
-                <TextInput
-                  style={[styles.input, { color: colors.inputText, flex: 1 }]}
-                  placeholder="Password"
-                  placeholderTextColor={colors.placeholder}
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!isPasswordVisible}
-                />
-                <TouchableOpacity
-                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                  style={styles.eyeIconButton}
-                >
-                  <EyeIcon width={24} height={24} color={colors.inputIconSecondary} />
-                </TouchableOpacity>
+                  <View style={styles.signUpWrapper}>
+                    <Text
+                      style={[styles.signUpText, { color: colors.textMuted }]}
+                    >
+                      Don't have an account?{' '}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={handleSignUp}
+                      activeOpacity={0.7}
+                    >
+                      <Text
+                        style={[
+                          styles.signUpLink,
+                          { color: colors.accentTertiary },
+                        ]}
+                      >
+                        Sign Up
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Input Fields */}
+                <View style={styles.inputsContainer}>
+                  {/* Phone Number Input */}
+                  <View style={styles.inputGroup}>
+                    <Text
+                      style={[
+                        styles.labelText,
+                        { color: colors.accentTertiary },
+                      ]}
+                    >
+                      PHONE NUMBER
+                    </Text>
+                    <View
+                      style={[
+                        styles.inputWrapper,
+                        { backgroundColor: colors.inputBackground },
+                        focusedInput === 'phoneNumber' && [
+                          styles.inputWrapperFocused,
+                          { borderColor: colors.accent },
+                        ],
+                        !isDark &&
+                          focusedInput !== 'phoneNumber' && [
+                            styles.inputWrapperLight,
+                            { borderColor: colors.borderLight },
+                          ],
+                      ]}
+                    >
+                      <UserIcon
+                        width={13}
+                        height={14}
+                        color={colors.inputIcon}
+                      />
+                      <TextInput
+                        style={[styles.input, { color: colors.textPrimary }]}
+                        placeholder="Phone number"
+                        placeholderTextColor={colors.placeholder}
+                        value={phoneNumber}
+                        onChangeText={setPhoneNumber}
+                        keyboardType="phone-pad"
+                        onFocus={() => setFocusedInput('phoneNumber')}
+                        onBlur={() => setFocusedInput(null)}
+                      />
+                      {showPhoneCheck && (
+                        <CheckmarkIcon width={10} height={8} />
+                      )}
+                    </View>
+                  </View>
+
+                  {/* Password Input */}
+                  <View style={styles.inputGroup}>
+                    <Text
+                      style={[
+                        styles.labelText,
+                        { color: colors.accentTertiary },
+                      ]}
+                    >
+                      PASSWORD
+                    </Text>
+                    <View
+                      style={[
+                        styles.inputWrapper,
+                        { backgroundColor: colors.inputBackground },
+                        focusedInput === 'password' && [
+                          styles.inputWrapperFocused,
+                          { borderColor: colors.accent },
+                        ],
+                        !isDark &&
+                          focusedInput !== 'password' && [
+                            styles.inputWrapperLight,
+                            { borderColor: colors.borderLight },
+                          ],
+                      ]}
+                    >
+                      <TextInput
+                        style={[styles.input, { color: colors.textPrimary }]}
+                        placeholder="Password"
+                        placeholderTextColor={colors.placeholder}
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry={!isPasswordVisible}
+                        onFocus={() => setFocusedInput('password')}
+                        onBlur={() => setFocusedInput(null)}
+                      />
+                      <TouchableOpacity
+                        onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                        style={styles.eyeIconButton}
+                      >
+                        <EyeIcon
+                          width={24}
+                          height={24}
+                          color={colors.inputIconSecondary}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+
+                {/* Spacer for Next Button */}
+                <View style={styles.buttonSpacer} />
               </View>
-            </View>
+
+              {/* Next Button - Fixed at bottom */}
+              <NextButton
+                onPress={() => {
+                  navigation.navigate('OTP');
+                }}
+                showText={true}
+                textLabel="Next"
+                size="medium"
+              />
+            </SafeAreaView>
           </View>
         </View>
-
-        {/* Next Button */}
-        <NextButton
-          onPress={() => {
-            navigation.navigate('OTP');
-          }}
-          showText={true}
-          textLabel="Next"
-          size="medium"
-        />
-      </SafeAreaView>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    minHeight: hp('100%'),
+    position: 'relative',
+  },
+  contentWrapper: {
+    flex: 1,
+    position: 'relative',
+    zIndex: 1,
   },
   safeArea: {
     flex: 1,
+    backgroundColor: 'transparent',
   },
-  imagesContainer: {
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+    backgroundColor: 'transparent',
+  },
+  buttonSpacer: {
+    height: hp('8%'),
+  },
+  profilePhotosContainer: {
     position: 'absolute',
-    top: -hp('14%'),
-    left: -wp('63%'),
-    width: wp('215%'),
-    height: hp('51.6%'),
-    transform: [{ rotate: '-9.693deg' }],
+    top: hp('2%'),
+    left: 0,
+    right: 0,
+    width: '100%',
+    height: hp('35%'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    transform: [{ rotate: '-10deg' }],
+    zIndex: 1,
+    overflow: 'visible',
   },
-  image: {
+  profilePhoto: {
     position: 'absolute',
-    borderRadius: 36,
+    width: wp('55%'),
+    height: wp('72%'),
+    borderRadius: 25,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 8,
   },
-  imageLeft: {
+  profilePhotoLeft: {
+    left: '50%',
+    marginLeft: -wp('90%'),
+    zIndex: 1,
+  },
+  profilePhotoCenter: {
+    left: '50%',
+    marginLeft: -wp('32.5%'),
+    zIndex: 3,
     width: wp('65%'),
-    height: hp('44%'),
-    left: wp('1.5%'),
-    top: hp('15.4%'),
+    height: wp('90%'),
   },
-  imageCenter: {
-    width: wp('76%'),
-    height: hp('51.6%'),
-    left: wp('68.6%'),
-    top: hp('5.5%'),
-  },
-  imageRight: {
-    width: wp('65%'),
-    height: hp('44%'),
-    left: wp('149.5%'),
-    top: hp('3.7%'),
+  profilePhotoRight: {
+    left: '50%',
+    marginLeft: wp('35%'),
+    zIndex: 2,
   },
   content: {
     paddingHorizontal: wp('9.7%'),
-    marginTop: hp('52.8%'),
+    marginTop: hp('42%'),
   },
   titleSection: {
     alignItems: 'center',
     marginBottom: hp('4.5%'),
-  },
-  titleWrapper: {
-    alignItems: 'center',
-    position: 'relative',
-    height: hp('7.6%'),
-    justifyContent: 'center',
-  },
-  loginTitle: {
-    fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
-    fontSize: 30,
-    lineHeight: 32,
-    textAlign: 'center',
-  },
-  underline: {
-    width: 80,
-    height: 11,
-    position: 'absolute',
-    top: 21,
+    width: '100%',
+    paddingHorizontal: wp('2%'),
   },
   signUpWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    paddingHorizontal: wp('5%'),
+    maxWidth: '100%',
     marginTop: hp('2.2%'),
   },
   signUpText: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '600',
+    fontFamily: 'Comfortaa-SemiBold',
     fontSize: 15,
     lineHeight: 20,
+    textAlign: 'center',
   },
   signUpLink: {
-    fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
+    fontFamily: 'Comfortaa-SemiBold',
     fontSize: 15,
     lineHeight: 20,
   },
   inputsContainer: {
     gap: 12,
+    marginBottom: hp('1.2%'),
   },
   inputGroup: {
     height: 72,
     position: 'relative',
   },
   labelText: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '500',
-    fontSize: 10,
-    lineHeight: 15,
-    letterSpacing: 0.5,
+    fontFamily: 'Comfortaa-Regular',
+    fontSize: 11,
+    textTransform: 'uppercase',
     position: 'absolute',
     top: 0,
     left: 17,
@@ -262,13 +354,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 18,
     gap: 14,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
   },
   inputWrapperLight: {
     borderWidth: 1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  inputWrapperFocused: {
+    borderWidth: 1.5,
   },
   input: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '600',
+    fontFamily: 'Comfortaa-SemiBold',
     fontSize: 16,
     lineHeight: 20,
     paddingVertical: 0,

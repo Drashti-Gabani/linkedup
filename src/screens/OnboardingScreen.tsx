@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { wp, hp } from '../utils/responsive';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
+import { gradients } from '../theme/colors';
 import { onboardingImages } from '../assets/images';
 import { AuthStackNavigationProp } from '../navigation/types';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -147,7 +148,14 @@ const OnboardingScreen: React.FC = () => {
           <Text style={[styles.titleText, { color: colors.textPrimary }]}>
             {slides[activeIndex].title}
           </Text>
-          {!isDark && <View style={styles.underline} />}
+          {!isDark && (
+            <View
+              style={[
+                styles.underline,
+                { backgroundColor: colors.accentUnderline },
+              ]}
+            />
+          )}
         </View>
 
         <Text style={[styles.subtext, { color: colors.textSecondary }]}>
@@ -162,11 +170,8 @@ const OnboardingScreen: React.FC = () => {
             style={[
               styles.dot,
               index === activeIndex
-                ? [styles.activeDot, { backgroundColor: colors.accent }]
-                : [
-                    styles.inactiveDot,
-                    { backgroundColor: colors.backgroundSecondary },
-                  ],
+                ? [styles.activeDot, { backgroundColor: colors.signInLink }]
+                : [styles.inactiveDot, { backgroundColor: colors.dotInactive }],
             ]}
           />
         ))}
@@ -175,24 +180,28 @@ const OnboardingScreen: React.FC = () => {
       <View style={styles.buttonSection}>
         <TouchableOpacity
           activeOpacity={0.8}
-          style={styles.createAccountWrapper}
+          style={[styles.createAccountWrapper, { shadowColor: colors.shadow }]}
           onPress={() => navigation.navigate('SignUp')}
         >
           <LinearGradient
-            colors={['#9253FF', '#8239FF']}
+            colors={gradients.primary}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             angle={46}
             style={styles.createAccountButton}
           >
-            <Text style={styles.createAccountText}>Create Account</Text>
+            <Text
+              style={[styles.createAccountText, { color: colors.iconSelected }]}
+            >
+              Create Account
+            </Text>
           </LinearGradient>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-          <Text style={styles.signInText}>
+          <Text style={[styles.signInText, { color: colors.signInText }]}>
             Already have an account?{' '}
-            <Text style={styles.signInLink}>Sign In</Text>
+            <Text style={[{ color: colors.signInLink }]}>Sign In</Text>
           </Text>
         </TouchableOpacity>
       </View>
@@ -233,7 +242,6 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
     fontSize: wp('8.5%'),
     textAlign: 'center',
     letterSpacing: -1.05,
@@ -279,7 +287,6 @@ const styles = StyleSheet.create({
     width: wp('80.7%'),
     height: hp('6.5%'),
     borderRadius: wp('3.4%'),
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 25,
@@ -293,22 +300,15 @@ const styles = StyleSheet.create({
   },
   createAccountText: {
     fontFamily: 'Comfortaa-Bold',
-    fontWeight: '700',
     fontSize: wp('4.8%'),
-    color: '#FFFFFF',
     textAlign: 'center',
   },
   signInText: {
     fontFamily: 'Avenir-Regular',
     fontWeight: '400',
     fontSize: wp('3.9%'),
-    color: '#A7A7A7',
     textAlign: 'center',
     marginTop: hp('2.3%'),
-  },
-  signInLink: {
-    color: '#A7A7A7',
-    textDecorationLine: 'underline',
   },
 });
 

@@ -60,19 +60,16 @@ const ProfessionalExperienceScreen: React.FC = () => {
           <ScreenTitle
             title="Professional Experience"
             subtitle="Tell us about your Professional experience"
-            highlightWidth={96}
-            highlightTop={30}
+            highlightWidth={88}
           />
 
           {/* Experience Range Selection */}
-          <View style={styles.experienceSection}>
-            <SelectionSection
-              title=""
-              options={EXPERIENCE_RANGES}
-              selectedValue={selectedRange}
-              onSelect={setSelectedRange}
-            />
-          </View>
+          <SelectionSection
+            title=""
+            options={EXPERIENCE_RANGES}
+            selectedValue={selectedRange}
+            onSelect={setSelectedRange}
+          />
 
           {/* Don't Show Checkbox */}
           <TouchableOpacity
@@ -150,15 +147,12 @@ const styles = StyleSheet.create({
     paddingBottom: hp('12%'),
   },
   content: {
-    paddingHorizontal: wp('11%'),
-  },
-  experienceSection: {
-    marginBottom: hp('2%'),
+    paddingHorizontal: wp('10%'),
   },
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: hp('2%'),
+    marginBottom: hp('3%'),
   },
   checkbox: {
     width: 19,
@@ -186,7 +180,6 @@ const styles = StyleSheet.create({
   inputLabelMask: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '700',
     letterSpacing: 0.8,
     backgroundColor: 'transparent',
   },
@@ -196,7 +189,6 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '700',
     letterSpacing: 0.8,
   },
   inputContainer: {

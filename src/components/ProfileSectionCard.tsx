@@ -95,7 +95,6 @@ const styles = StyleSheet.create({
   tagText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 12,
-    fontWeight: '700',
     letterSpacing: -0.24,
     lineHeight: 13.38,
     paddingVertical: 12,

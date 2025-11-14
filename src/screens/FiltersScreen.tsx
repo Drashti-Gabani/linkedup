@@ -461,7 +461,6 @@ const styles = StyleSheet.create({
   cardName: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 30,
-    fontWeight: '700',
     color: '#FFFFFF',
     lineHeight: 33.45,
     letterSpacing: -0.9,
@@ -517,7 +516,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 30,
-    fontWeight: '700',
     lineHeight: 33.45,
     letterSpacing: -0.9,
     flex: 1,
@@ -549,14 +547,12 @@ const styles = StyleSheet.create({
   pillText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '700',
     color: '#FFFFFF',
     lineHeight: 17.84,
     letterSpacing: -0.32,
   },
   pillTextLight: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '400',
+    fontFamily: 'Comfortaa-Regular',
   },
   filterModal: {
     position: 'absolute',
@@ -605,9 +601,8 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   filterLabel: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Medium',
     fontSize: 18,
-    fontWeight: '500',
     lineHeight: 20.07,
     letterSpacing: -0.54,
     marginBottom: 11,
@@ -622,9 +617,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 19,
   },
   filterInputText: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Medium',
     fontSize: 18,
-    fontWeight: '500',
     lineHeight: 20.07,
     letterSpacing: -0.54,
   },
@@ -647,9 +641,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   segmentText: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Medium',
     fontSize: 18,
-    fontWeight: '500',
     lineHeight: 20.07,
     letterSpacing: -0.54,
     textAlign: 'center',
@@ -668,9 +661,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 43,
   },
   checkboxInputText: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Medium',
     fontSize: 18,
-    fontWeight: '500',
     lineHeight: 20.07,
     letterSpacing: -0.54,
   },

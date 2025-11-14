@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 24,
-    fontWeight: '700',
     lineHeight: 26.76,
     marginBottom: 12,
   },
@@ -135,7 +134,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 14,
-    fontWeight: '700',
     lineHeight: 15.61,
   },
   confirmButton: {
@@ -147,7 +145,6 @@ const styles = StyleSheet.create({
   confirmButtonText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 14,
-    fontWeight: '700',
     lineHeight: 15.61,
     color: '#FFFFFF',
   },

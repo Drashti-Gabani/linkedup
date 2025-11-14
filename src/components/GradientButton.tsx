@@ -18,7 +18,7 @@ const GradientButton: React.FC<GradientButtonProps> = ({
   disabled = false,
 }) => {
   const { gradients, colors } = useTheme();
-  
+
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -33,7 +33,9 @@ const GradientButton: React.FC<GradientButtonProps> = ({
         style={styles.gradient}
         angle={46}
       >
-        <Text style={[styles.buttonText, { color: colors.iconSelected }]}>{text}</Text>
+        <Text style={[styles.buttonText, { color: colors.iconSelected }]}>
+          {text}
+        </Text>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -56,8 +58,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 20,
-    fontWeight: '700',
-    letterSpacing: -0.6,
     paddingVertical: 16,
   },
 });

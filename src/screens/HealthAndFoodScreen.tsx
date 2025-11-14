@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     paddingBottom: hp('12%'),
   },
   content: {
-    paddingHorizontal: wp('6%'),
+    paddingHorizontal: wp('10%'),
   },
 });
 

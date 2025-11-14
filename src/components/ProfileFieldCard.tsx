@@ -82,9 +82,8 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   label: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Medium',
     fontSize: 10,
-    fontWeight: '500',
     lineHeight: 15,
     letterSpacing: 0.5,
     marginLeft: 15,
@@ -104,9 +103,8 @@ const styles = StyleSheet.create({
     marginRight: 13,
   },
   value: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-SemiBold',
     fontSize: 16,
-    fontWeight: '600',
     lineHeight: 20,
   },
   editButton: {

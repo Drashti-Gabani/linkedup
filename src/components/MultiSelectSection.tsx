@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
   optionTag: {
     flexDirection: 'row',
     paddingVertical: hp(1.7),
-    paddingHorizontal: wp(7),
+    paddingHorizontal: wp(6),
     borderRadius: 10,
     gap: 14,
     alignItems: 'center',

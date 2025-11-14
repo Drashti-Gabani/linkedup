@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -13,14 +14,13 @@ import { useNavigation } from '@react-navigation/native';
 import CountryPicker, {
   CountryCode,
   Country,
-  DARK_THEME,
 } from 'react-native-country-picker-modal';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
-import NextButton from '../components/NextButton';
 import DropdownArrowIcon from '../components/icons/DropdownArrowIcon';
+import GradientButton from '../components/GradientButton';
 
 // Helper function to convert country code to flag emoji
 const getFlagEmoji = (countryCode: CountryCode): string => {
@@ -58,68 +58,66 @@ const OTPScreen: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
-      edges={['top']}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
-      {/* Back Button */}
-      <BackButton
-        onPress={() => navigation.goBack()}
-        size="medium"
-      />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        bounces={false}
+      >
+        <BackButton onPress={() => navigation.goBack()} size="medium" />
 
-      {/* Main Content Container - using flexbox */}
-      <View style={styles.mainContainer}>
-        {/* Top Section - Heading and Description */}
-        <View style={styles.topSection}>
-          {/* Heading */}
-          <MaskedView
-            style={styles.headingContainer}
-            maskElement={
-              <Text style={[styles.heading, { color: 'white' }]}>
-                Can I get{'\n'}those digits?
-              </Text>
-            }
-          >
-            <LinearGradient
-              colors={gradients.secondary}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              angle={242}
-              style={styles.headingGradient}
+        {/* Main Content Container - using flexbox */}
+        <View style={styles.mainContainer}>
+          {/* Top Section - Heading and Description */}
+          <View style={styles.topSection}>
+            {/* Heading */}
+            <MaskedView
+              style={styles.headingContainer}
+              maskElement={
+                <Text style={[styles.heading, { color: 'white' }]}>
+                  Can I get{'\n'}those digits?
+                </Text>
+              }
             >
-              <Text style={[styles.heading, { color: 'transparent' }]}>
-                Can I get{'\n'}those digits?
-              </Text>
-            </LinearGradient>
-          </MaskedView>
-
-          {/* Description */}
-          <Text
-            style={[
-              styles.description,
-              {
-                color: colors.textMuted,
-              },
-            ]}
-          >
-            Please enter your mobile number for verification to ensure a secure
-            and authentic experience on our platform
-          </Text>
-        </View>
-
-        {/* Middle Section - Phone Input and Privacy Note */}
-        <View style={styles.middleSection}>
-          {/* Phone Number Input */}
-          <View style={styles.numberField}>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              onPress={() => setCountryPickerVisible(true)}
-            >
-                <LinearGradient
+              <LinearGradient
                 colors={gradients.secondary}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                angle={242}
+                style={styles.headingGradient}
+              >
+                <Text style={[styles.heading, { color: 'transparent' }]}>
+                  Can I get{'\n'}those digits?
+                </Text>
+              </LinearGradient>
+            </MaskedView>
+
+            {/* Description */}
+            <Text
+              style={[
+                styles.description,
+                {
+                  color: colors.textMuted,
+                },
+              ]}
+            >
+              Please enter your mobile number for verification to ensure a
+              secure and authentic experience on our platform
+            </Text>
+          </View>
+
+          {/* Middle Section - Phone Input and Privacy Note */}
+          <View style={styles.middleSection}>
+            {/* Phone Number Input */}
+            <View style={styles.numberField}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => setCountryPickerVisible(true)}
+              >
+                <LinearGradient
+                  colors={gradients.secondary}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   angle={242}
@@ -127,75 +125,72 @@ const OTPScreen: React.FC = () => {
                 >
                   <View style={styles.countryCodeContent}>
                     <Text style={styles.flag}>{getCountryFlag()}</Text>
-                  <Text style={[styles.codeText, { color: colors.iconSelected }]}>
+                    <Text
+                      style={[styles.codeText, { color: colors.iconSelected }]}
+                    >
                       {getCallingCode()}
                     </Text>
                     <DropdownArrowIcon
                       width={wp('2.66%')}
                       height={wp('1.33%')}
-                    color={colors.iconSelected}
+                      color={colors.iconSelected}
                     />
                   </View>
                 </LinearGradient>
-            </TouchableOpacity>
-            <TextInput
-              style={[
-                styles.phoneInput,
-                { color: colors.fieldText },
-              ]}
-              placeholder="800-111-2222"
-              placeholderTextColor={colors.placeholder}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-            />
-          </View>
+              </TouchableOpacity>
+              <TextInput
+                style={[styles.phoneInput, { color: colors.fieldText }]}
+                placeholder="800-111-2222"
+                placeholderTextColor={colors.placeholder}
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
+              />
+            </View>
 
-          {/* Privacy Note */}
-          <Text
-            style={[
-              styles.privacyNote,
-              {
-                color: colors.textMuted,
-              },
-            ]}
-          >
-            Don't worry — your number stays private and won't be shown to anyone
-            else
-          </Text>
+            {/* Privacy Note */}
+            <Text
+              style={[
+                styles.privacyNote,
+                {
+                  color: colors.textMuted,
+                },
+              ]}
+            >
+              Don't worry — your number stays private and won't be shown to
+              anyone else
+            </Text>
+          </View>
         </View>
 
-      </View>
+        <GradientButton
+          onPress={() => navigation.navigate('OTPVerify')}
+          text="Next"
+        />
 
-      <NextButton
-        onPress={() => navigation.navigate('OTPVerify')}
-        showText={true}
-        textLabel="Next"
-        size="medium"
-      />
-
-      {/* Country Picker Modal */}
-      <CountryPicker
-        {...{
-          countryCode,
-          withFilter: true,
-          withFlag: true,
-          withFlagButton: false, // Disable default flag button
-          withCountryNameButton: false,
-          withAlphaFilter: false,
-          withCallingCode: true,
-          withEmoji: true,
-          withModal: true, // Ensure it only shows as modal
-          onSelect: onSelectCountry,
-          visible: countryPickerVisible,
-          onClose: () => setCountryPickerVisible(false),
-          theme: undefined, // Use default theme, colors handled by app theme
-        }}
-        modalProps={{
-          animationType: 'slide',
-        }}
-        containerButtonStyle={{ width: 0, height: 0, opacity: 0 }} // Hide any container button
-      />
+        {/* Country Picker Modal */}
+        <CountryPicker
+          {...{
+            countryCode,
+            withFilter: true,
+            withFlag: true,
+            withFlagButton: false, // Disable default flag button
+            withCountryNameButton: false,
+            withAlphaFilter: false,
+            withCallingCode: true,
+            withEmoji: true,
+            withModal: true, // Ensure it only shows as modal
+            onSelect: onSelectCountry,
+            visible: countryPickerVisible,
+            onClose: () => setCountryPickerVisible(false),
+            theme: undefined, // Use default theme, colors handled by app theme
+          }}
+          modalProps={{
+            animationType: 'slide',
+          }}
+          containerButtonStyle={{ width: 0, height: 0, opacity: 0 }} // Hide any container button
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -204,9 +199,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: hp('5%'),
+  },
   mainContainer: {
     flex: 1,
-    paddingHorizontal: wp('9.66%'), // x: 40 in Figma
+    paddingHorizontal: wp('10%'), // x: 40 in Figma
     paddingTop: hp('19.2%'), // y: 172 from top (246 - 73 = 173px)
   },
   topSection: {
@@ -225,8 +227,7 @@ const styles = StyleSheet.create({
     lineHeight: wp('12.2%'),
   },
   description: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '400',
+    fontFamily: 'Comfortaa-Regular',
     marginTop: hp('4.8%'), // ~43px spacing from heading (155px in Figma)
     width: wp('80.7%'), // 334px in Figma
   },
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
   },
   dropdownIcon: {
     fontSize: wp('2.66%'),
-    color: '#FFFFFF',
+    // color will be set dynamically
   },
   phoneInput: {
     flex: 1,
@@ -281,8 +282,7 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
   privacyNote: {
-    fontFamily: 'Comfortaa',
-    fontWeight: '400',
+    fontFamily: 'Comfortaa-Regular',
     marginTop: hp('2.5%'), // ~22px spacing from number field (90px in Figma)
     width: wp('80.7%'), // 334px width
   },

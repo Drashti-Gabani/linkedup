@@ -184,9 +184,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   label: {
-    fontFamily: 'Comfortaa',
+    fontFamily: 'Comfortaa-Medium',
     fontSize: 18,
-    fontWeight: '500',
     lineHeight: 20.07,
     letterSpacing: -0.54,
     marginBottom: 11,
