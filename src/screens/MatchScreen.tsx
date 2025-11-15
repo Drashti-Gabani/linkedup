@@ -274,7 +274,6 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Comfortaa',
     fontSize: hp('2.2%'),
-    fontWeight: '700',
     lineHeight: hp('2.5%'),
     letterSpacing: -0.6,
     textAlign: 'center',

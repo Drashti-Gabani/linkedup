@@ -7,17 +7,20 @@ import {
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Slider from '@react-native-community/slider';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
-import { AuthStackNavigationProp, MainStackNavigationProp } from '../navigation/types';
+import {
+  AuthStackNavigationProp,
+  MainStackNavigationProp,
+} from '../navigation/types';
 import SelectionSection from '../components/SelectionSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
 import GradientButton from '../components/GradientButton';
 import ScreenTitle from '../components/ScreenTitle';
+import GradientText from '../components/GradientText';
 
 const MARITAL_STATUSES = ['Single', 'Married', 'Divorced', 'Widowed'];
 const RELIGIONS = [
@@ -30,9 +33,11 @@ const RELIGIONS = [
 ];
 
 const LifestyleAndBeliefsScreen: React.FC = () => {
-  const { colors, gradients } = useTheme();
+  const { colors, isDark } = useTheme();
   const route = useRoute();
-  const navigation = useNavigation<AuthStackNavigationProp | MainStackNavigationProp>();
+  const navigation = useNavigation<
+    AuthStackNavigationProp | MainStackNavigationProp
+  >();
   const params = route.params as { fromMyProfile?: boolean } | undefined;
   const fromMyProfile = params?.fromMyProfile ?? false;
 
@@ -109,15 +114,28 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
                 <View
                   style={[
                     styles.heightTooltip,
-                    { backgroundColor: colors.backgroundSecondary },
+                    { backgroundColor: colors.backgroundQuaternary },
                   ]}
                 >
-                  <Text style={styles.heightValueText}>{`${height} cm`}</Text>
+                  {isDark ? (
+                    <Text
+                      style={[
+                        styles.heightValueText,
+                        { color: colors.textPrimary },
+                      ]}
+                    >
+                      {`${height} cm`}
+                    </Text>
+                  ) : (
+                    <GradientText style={styles.heightValueText}>
+                      {`${height} cm`}
+                    </GradientText>
+                  )}
                 </View>
                 <View
                   style={[
                     styles.tooltipArrow,
-                    { borderTopColor: colors.backgroundSecondary },
+                    { borderTopColor: colors.backgroundQuaternary },
                   ]}
                 />
               </View>
@@ -216,7 +234,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Sofia Pro',
     fontWeight: '600',
     fontSize: 14,
-    // color will be set dynamically via gradient mask
+    letterSpacing: -0.42,
   },
   tooltipArrow: {
     width: 0,

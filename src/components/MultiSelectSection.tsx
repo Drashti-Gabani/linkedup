@@ -218,10 +218,8 @@ const styles = StyleSheet.create({
     // Icons will size naturally based on their content
   },
   optionText: {
-    fontFamily: 'Sofia Pro',
+    fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '600',
-    letterSpacing: -0.32,
     flexShrink: 0,
   },
 });

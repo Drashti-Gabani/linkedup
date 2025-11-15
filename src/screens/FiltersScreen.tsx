@@ -1297,7 +1297,7 @@ const styles = StyleSheet.create({
   },
   toggleText: {
     fontFamily: 'Comfortaa-Medium',
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 20,
     letterSpacing: -0.54,
   },

@@ -20,7 +20,7 @@ const ProfileFieldCard: React.FC<ProfileFieldCardProps> = ({
 
   const renderIcon = () => {
     const iconColor = colors.inputIcon;
-    
+
     switch (icon) {
       case 'user':
         return (
@@ -57,12 +57,12 @@ const ProfileFieldCard: React.FC<ProfileFieldCardProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, { color: colors.fieldLabel }]}>
-        {label}
-      </Text>
+      <Text style={[styles.label, { color: colors.fieldLabel }]}>{label}</Text>
       <View style={[styles.field, { backgroundColor: colors.fieldBackground }]}>
         <View style={styles.iconContainer}>{renderIcon()}</View>
-        <Text style={[styles.value, { color: colors.placeholder }]}>{value}</Text>
+        <Text style={[styles.value, { color: colors.placeholder }]}>
+          {value}
+        </Text>
       </View>
       {onEdit && (
         <TouchableOpacity style={styles.editButton} onPress={onEdit}>

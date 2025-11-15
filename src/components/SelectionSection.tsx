@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 20,
-    letterSpacing: -0.4,
     marginBottom: 16,
   },
   optionsContainer: {
@@ -211,9 +210,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   optionLabel: {
-    fontFamily: 'Sofia Pro',
+    fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
-    fontWeight: '500',
     flex: 1,
   },
 });

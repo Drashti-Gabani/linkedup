@@ -377,7 +377,6 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 30,
-    fontWeight: '700',
     color: '#FFFFFF',
     letterSpacing: -0.9,
     lineHeight: 33,

@@ -51,21 +51,11 @@ const ChatScreen: React.FC = () => {
         </View>
         <View style={styles.messageInfo}>
           <View style={styles.messageHeader}>
-            <Text
-              style={[
-                styles.messageName,
-                { color: colors.heading },
-              ]}
-            >
+            <Text style={[styles.messageName, { color: colors.heading }]}>
               {item.name}
             </Text>
           </View>
-          <Text
-            style={[
-              styles.messageText,
-              { color: colors.textPrimary },
-            ]}
-          >
+          <Text style={[styles.messageText, { color: colors.textPrimary }]}>
             {item.message}
           </Text>
         </View>
@@ -124,10 +114,7 @@ const ChatScreen: React.FC = () => {
 
   return (
     <SafeAreaView
-      style={[
-        styles.container,
-        { backgroundColor: colors.background },
-      ]}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
@@ -158,20 +145,10 @@ const ChatScreen: React.FC = () => {
         </View>
 
         <View style={styles.headerText}>
-          <Text
-            style={[
-              styles.inboxTitle,
-              { color: colors.heading },
-            ]}
-          >
+          <Text style={[styles.inboxTitle, { color: colors.heading }]}>
             Inbox
           </Text>
-          <Text
-            style={[
-              styles.messageCount,
-              { color: colors.textMuted },
-            ]}
-          >
+          <Text style={[styles.messageCount, { color: colors.textMuted }]}>
             33 messages
           </Text>
         </View>
@@ -203,10 +180,7 @@ const ChatScreen: React.FC = () => {
             />
           </Svg>
           <TextInput
-            style={[
-              styles.searchText,
-              { color: colors.searchIcon },
-            ]}
+            style={[styles.searchText, { color: colors.searchIcon }]}
             placeholder="Search"
             placeholderTextColor={colors.placeholder}
           />
@@ -215,12 +189,7 @@ const ChatScreen: React.FC = () => {
 
       {/* Messages List */}
       <View style={styles.messagesContainer}>
-        <Text
-          style={[
-            styles.sectionTitle,
-            { color: colors.heading },
-          ]}
-        >
+        <Text style={[styles.sectionTitle, { color: colors.heading }]}>
           Messages
         </Text>
 

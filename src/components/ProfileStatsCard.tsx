@@ -29,9 +29,9 @@ const ProfileStatsCard: React.FC<ProfileStatsCardProps> = ({
       end={{ x: 0, y: 1 }}
       style={styles.container}
     >
-      <View style={{ paddingVertical: 15 }}>
-        {/* Header with Settings and Send buttons */}
-        <View style={styles.header}>
+      <View style={styles.content}>
+        {/* Top row: Send button, Profile Picture, Settings button */}
+        <View style={styles.topRow}>
           <TouchableOpacity style={styles.headerButton} onPress={onSendPress}>
             <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
               <Path
@@ -43,6 +43,10 @@ const ProfileStatsCard: React.FC<ProfileStatsCardProps> = ({
               />
             </Svg>
           </TouchableOpacity>
+
+          <View style={styles.profileImageContainer}>
+            <Image source={{ uri: profileImage }} style={styles.profileImage} />
+          </View>
 
           <TouchableOpacity
             style={styles.headerButton}
@@ -57,13 +61,8 @@ const ProfileStatsCard: React.FC<ProfileStatsCardProps> = ({
           </TouchableOpacity>
         </View>
 
-        {/* Profile Photo and Name */}
-        <View style={styles.profileSection}>
-          <View style={styles.profileImageContainer}>
-            <Image source={{ uri: profileImage }} style={styles.profileImage} />
-          </View>
-          <Text style={styles.name}>{name}</Text>
-        </View>
+        {/* Name */}
+        <Text style={styles.name}>{name}</Text>
 
         {/* Stats */}
         <View style={styles.stats}>
@@ -90,10 +89,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginHorizontal: 20,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  content: {
+    paddingVertical: 15,
     paddingHorizontal: 16,
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
   headerButton: {
     width: 52,
@@ -105,10 +109,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  profileSection: {
-    alignItems: 'center',
-    marginTop: 14,
-  },
   profileImageContainer: {
     width: 99,
     height: 99,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: '#FFFFFF',
     overflow: 'hidden',
-    marginBottom: 10,
+    marginTop: 12,
   },
   profileImage: {
     width: '100%',
@@ -125,15 +125,15 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 18,
-    fontWeight: '700',
     color: '#FFFFFF',
     lineHeight: 27,
+    textAlign: 'center',
+    marginBottom: 20,
   },
   stats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     paddingHorizontal: 20,
-    marginTop: 20,
   },
   statItem: {
     alignItems: 'center',
@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
   statLabel: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 12,
-    fontWeight: '700',
     color: '#FFFFFF',
     lineHeight: 18,
     textAlign: 'center',

@@ -22,7 +22,7 @@ const NextButton: React.FC<NextButtonProps> = ({
   style,
 }) => {
   const { gradients, colors } = useTheme();
-  
+
   const getSize = () => {
     switch (size) {
       case 'small':

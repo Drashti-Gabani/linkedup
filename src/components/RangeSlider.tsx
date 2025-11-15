@@ -54,10 +54,11 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     if (isDragging !== thumb || !initialPositionRef.current) return;
 
     const { translationX } = event.nativeEvent;
-    const initialPos = thumb === 'min' 
-      ? initialPositionRef.current.min 
-      : initialPositionRef.current.max;
-    
+    const initialPos =
+      thumb === 'min'
+        ? initialPositionRef.current.min
+        : initialPositionRef.current.max;
+
     const newPosition = Math.max(
       0,
       Math.min(SLIDER_WIDTH, initialPos + translationX),
@@ -98,23 +99,45 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   return (
     <GestureHandlerRootView style={styles.container}>
       {label && (
-        <Text style={[styles.label, { color: colors.heading }]}>
-          {label}
-        </Text>
+        <Text style={[styles.label, { color: colors.heading }]}>{label}</Text>
       )}
 
       <View style={styles.rangeLabels}>
         <View style={styles.rangeLabel}>
-          <View style={[styles.rangeLabelBox, { backgroundColor: colors.backgroundSecondary }]}>
-            <Text style={[styles.rangeLabelText, { color: colors.accent }]}>{value.min}</Text>
+          <View
+            style={[
+              styles.rangeLabelBox,
+              { backgroundColor: colors.backgroundSecondary },
+            ]}
+          >
+            <Text style={[styles.rangeLabelText, { color: colors.accent }]}>
+              {value.min}
+            </Text>
           </View>
-          <View style={[styles.rangeLabelArrow, { borderTopColor: colors.backgroundSecondary }]} />
+          <View
+            style={[
+              styles.rangeLabelArrow,
+              { borderTopColor: colors.backgroundSecondary },
+            ]}
+          />
         </View>
         <View style={styles.rangeLabel}>
-          <View style={[styles.rangeLabelBox, { backgroundColor: colors.backgroundSecondary }]}>
-            <Text style={[styles.rangeLabelText, { color: colors.accent }]}>{value.max}</Text>
+          <View
+            style={[
+              styles.rangeLabelBox,
+              { backgroundColor: colors.backgroundSecondary },
+            ]}
+          >
+            <Text style={[styles.rangeLabelText, { color: colors.accent }]}>
+              {value.max}
+            </Text>
           </View>
-          <View style={[styles.rangeLabelArrow, { borderTopColor: colors.backgroundSecondary }]} />
+          <View
+            style={[
+              styles.rangeLabelArrow,
+              { borderTopColor: colors.backgroundSecondary },
+            ]}
+          />
         </View>
       </View>
 

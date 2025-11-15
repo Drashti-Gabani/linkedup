@@ -381,7 +381,6 @@ const styles = StyleSheet.create({
   filterButtonText: {
     fontFamily: 'Comfortaa-SemiBold',
     fontSize: 16,
-    fontWeight: '600',
     color: '#FFFFFF',
     letterSpacing: -0.32,
   },
