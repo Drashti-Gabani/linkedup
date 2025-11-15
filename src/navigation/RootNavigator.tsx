@@ -165,7 +165,11 @@ const MainNavigator: React.FC = () => {
       <MainStack.Screen name="UserProfile" component={UserProfileScreen} />
       <MainStack.Screen name="MyProfile" component={MyProfileScreen} />
       <MainStack.Screen name="Likes" component={LikesScreen} />
-      <MainStack.Screen name="Filters" component={FiltersScreen} />
+      <MainStack.Screen
+        name="Filters"
+        component={FiltersScreen}
+        options={{ presentation: 'modal' }}
+      />
       <MainStack.Screen name="Match" component={MatchScreen} />
       <MainStack.Screen name="Conversation" component={ConversationScreen} />
       <MainStack.Screen name="Profile" component={ProfileScreen} />
