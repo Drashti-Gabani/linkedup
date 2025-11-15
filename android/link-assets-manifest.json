@@ -1,0 +1,33 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Chewy-Regular.ttf",
+      "sha1": "a3ad025edbfd8e4c49ca201e2478d51e1027ef1c"
+    },
+    {
+      "path": "assets/fonts/Comfortaa-Bold.ttf",
+      "sha1": "afce338e253d70672cca8c92a314d1ef5711fec9"
+    },
+    {
+      "path": "assets/fonts/Comfortaa-Light.ttf",
+      "sha1": "3a2f212977db18a2db1f545aa160e3a0d6114823"
+    },
+    {
+      "path": "assets/fonts/Comfortaa-Medium.ttf",
+      "sha1": "ed44ddb497ad6480e9eb22af121e19e92eea049a"
+    },
+    {
+      "path": "assets/fonts/Comfortaa-Regular.ttf",
+      "sha1": "11194d2f51c9ff7596a121b0d00e283b5950ae53"
+    },
+    {
+      "path": "assets/fonts/Comfortaa-SemiBold.ttf",
+      "sha1": "3b93825d3391336179214362ca2b1ccd4bcacddc"
+    },
+    {
+      "path": "assets/fonts/README.md",
+      "sha1": "a8a71041ff9570a553fdc1b62cfeac48fdb80622"
+    }
+  ]
+}

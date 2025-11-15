@@ -41,6 +41,8 @@ import MatchScreen from '../screens/MatchScreen';
 import ConversationScreen from '../screens/ConversationScreen';
 import ProfileScreen from '../ProfileScreen';
 import CommunityGuidelinesScreen from '../screens/CommunityGuidelinesScreen';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
+import LegalScreen from '../screens/LegalScreen';
 
 // Bottom Tab Bar Component
 import BottomTabBar from '../components/BottomTabBar';
@@ -173,6 +175,11 @@ const MainNavigator: React.FC = () => {
       <MainStack.Screen name="Match" component={MatchScreen} />
       <MainStack.Screen name="Conversation" component={ConversationScreen} />
       <MainStack.Screen name="Profile" component={ProfileScreen} />
+      <MainStack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+      />
+      <MainStack.Screen name="Legal" component={LegalScreen} />
     </MainStack.Navigator>
   );
 };

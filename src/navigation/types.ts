@@ -44,6 +44,8 @@ export type MainStackParamList = {
   Conversation: undefined;
   Profile: undefined;
   CommunityGuidelines: undefined;
+  ChangePassword: undefined;
+  Legal: { type: 'about' | 'privacy' | 'terms' };
 };
 
 // Root Stack Param List (combines Auth and Main)

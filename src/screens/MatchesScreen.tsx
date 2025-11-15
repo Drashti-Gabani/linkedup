@@ -115,7 +115,7 @@ const MatchesScreen: React.FC = () => {
             styles.headerButton,
             { backgroundColor: colors.headerButtonBackground },
           ]}
-          onPress={() => navigation.navigate('Settings')}
+          onPress={() => navigation.navigate('Match')}
         >
           <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
             <Path

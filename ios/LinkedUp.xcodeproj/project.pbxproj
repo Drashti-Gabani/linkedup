@@ -7,23 +7,37 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		021CD76C1CD843D8AAC81DDD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 5109AFF46BDB453A917B55EB /* README.md */; };
 		0C80B921A6F3F58F76C31292 /* libPods-LinkedUp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-LinkedUp.a */; };
+		1095DF0D2CE7458294476D68 /* Comfortaa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 203C10D7449648DE86EA15DA /* Comfortaa-Bold.ttf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		15FD1D39621C4D1C98F0C7AB /* Comfortaa-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBCD98C3C006484686BAF03F /* Comfortaa-Regular.ttf */; };
+		44166E37D53346CE96C71899 /* Comfortaa-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08E690FEAC244550B6413B23 /* Comfortaa-Light.ttf */; };
+		698D8A2880804702B61E8BD2 /* Comfortaa-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 688DFDA40034474CB741674D /* Comfortaa-Medium.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		C9F7413934E549000F7E32A0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		EF0C5E6BED0E4FFA8716463E /* Chewy-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 033DEB38B79B4F35922B00D0 /* Chewy-Regular.ttf */; };
+		FABD32B52932467A8D3FE5A3 /* Comfortaa-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DBADF65F95804E73BBFB34CA /* Comfortaa-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		033DEB38B79B4F35922B00D0 /* Chewy-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Chewy-Regular.ttf"; path = "../assets/fonts/Chewy-Regular.ttf"; sourceTree = "<group>"; };
+		08E690FEAC244550B6413B23 /* Comfortaa-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-Light.ttf"; path = "../assets/fonts/Comfortaa-Light.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* LinkedUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinkedUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LinkedUp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = LinkedUp/Info.plist; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = LinkedUp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		203C10D7449648DE86EA15DA /* Comfortaa-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-Bold.ttf"; path = "../assets/fonts/Comfortaa-Bold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-LinkedUp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkedUp.debug.xcconfig"; path = "Target Support Files/Pods-LinkedUp/Pods-LinkedUp.debug.xcconfig"; sourceTree = "<group>"; };
+		5109AFF46BDB453A917B55EB /* README.md */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = README.md; path = ../assets/fonts/README.md; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-LinkedUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LinkedUp.release.xcconfig"; path = "Target Support Files/Pods-LinkedUp/Pods-LinkedUp.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-LinkedUp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-LinkedUp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		688DFDA40034474CB741674D /* Comfortaa-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-Medium.ttf"; path = "../assets/fonts/Comfortaa-Medium.ttf"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = LinkedUp/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = LinkedUp/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CBCD98C3C006484686BAF03F /* Comfortaa-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-Regular.ttf"; path = "../assets/fonts/Comfortaa-Regular.ttf"; sourceTree = "<group>"; };
+		DBADF65F95804E73BBFB34CA /* Comfortaa-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Comfortaa-SemiBold.ttf"; path = "../assets/fonts/Comfortaa-SemiBold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -75,6 +89,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				E1B22D8DD47B47C381E6709F /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -96,6 +111,21 @@
 				5709B34CF0A7D63546082F79 /* Pods-LinkedUp.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		E1B22D8DD47B47C381E6709F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				033DEB38B79B4F35922B00D0 /* Chewy-Regular.ttf */,
+				203C10D7449648DE86EA15DA /* Comfortaa-Bold.ttf */,
+				08E690FEAC244550B6413B23 /* Comfortaa-Light.ttf */,
+				688DFDA40034474CB741674D /* Comfortaa-Medium.ttf */,
+				CBCD98C3C006484686BAF03F /* Comfortaa-Regular.ttf */,
+				DBADF65F95804E73BBFB34CA /* Comfortaa-SemiBold.ttf */,
+				5109AFF46BDB453A917B55EB /* README.md */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,6 +191,13 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C9F7413934E549000F7E32A0 /* PrivacyInfo.xcprivacy in Resources */,
+				EF0C5E6BED0E4FFA8716463E /* Chewy-Regular.ttf in Resources */,
+				1095DF0D2CE7458294476D68 /* Comfortaa-Bold.ttf in Resources */,
+				44166E37D53346CE96C71899 /* Comfortaa-Light.ttf in Resources */,
+				698D8A2880804702B61E8BD2 /* Comfortaa-Medium.ttf in Resources */,
+				15FD1D39621C4D1C98F0C7AB /* Comfortaa-Regular.ttf in Resources */,
+				FABD32B52932467A8D3FE5A3 /* Comfortaa-SemiBold.ttf in Resources */,
+				021CD76C1CD843D8AAC81DDD /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

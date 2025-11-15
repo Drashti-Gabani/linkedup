@@ -32,7 +32,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -58,6 +58,8 @@
 		<string>SofiaPro-Regular.ttf</string>
 		<string>SofiaPro-SemiBold.ttf</string>
 		<string>Sk-Modernist-Regular.ttf</string>
+		<string>Chewy-Regular.ttf</string>
+		<string>Comfortaa-Light.ttf</string>
 	</array>
 </dict>
 </plist>

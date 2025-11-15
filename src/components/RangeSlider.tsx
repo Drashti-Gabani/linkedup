@@ -35,6 +35,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   const { colors, gradients } = useTheme();
   const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
   const panRef = useRef(null);
+  const initialPositionRef = useRef<{ min: number; max: number } | null>(null);
 
   const getPosition = (val: number) => {
     return ((val - min) / (max - min)) * SLIDER_WIDTH;
@@ -50,15 +51,16 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     event: PanGestureHandlerGestureEvent,
     thumb: 'min' | 'max',
   ) => {
-    if (isDragging !== thumb) return;
+    if (isDragging !== thumb || !initialPositionRef.current) return;
 
     const { translationX } = event.nativeEvent;
-    const currentPosition = getPosition(
-      thumb === 'min' ? value.min : value.max,
-    );
+    const initialPos = thumb === 'min' 
+      ? initialPositionRef.current.min 
+      : initialPositionRef.current.max;
+    
     const newPosition = Math.max(
       0,
-      Math.min(SLIDER_WIDTH, currentPosition + translationX),
+      Math.min(SLIDER_WIDTH, initialPos + translationX),
     );
     const newValue = getValue(newPosition);
 
@@ -79,8 +81,14 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
 
     if (state === State.BEGAN) {
       setIsDragging(thumb);
+      // Store initial positions when gesture begins
+      initialPositionRef.current = {
+        min: getPosition(value.min),
+        max: getPosition(value.max),
+      };
     } else if (state === State.END || state === State.CANCELLED) {
       setIsDragging(null);
+      initialPositionRef.current = null;
     }
   };
 
@@ -136,13 +144,16 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
             onGestureEvent={event => handleGestureEvent(event, 'min')}
             onHandlerStateChange={event => handleStateChange(event, 'min')}
             minDist={0}
+            activeOffsetX={[-5, 5]}
+            failOffsetY={[-10, 10]}
           >
             <View
               style={[
                 styles.sliderThumb,
-                { left: minPosition - 4.5 },
+                { left: minPosition },
                 isDragging === 'min' && styles.sliderThumbActive,
               ]}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <LinearGradient
                 colors={gradients.primary}
@@ -157,13 +168,16 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
             onGestureEvent={event => handleGestureEvent(event, 'max')}
             onHandlerStateChange={event => handleStateChange(event, 'max')}
             minDist={0}
+            activeOffsetX={[-5, 5]}
+            failOffsetY={[-10, 10]}
           >
             <View
               style={[
                 styles.sliderThumb,
-                { left: maxPosition - 4.5 },
+                { left: maxPosition },
                 isDragging === 'max' && styles.sliderThumbActive,
               ]}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <LinearGradient
                 colors={gradients.primary}
@@ -230,27 +244,29 @@ const styles = StyleSheet.create({
   },
   sliderTrack: {
     position: 'relative',
-    height: 3,
+    height: 4,
     width: SLIDER_WIDTH,
-    borderRadius: 1,
+    borderRadius: 2,
+    marginVertical: 15,
   },
   sliderTrackInactive: {
     position: 'absolute',
     width: '100%',
-    height: 3,
-    borderRadius: 1,
+    height: 4,
+    borderRadius: 2,
   },
   sliderTrackActive: {
     position: 'absolute',
-    height: 3,
-    borderRadius: 1,
+    height: 4,
+    borderRadius: 2,
   },
   sliderThumb: {
     position: 'absolute',
-    width: 9,
-    height: 9,
-    borderRadius: 4.5,
-    top: -3,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    top: -8.5,
+    left: -10,
   },
   sliderThumbActive: {
     transform: [{ scale: 1.2 }],
@@ -258,7 +274,7 @@ const styles = StyleSheet.create({
   sliderThumbGradient: {
     width: '100%',
     height: '100%',
-    borderRadius: 4.5,
+    borderRadius: 10,
   },
 });
 

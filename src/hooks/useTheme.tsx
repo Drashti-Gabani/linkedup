@@ -20,6 +20,7 @@ import { Theme, ThemeMode, getTheme } from '../theme';
 interface ThemeContextValue extends Theme {
   mode: ThemeMode;
   isDark: boolean;
+  setMode: (mode: ThemeMode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
@@ -28,22 +29,31 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const systemScheme = useColorScheme();
-  const [mode, setMode] = useState<ThemeMode>(() => {
+  const [mode, setModeState] = useState<ThemeMode>(() => {
     // Initialize with system scheme
     return systemScheme === 'dark' ? 'dark' : 'light';
   });
+  const [isManualMode, setIsManualMode] = useState(false);
 
-  // Automatically sync with system appearance changes
+  // Automatically sync with system appearance changes only if user hasn't manually set mode
   useEffect(() => {
-    const newMode: ThemeMode = systemScheme === 'dark' ? 'dark' : 'light';
-    setMode(newMode);
-  }, [systemScheme]);
+    if (!isManualMode) {
+      const newMode: ThemeMode = systemScheme === 'dark' ? 'dark' : 'light';
+      setModeState(newMode);
+    }
+  }, [systemScheme, isManualMode]);
+
+  // Wrapper function to set mode manually
+  const setMode = (newMode: ThemeMode) => {
+    setIsManualMode(true);
+    setModeState(newMode);
+  };
 
   const themeObject = useMemo(() => getTheme(mode), [mode]);
   const isDark = mode === 'dark';
 
   const value = useMemo<ThemeContextValue>(
-    () => ({ mode, isDark, ...themeObject }),
+    () => ({ mode, isDark, setMode, ...themeObject }),
     [mode, isDark, themeObject],
   );
 
