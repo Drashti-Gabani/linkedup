@@ -81,9 +81,7 @@ const MyProfileScreen: React.FC = () => {
         </View>
 
         {/* Title */}
-        <Text style={[styles.title, { color: colors.heading }]}>
-          My Profile
-        </Text>
+        <Text style={[styles.title, { color: '#FFFFFF' }]}>My Profile</Text>
 
         {/* Back Button */}
         <TouchableOpacity
@@ -131,6 +129,7 @@ const MyProfileScreen: React.FC = () => {
                 style={[
                   styles.field,
                   { backgroundColor: colors.fieldBackground },
+                  isEditingFirstName && styles.fieldEditing,
                 ]}
               >
                 <View style={styles.iconContainer}>
@@ -178,6 +177,7 @@ const MyProfileScreen: React.FC = () => {
                 style={[
                   styles.field,
                   { backgroundColor: colors.fieldBackground },
+                  isEditingEmail && styles.fieldEditing,
                 ]}
               >
                 <View style={styles.iconContainer}>
@@ -227,6 +227,7 @@ const MyProfileScreen: React.FC = () => {
                 style={[
                   styles.field,
                   { backgroundColor: colors.fieldBackground },
+                  isEditingBirthdate && styles.fieldEditing,
                 ]}
               >
                 <View style={styles.iconContainer}>
@@ -271,7 +272,9 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Interests"
                 tags={profileData.interests}
-                onEdit={() => navigation.navigate('Interests')}
+                onEdit={() =>
+                  navigation.navigate('Interests', { fromMyProfile: true })
+                }
               />
             </View>
 
@@ -280,7 +283,9 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Personality Traits"
                 tags={profileData.personalityTraits}
-                onEdit={() => navigation.navigate('WhoAmI')}
+                onEdit={() =>
+                  navigation.navigate('WhoAmI', { fromMyProfile: true })
+                }
               />
             </View>
 
@@ -290,7 +295,11 @@ const MyProfileScreen: React.FC = () => {
                 <Text style={[styles.galleryTitle, { color: colors.heading }]}>
                   Gallery
                 </Text>
-                <TouchableOpacity onPress={() => console.log('Edit Gallery')}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Media', { fromMyProfile: true })
+                  }
+                >
                   <Text style={[styles.editText, { color: colors.fieldLabel }]}>
                     Edit
                   </Text>
@@ -333,7 +342,11 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Marital Status"
                 tags={profileData.maritalStatus}
-                onEdit={() => navigation.navigate('LifestyleAndBeliefs')}
+                onEdit={() =>
+                  navigation.navigate('LifestyleAndBeliefs', {
+                    fromMyProfile: true,
+                  })
+                }
               />
             </View>
 
@@ -342,7 +355,9 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Languages"
                 tags={profileData.languages}
-                onEdit={() => navigation.navigate('Languages')}
+                onEdit={() =>
+                  navigation.navigate('Languages', { fromMyProfile: true })
+                }
               />
             </View>
 
@@ -351,7 +366,9 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Education"
                 tags={profileData.education}
-                onEdit={() => navigation.navigate('Education')}
+                onEdit={() =>
+                  navigation.navigate('Education', { fromMyProfile: true })
+                }
                 isAddtionalInfo={true}
               />
             </View>
@@ -361,7 +378,11 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Professional Role"
                 tags={profileData.professionalRole}
-                onEdit={() => navigation.navigate('ProfessionalRole')}
+                onEdit={() =>
+                  navigation.navigate('ProfessionalRole', {
+                    fromMyProfile: true,
+                  })
+                }
               />
             </View>
 
@@ -370,7 +391,9 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Industry"
                 tags={profileData.industries}
-                onEdit={() => navigation.navigate('Industry')}
+                onEdit={() =>
+                  navigation.navigate('Industry', { fromMyProfile: true })
+                }
               />
             </View>
 
@@ -379,7 +402,11 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Religion"
                 tags={profileData.religion}
-                onEdit={() => navigation.navigate('LifestyleAndBeliefs')}
+                onEdit={() =>
+                  navigation.navigate('LifestyleAndBeliefs', {
+                    fromMyProfile: true,
+                  })
+                }
               />
             </View>
 
@@ -388,7 +415,11 @@ const MyProfileScreen: React.FC = () => {
               <ProfileSectionCard
                 title="Pets"
                 tags={profileData.pets}
-                onEdit={() => navigation.navigate('LifestyleAndBeliefs')}
+                onEdit={() =>
+                  navigation.navigate('LifestyleAndBeliefs', {
+                    fromMyProfile: true,
+                  })
+                }
               />
             </View>
 
@@ -438,6 +469,8 @@ const styles = StyleSheet.create({
     height: 52,
     borderRadius: 15,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 2,
@@ -453,7 +486,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 50,
-    marginTop: -30,
+    marginTop: -20,
   },
   content: {
     paddingHorizontal: 37,
@@ -548,6 +581,10 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: 40,
+  },
+  fieldEditing: {
+    borderWidth: 1,
+    borderColor: '#8239FF',
   },
 });
 

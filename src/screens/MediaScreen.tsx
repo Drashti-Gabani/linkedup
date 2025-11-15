@@ -12,7 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -28,9 +28,13 @@ import {
 } from 'react-native-image-picker';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
-import { AuthStackNavigationProp } from '../navigation/types';
+import {
+  AuthStackNavigationProp,
+  MainStackNavigationProp,
+} from '../navigation/types';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import GradientButton from '../components/GradientButton';
 import ScreenTitle from '../components/ScreenTitle';
 
 interface PhotoItem {
@@ -48,7 +52,12 @@ const GRID_POSITIONS = [
 
 const MediaScreen: React.FC = () => {
   const { colors, gradients } = useTheme();
-  const navigation = useNavigation<AuthStackNavigationProp>();
+  const route = useRoute();
+  const navigation = useNavigation<
+    AuthStackNavigationProp | MainStackNavigationProp
+  >();
+  const params = route.params as { fromMyProfile?: boolean } | undefined;
+  const fromMyProfile = params?.fromMyProfile ?? false;
 
   const [photos, setPhotos] = useState<PhotoItem[]>([]);
   const photosRef = useRef(photos);
@@ -198,12 +207,23 @@ const MediaScreen: React.FC = () => {
             </View>
           </View>
 
-          <NextButton
-            onPress={() => navigation.navigate('Interests')}
-            showText={true}
-            textLabel="Next"
-            size="medium"
-          />
+          {fromMyProfile ? (
+            <View style={styles.updateButtonContainer}>
+              <GradientButton
+                onPress={() => navigation.goBack()}
+                text="Update"
+              />
+            </View>
+          ) : (
+            <NextButton
+              onPress={() => {
+                (navigation as AuthStackNavigationProp).navigate('Interests');
+              }}
+              showText={true}
+              textLabel="Next"
+              size="medium"
+            />
+          )}
         </ScrollView>
       </SafeAreaView>
     </GestureHandlerRootView>
@@ -531,6 +551,12 @@ const styles = StyleSheet.create({
   },
   content: {
     alignItems: 'center',
+  },
+  updateButtonContainer: {
+    position: 'absolute',
+    bottom: hp('5%'),
+    left: 0,
+    right: 0,
   },
   photoGrid: {
     position: 'relative',

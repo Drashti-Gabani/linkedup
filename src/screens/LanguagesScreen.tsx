@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
-import { AuthStackNavigationProp } from '../navigation/types';
+import { AuthStackNavigationProp, MainStackNavigationProp } from '../navigation/types';
 import MultiSelectSection from '../components/MultiSelectSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import GradientButton from '../components/GradientButton';
 import ScreenTitle from '../components/ScreenTitle';
 
 const ALL_LANGUAGES = [
@@ -31,7 +32,10 @@ const ALL_LANGUAGES = [
 
 const LanguagesScreen: React.FC = () => {
   const { colors } = useTheme();
-  const navigation = useNavigation<AuthStackNavigationProp>();
+  const route = useRoute();
+  const navigation = useNavigation<AuthStackNavigationProp | MainStackNavigationProp>();
+  const params = route.params as { fromMyProfile?: boolean } | undefined;
+  const fromMyProfile = params?.fromMyProfile ?? false;
 
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([
     'English',
@@ -53,7 +57,7 @@ const LanguagesScreen: React.FC = () => {
 
   const handleNext = () => {
     console.log('Selected Languages:', selectedLanguages);
-    navigation.navigate('Industry');
+    (navigation as AuthStackNavigationProp).navigate('Industry');
   };
 
   return (
@@ -118,12 +122,18 @@ const LanguagesScreen: React.FC = () => {
           </View>
         </View>
 
-        <NextButton
-          onPress={handleNext}
-          showText={true}
-          textLabel="Next"
-          size="medium"
-        />
+        {fromMyProfile ? (
+          <View style={styles.updateButtonContainer}>
+            <GradientButton onPress={() => navigation.goBack()} text="Update" />
+          </View>
+        ) : (
+          <NextButton
+            onPress={handleNext}
+            showText={true}
+            textLabel="Next"
+            size="medium"
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -135,7 +145,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: hp('12%'),
+    paddingBottom: hp('18%'),
   },
   content: {
     paddingHorizontal: wp('10%'),
@@ -159,6 +169,12 @@ const styles = StyleSheet.create({
   },
   languagesSection: {
     marginBottom: hp('2%'),
+  },
+  updateButtonContainer: {
+    position: 'absolute',
+    bottom: hp('8%'),
+    left: 0,
+    right: 0,
   },
 });
 

@@ -1,12 +1,16 @@
 import React, { useState, useMemo } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
-import { AuthStackNavigationProp } from '../navigation/types';
+import {
+  AuthStackNavigationProp,
+  MainStackNavigationProp,
+} from '../navigation/types';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import GradientButton from '../components/GradientButton';
 import MultiSelectSection from '../components/MultiSelectSection';
 import ScreenTitle from '../components/ScreenTitle';
 import { interestIconImages } from '../assets/images';
@@ -37,7 +41,12 @@ const INTERESTS: Interest[] = [
 
 const InterestsScreen: React.FC = () => {
   const { colors } = useTheme();
-  const navigation = useNavigation<AuthStackNavigationProp>();
+  const route = useRoute();
+  const navigation = useNavigation<
+    AuthStackNavigationProp | MainStackNavigationProp
+  >();
+  const params = route.params as { fromMyProfile?: boolean } | undefined;
+  const fromMyProfile = params?.fromMyProfile ?? false;
 
   const [selectedInterests, setSelectedInterests] = useState<string[]>([
     'Movies',
@@ -61,7 +70,7 @@ const InterestsScreen: React.FC = () => {
   const handleNext = () => {
     // Navigate to next screen
     console.log('Selected interests:', selectedInterests);
-    navigation.navigate('LifestyleAndBeliefs');
+    (navigation as AuthStackNavigationProp).navigate('LifestyleAndBeliefs');
   };
 
   return (
@@ -88,12 +97,18 @@ const InterestsScreen: React.FC = () => {
           iconMap={iconMap}
         />
 
-        <NextButton
-          onPress={handleNext}
-          showText={true}
-          textLabel="Next"
-          size="medium"
-        />
+        {fromMyProfile ? (
+          <View style={styles.updateButtonContainer}>
+            <GradientButton onPress={() => navigation.goBack()} text="Update" />
+          </View>
+        ) : (
+          <NextButton
+            onPress={handleNext}
+            showText={true}
+            textLabel="Next"
+            size="medium"
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -108,8 +123,14 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: wp('10%'),
-    paddingBottom: hp('12%'),
+    paddingBottom: hp('18%'),
     flexGrow: 1,
+  },
+  updateButtonContainer: {
+    position: 'absolute',
+    bottom: hp('8%'),
+    left: 0,
+    right: 0,
   },
 });
 

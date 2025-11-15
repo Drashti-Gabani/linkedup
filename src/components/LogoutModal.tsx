@@ -39,17 +39,8 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
             { backgroundColor: colors.backgroundCard },
           ]}
         >
-          <Text
-            style={[styles.title, { color: colors.heading }]}
-          >
-            Logout
-          </Text>
-          <Text
-            style={[
-              styles.message,
-              { color: colors.textMuted },
-            ]}
-          >
+          <Text style={[styles.title, { color: colors.heading }]}>Logout</Text>
+          <Text style={[styles.message, { color: colors.textMuted }]}>
             Are you sure you want to logout?
           </Text>
 
@@ -62,12 +53,7 @@ const LogoutModal: React.FC<LogoutModalProps> = ({
               ]}
               onPress={onCancel}
             >
-              <Text
-                style={[
-                  styles.buttonText,
-                  { color: colors.buttonText },
-                ]}
-              >
+              <Text style={[styles.buttonText, { color: colors.buttonText }]}>
                 Cancel
               </Text>
             </TouchableOpacity>

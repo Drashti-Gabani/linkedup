@@ -3,13 +3,14 @@ import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
-import { AuthStackNavigationProp } from '../navigation/types';
+import { AuthStackNavigationProp, MainStackNavigationProp } from '../navigation/types';
 import MultiSelectSection from '../components/MultiSelectSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import GradientButton from '../components/GradientButton';
 import ScreenTitle from '../components/ScreenTitle';
 
 const EDUCATION_LEVELS = [
@@ -23,7 +24,10 @@ const EDUCATION_LEVELS = [
 
 const EducationScreen: React.FC = () => {
   const { colors, gradients } = useTheme();
-  const navigation = useNavigation<AuthStackNavigationProp>();
+  const route = useRoute();
+  const navigation = useNavigation<AuthStackNavigationProp | MainStackNavigationProp>();
+  const params = route.params as { fromMyProfile?: boolean } | undefined;
+  const fromMyProfile = params?.fromMyProfile ?? false;
 
   const [selectedEducation, setSelectedEducation] = useState<string[]>([
     'Diploma',
@@ -40,8 +44,7 @@ const EducationScreen: React.FC = () => {
       education: selectedEducation[0],
       instituteName,
     });
-    // navigation.navigate('NextScreen');
-    navigation.navigate('Languages');
+    (navigation as AuthStackNavigationProp).navigate('Languages');
   };
 
   return (
@@ -107,12 +110,18 @@ const EducationScreen: React.FC = () => {
           </View>
         </View>
 
-        <NextButton
-          onPress={handleNext}
-          showText={true}
-          textLabel="Next"
-          size="medium"
-        />
+        {fromMyProfile ? (
+          <View style={styles.updateButtonContainer}>
+            <GradientButton onPress={() => navigation.goBack()} text="Update" />
+          </View>
+        ) : (
+          <NextButton
+            onPress={handleNext}
+            showText={true}
+            textLabel="Next"
+            size="medium"
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -124,7 +133,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: hp('12%'),
+    paddingBottom: hp('18%'),
   },
   content: {
     paddingHorizontal: wp('10%'),
@@ -161,6 +170,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     padding: 0,
+  },
+  updateButtonContainer: {
+    position: 'absolute',
+    bottom: hp('8%'),
+    left: 0,
+    right: 0,
   },
 });
 

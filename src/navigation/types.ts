@@ -46,6 +46,14 @@ export type MainStackParamList = {
   CommunityGuidelines: undefined;
   ChangePassword: undefined;
   Legal: { type: 'about' | 'privacy' | 'terms' };
+  Media: { fromMyProfile?: boolean };
+  Interests: { fromMyProfile?: boolean };
+  WhoAmI: { fromMyProfile?: boolean };
+  Education: { fromMyProfile?: boolean };
+  Languages: { fromMyProfile?: boolean };
+  Industry: { fromMyProfile?: boolean };
+  ProfessionalRole: { fromMyProfile?: boolean };
+  LifestyleAndBeliefs: { fromMyProfile?: boolean };
 };
 
 // Root Stack Param List (combines Auth and Main)

@@ -102,7 +102,6 @@ const styles = StyleSheet.create({
   matchedText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 14,
-    fontWeight: '700',
     color: '#FFFFFF',
     lineHeight: 15.6,
     letterSpacing: -0.28,

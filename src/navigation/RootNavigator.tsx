@@ -180,6 +180,20 @@ const MainNavigator: React.FC = () => {
         component={ChangePasswordScreen}
       />
       <MainStack.Screen name="Legal" component={LegalScreen} />
+      <MainStack.Screen name="Media" component={MediaScreen} />
+      <MainStack.Screen name="Interests" component={InterestsScreen} />
+      <MainStack.Screen name="WhoAmI" component={WhoAmIScreen} />
+      <MainStack.Screen name="Education" component={EducationScreen} />
+      <MainStack.Screen name="Languages" component={LanguagesScreen} />
+      <MainStack.Screen name="Industry" component={IndustryScreen} />
+      <MainStack.Screen
+        name="ProfessionalRole"
+        component={ProfessionRoleScreen}
+      />
+      <MainStack.Screen
+        name="LifestyleAndBeliefs"
+        component={LifestyleAndBeliefsScreen}
+      />
     </MainStack.Navigator>
   );
 };
