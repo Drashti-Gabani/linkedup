@@ -126,7 +126,7 @@ const LoginScreen: React.FC = () => {
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: colors.inputBackground },
+                        { backgroundColor: colors.fieldBackground },
                         focusedInput === 'phoneNumber' && [
                           styles.inputWrapperFocused,
                           { borderColor: colors.accent },
@@ -172,7 +172,7 @@ const LoginScreen: React.FC = () => {
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: colors.inputBackground },
+                        { backgroundColor: colors.fieldBackground },
                         focusedInput === 'password' && [
                           styles.inputWrapperFocused,
                           { borderColor: colors.accent },

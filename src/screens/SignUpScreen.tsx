@@ -5,7 +5,6 @@ import {
   TextInput,
   StyleSheet,
   Image,
-  TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -98,19 +97,20 @@ const SignUpScreen: React.FC = () => {
                   <View style={styles.subtitleWrapper}>
                     <Text
                       style={[styles.subtitleText, { color: colors.textMuted }]}
+                      numberOfLines={1}
+                      ellipsizeMode="clip"
                     >
                       Sign up today for free! or{' '}
-                    </Text>
-                    <TouchableOpacity onPress={handleLogin} activeOpacity={0.7}>
                       <Text
                         style={[
                           styles.loginLink,
                           { color: colors.accentTertiary },
                         ]}
+                        onPress={handleLogin}
                       >
                         Login
                       </Text>
-                    </TouchableOpacity>
+                    </Text>
                   </View>
                 </View>
 
@@ -129,7 +129,7 @@ const SignUpScreen: React.FC = () => {
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: colors.inputBackground },
+                        { backgroundColor: colors.fieldBackground },
                         focusedInput === 'firstName' && [
                           styles.inputWrapperFocused,
                           { borderColor: colors.accent },
@@ -174,7 +174,7 @@ const SignUpScreen: React.FC = () => {
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: colors.inputBackground },
+                        { backgroundColor: colors.fieldBackground },
                         focusedInput === 'email' && [
                           styles.inputWrapperFocused,
                           { borderColor: colors.accent },
@@ -221,7 +221,7 @@ const SignUpScreen: React.FC = () => {
                     <View
                       style={[
                         styles.inputWrapper,
-                        { backgroundColor: colors.inputBackground },
+                        { backgroundColor: colors.fieldBackground },
                         focusedInput === 'birthdate' && [
                           styles.inputWrapperFocused,
                           { borderColor: colors.accent },
@@ -384,18 +384,17 @@ const styles = StyleSheet.create({
     top: 21,
   },
   subtitleWrapper: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    flexWrap: 'wrap',
-    paddingHorizontal: wp('5%'),
-    maxWidth: '100%',
+    paddingHorizontal: wp('2%'),
+    width: '100%',
   },
   subtitleText: {
     fontFamily: 'Comfortaa-SemiBold',
     fontSize: 16,
     lineHeight: 20,
     textAlign: 'center',
+    flexShrink: 1,
   },
   loginLink: {
     fontFamily: 'Comfortaa-SemiBold',

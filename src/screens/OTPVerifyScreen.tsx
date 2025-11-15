@@ -146,7 +146,7 @@ const OTPVerifyScreen: React.FC = () => {
                           styles.otpBox,
                           styles.otpBoxEmptyLight,
                           {
-                            backgroundColor: colors.otpBoxEmpty,
+                            backgroundColor: colors.fieldBackground,
                             borderColor: colors.otpBoxEmptyBorder,
                           },
                         ]}

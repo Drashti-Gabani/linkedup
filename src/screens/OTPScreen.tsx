@@ -138,14 +138,16 @@ const OTPScreen: React.FC = () => {
                   </View>
                 </LinearGradient>
               </TouchableOpacity>
-              <TextInput
-                style={[styles.phoneInput, { color: colors.fieldText }]}
-                placeholder="800-111-2222"
-                placeholderTextColor={colors.placeholder}
-                value={phoneNumber}
-                onChangeText={setPhoneNumber}
-                keyboardType="phone-pad"
-              />
+              <View style={[styles.phoneInputWrapper, { backgroundColor: colors.fieldBackground }]}>
+                <TextInput
+                  style={[styles.phoneInput, { color: colors.fieldText }]}
+                  placeholder="800-111-2222"
+                  placeholderTextColor={colors.placeholder}
+                  value={phoneNumber}
+                  onChangeText={setPhoneNumber}
+                  keyboardType="phone-pad"
+                />
+              </View>
             </View>
 
             {/* Privacy Note */}
@@ -273,6 +275,13 @@ const styles = StyleSheet.create({
   dropdownIcon: {
     fontSize: wp('2.66%'),
     // color will be set dynamically
+  },
+  phoneInputWrapper: {
+    flex: 1,
+    height: hp('5.91%'), // Match country code height (52.97px)
+    borderRadius: wp('2.9%'), // 12px border radius to match country code
+    paddingHorizontal: wp('4.35%'), // ~18px horizontal padding
+    justifyContent: 'center',
   },
   phoneInput: {
     flex: 1,
