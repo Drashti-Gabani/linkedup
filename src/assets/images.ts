@@ -42,6 +42,7 @@ export const discoverControls = {
   like: require('./images/discover/like-button.png') as ImageSourcePropType,
   superlike:
     require('./images/discover/superlike-icon.png') as ImageSourcePropType,
+  reMatch: require('../../assets/icons/re_match.png') as ImageSourcePropType,
 };
 
 // Filter screen icons
@@ -142,6 +143,14 @@ export const interestIconImages = {
     default: require('./images/interests/design.png') as ImageSourcePropType,
     size: 24,
   },
+};
+
+// Relationship type images
+export const relationshipTypeImages = {
+  casual: require('./images/relationship-card-bg.png') as ImageSourcePropType,
+  professional:
+    require('./images/relationship-professional.png') as ImageSourcePropType,
+  marriage: require('./images/relationship-marriage.png') as ImageSourcePropType,
 };
 
 // Add more image categories as needed:

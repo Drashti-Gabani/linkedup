@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -17,6 +18,7 @@ import { useTheme } from '../hooks/useTheme';
 import SwipeableCard from '../components/SwipeableCard';
 import { User } from '../data/mockUsers';
 import { MainTabParamList, MainStackParamList } from '../navigation/types';
+import { discoverControls } from '../assets/images';
 
 // TODO: Replace with API data
 const MOCK_USERS: User[] = [
@@ -149,7 +151,7 @@ const DiscoverScreen: React.FC = () => {
             Discover
           </Text>
 
-          {/* Star (Likes) and Filter buttons */}
+          {/* Re-Match and Filter buttons */}
           <View style={styles.headerButtons}>
             <TouchableOpacity
               style={[
@@ -159,13 +161,14 @@ const DiscoverScreen: React.FC = () => {
               onPress={() => navigation.navigate('Likes')}
               activeOpacity={0.7}
             >
-              <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
-                <Path
-                  d="M10 1.5L12.5 7.5L19 8.5L14.5 13L15.5 19.5L10 16.5L4.5 19.5L5.5 13L1 8.5L7.5 7.5L10 1.5Z"
-                  fill={colors.headerButtonIcon}
-                  fillRule="evenodd"
-                />
-              </Svg>
+              <Image
+                source={discoverControls.reMatch}
+                style={[
+                  styles.headerButtonIcon,
+                  { tintColor: colors.headerButtonIcon },
+                ]}
+                resizeMode="contain"
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -323,6 +326,10 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerButtonIcon: {
+    width: '80%',
+    height: '80%',
   },
   cardContainer: {
     flex: 1,

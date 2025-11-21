@@ -10,92 +10,84 @@ import {
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import GradientButton from '../components/GradientButton';
-import BackButton from '../components/BackButton';
 import EyeIcon from '../components/icons/EyeIcon';
 import GradientText from '../components/GradientText';
 import { SettingsScreenNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 
-interface PasswordErrors {
-  currentPassword?: string;
-  newPassword?: string;
-  confirmPassword?: string;
+interface PINErrors {
+  currentPIN?: string;
+  newPIN?: string;
+  confirmPIN?: string;
 }
 
 const ChangePasswordScreen: React.FC = () => {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   const { colors, isDark, gradients } = useTheme();
 
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] =
-    useState(false);
-  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
+  const [currentPIN, setCurrentPIN] = useState('');
+  const [newPIN, setNewPIN] = useState('');
+  const [confirmPIN, setConfirmPIN] = useState('');
+  const [isCurrentPINVisible, setIsCurrentPINVisible] = useState(false);
+  const [isNewPINVisible, setIsNewPINVisible] = useState(false);
+  const [isConfirmPINVisible, setIsConfirmPINVisible] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
-  const [errors, setErrors] = useState<PasswordErrors>({});
+  const [errors, setErrors] = useState<PINErrors>({});
 
   // Validation functions
-  const validateCurrentPassword = (password: string): string | undefined => {
-    if (!password.trim()) {
-      return 'Current password is required';
+  const validateCurrentPIN = (pin: string): string | undefined => {
+    if (!pin.trim()) {
+      return 'Current PIN is required';
     }
     return undefined;
   };
 
-  const validateNewPassword = (password: string): string | undefined => {
-    if (!password.trim()) {
-      return 'New password is required';
+  const validateNewPIN = (pin: string): string | undefined => {
+    if (!pin.trim()) {
+      return 'New PIN is required';
     }
-    if (password.length < 8) {
-      return 'Password must be at least 8 characters';
+    if (pin.length < 4) {
+      return 'PIN must be at least 4 digits';
     }
-    if (!/(?=.*[a-z])/.test(password)) {
-      return 'Password must contain at least one lowercase letter';
+    if (!/^\d+$/.test(pin)) {
+      return 'PIN must contain only numbers';
     }
-    if (!/(?=.*[A-Z])/.test(password)) {
-      return 'Password must contain at least one uppercase letter';
-    }
-    if (!/(?=.*\d)/.test(password)) {
-      return 'Password must contain at least one number';
-    }
-    if (password === currentPassword) {
-      return 'New password must be different from current password';
+    if (pin === currentPIN) {
+      return 'New PIN must be different from current PIN';
     }
     return undefined;
   };
 
-  const validateConfirmPassword = (password: string): string | undefined => {
-    if (!password.trim()) {
-      return 'Please confirm your new password';
+  const validateConfirmPIN = (pin: string): string | undefined => {
+    if (!pin.trim()) {
+      return 'Please confirm your new PIN';
     }
-    if (password !== newPassword) {
-      return 'Passwords do not match';
+    if (pin !== newPIN) {
+      return 'PINs do not match';
     }
     return undefined;
   };
 
   const validateForm = (): boolean => {
-    const newErrors: PasswordErrors = {};
+    const newErrors: PINErrors = {};
 
-    const currentPasswordError = validateCurrentPassword(currentPassword);
-    if (currentPasswordError) {
-      newErrors.currentPassword = currentPasswordError;
+    const currentPINError = validateCurrentPIN(currentPIN);
+    if (currentPINError) {
+      newErrors.currentPIN = currentPINError;
     }
 
-    const newPasswordError = validateNewPassword(newPassword);
-    if (newPasswordError) {
-      newErrors.newPassword = newPasswordError;
+    const newPINError = validateNewPIN(newPIN);
+    if (newPINError) {
+      newErrors.newPIN = newPINError;
     }
 
-    const confirmPasswordError = validateConfirmPassword(confirmPassword);
-    if (confirmPasswordError) {
-      newErrors.confirmPassword = confirmPasswordError;
+    const confirmPINError = validateConfirmPIN(confirmPIN);
+    if (confirmPINError) {
+      newErrors.confirmPIN = confirmPINError;
     }
 
     setErrors(newErrors);
@@ -104,31 +96,31 @@ const ChangePasswordScreen: React.FC = () => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      // TODO: Implement password change API call
-      console.log('Password change submitted');
-      // Navigate back after successful password change
+      // TODO: Implement PIN change API call
+      console.log('PIN change submitted');
+      // Navigate back after successful PIN change
       navigation.goBack();
     }
   };
 
-  const handleCurrentPasswordChange = (text: string) => {
-    setCurrentPassword(text);
-    if (errors.currentPassword) {
-      setErrors(prev => ({ ...prev, currentPassword: undefined }));
+  const handleCurrentPINChange = (text: string) => {
+    setCurrentPIN(text);
+    if (errors.currentPIN) {
+      setErrors(prev => ({ ...prev, currentPIN: undefined }));
     }
   };
 
-  const handleNewPasswordChange = (text: string) => {
-    setNewPassword(text);
-    if (errors.newPassword) {
-      setErrors(prev => ({ ...prev, newPassword: undefined }));
+  const handleNewPINChange = (text: string) => {
+    setNewPIN(text);
+    if (errors.newPIN) {
+      setErrors(prev => ({ ...prev, newPIN: undefined }));
     }
   };
 
-  const handleConfirmPasswordChange = (text: string) => {
-    setConfirmPassword(text);
-    if (errors.confirmPassword) {
-      setErrors(prev => ({ ...prev, confirmPassword: undefined }));
+  const handleConfirmPINChange = (text: string) => {
+    setConfirmPIN(text);
+    if (errors.confirmPIN) {
+      setErrors(prev => ({ ...prev, confirmPIN: undefined }));
     }
   };
 
@@ -154,11 +146,29 @@ const ChangePasswordScreen: React.FC = () => {
           <SafeAreaView style={styles.safeArea}>
             {/* Header */}
             <View style={styles.header}>
-              <BackButton
-                onPress={() => navigation.goBack()}
-                size="medium"
-                style={styles.backButton}
-              />
+              <View style={styles.backButtonContainer}>
+                <TouchableOpacity
+                  style={styles.backButton}
+                  onPress={() => navigation.goBack()}
+                >
+                  <View
+                    style={[
+                      styles.headerButtonContainer,
+                      { backgroundColor: colors.headerButtonBackground },
+                    ]}
+                  >
+                    <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
+                      <Path
+                        d="M15 18L9 12L15 6"
+                        stroke={colors.headerButtonIcon}
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </Svg>
+                  </View>
+                </TouchableOpacity>
+              </View>
               <Text
                 style={[
                   styles.headerTitle,
@@ -167,22 +177,22 @@ const ChangePasswordScreen: React.FC = () => {
                   },
                 ]}
               >
-                Change Password
+                Change PIN
               </Text>
-              <View style={styles.headerSpacer} />
+              <View style={styles.backButtonContainer} />
             </View>
 
             {/* Content Section */}
             <View style={styles.content}>
               {/* Input Fields */}
               <View style={styles.inputsContainer}>
-                {/* Current Password Input */}
+                {/* Current PIN Input */}
                 <View style={styles.inputGroup}>
                   <GradientText
                     colors={gradients.secondary}
                     style={styles.labelText}
                   >
-                    CURRENT PASSWORD
+                    CURRENT PIN
                   </GradientText>
                   <View
                     style={[
@@ -192,12 +202,12 @@ const ChangePasswordScreen: React.FC = () => {
                           ? colors.inputBackground
                           : '#F5F7F9',
                       },
-                      focusedInput === 'currentPassword'
+                      focusedInput === 'currentPIN'
                         ? [
                             styles.inputWrapperFocused,
                             { borderColor: colors.accent },
                           ]
-                        : errors.currentPassword
+                        : errors.currentPIN
                         ? [styles.inputWrapperError, { borderColor: '#FF3B30' }]
                         : !isDark
                         ? [styles.inputWrapperLight, { borderColor: '#E8EAED' }]
@@ -206,17 +216,18 @@ const ChangePasswordScreen: React.FC = () => {
                   >
                     <TextInput
                       style={[styles.input, { color: colors.textPrimary }]}
-                      placeholder="Current password"
+                      placeholder="Current PIN"
                       placeholderTextColor={colors.placeholder}
-                      value={currentPassword}
-                      onChangeText={handleCurrentPasswordChange}
-                      secureTextEntry={!isCurrentPasswordVisible}
-                      onFocus={() => setFocusedInput('currentPassword')}
+                      value={currentPIN}
+                      onChangeText={handleCurrentPINChange}
+                      secureTextEntry={!isCurrentPINVisible}
+                      keyboardType="numeric"
+                      onFocus={() => setFocusedInput('currentPIN')}
                       onBlur={() => setFocusedInput(null)}
                     />
                     <TouchableOpacity
                       onPress={() =>
-                        setIsCurrentPasswordVisible(!isCurrentPasswordVisible)
+                        setIsCurrentPINVisible(!isCurrentPINVisible)
                       }
                       style={styles.eyeIconButton}
                     >
@@ -227,20 +238,18 @@ const ChangePasswordScreen: React.FC = () => {
                       />
                     </TouchableOpacity>
                   </View>
-                  {errors.currentPassword && (
-                    <Text style={styles.errorText}>
-                      {errors.currentPassword}
-                    </Text>
+                  {errors.currentPIN && (
+                    <Text style={styles.errorText}>{errors.currentPIN}</Text>
                   )}
                 </View>
 
-                {/* New Password Input */}
+                {/* New PIN Input */}
                 <View style={styles.inputGroup}>
                   <GradientText
                     colors={gradients.secondary}
                     style={styles.labelText}
                   >
-                    NEW PASSWORD
+                    NEW PIN
                   </GradientText>
                   <View
                     style={[
@@ -250,12 +259,12 @@ const ChangePasswordScreen: React.FC = () => {
                           ? colors.inputBackground
                           : '#F5F7F9',
                       },
-                      focusedInput === 'newPassword'
+                      focusedInput === 'newPIN'
                         ? [
                             styles.inputWrapperFocused,
                             { borderColor: colors.accent },
                           ]
-                        : errors.newPassword
+                        : errors.newPIN
                         ? [styles.inputWrapperError, { borderColor: '#FF3B30' }]
                         : !isDark
                         ? [styles.inputWrapperLight, { borderColor: '#E8EAED' }]
@@ -264,18 +273,17 @@ const ChangePasswordScreen: React.FC = () => {
                   >
                     <TextInput
                       style={[styles.input, { color: colors.textPrimary }]}
-                      placeholder="New password"
+                      placeholder="New PIN"
                       placeholderTextColor={colors.placeholder}
-                      value={newPassword}
-                      onChangeText={handleNewPasswordChange}
-                      secureTextEntry={!isNewPasswordVisible}
-                      onFocus={() => setFocusedInput('newPassword')}
+                      value={newPIN}
+                      onChangeText={handleNewPINChange}
+                      secureTextEntry={!isNewPINVisible}
+                      keyboardType="numeric"
+                      onFocus={() => setFocusedInput('newPIN')}
                       onBlur={() => setFocusedInput(null)}
                     />
                     <TouchableOpacity
-                      onPress={() =>
-                        setIsNewPasswordVisible(!isNewPasswordVisible)
-                      }
+                      onPress={() => setIsNewPINVisible(!isNewPINVisible)}
                       style={styles.eyeIconButton}
                     >
                       <EyeIcon
@@ -285,24 +293,23 @@ const ChangePasswordScreen: React.FC = () => {
                       />
                     </TouchableOpacity>
                   </View>
-                  {errors.newPassword && (
-                    <Text style={styles.errorText}>{errors.newPassword}</Text>
+                  {errors.newPIN && (
+                    <Text style={styles.errorText}>{errors.newPIN}</Text>
                   )}
-                  {!errors.newPassword && newPassword.length > 0 && (
+                  {!errors.newPIN && newPIN.length > 0 && (
                     <Text style={styles.helperText}>
-                      Must be at least 8 characters with uppercase, lowercase,
-                      and number
+                      Must be at least 4 digits
                     </Text>
                   )}
                 </View>
 
-                {/* Confirm Password Input */}
+                {/* Confirm PIN Input */}
                 <View style={styles.inputGroup}>
                   <GradientText
                     colors={gradients.secondary}
                     style={styles.labelText}
                   >
-                    CONFIRM NEW PASSWORD
+                    CONFIRM NEW PIN
                   </GradientText>
                   <View
                     style={[
@@ -312,12 +319,12 @@ const ChangePasswordScreen: React.FC = () => {
                           ? colors.inputBackground
                           : '#F5F7F9',
                       },
-                      focusedInput === 'confirmPassword'
+                      focusedInput === 'confirmPIN'
                         ? [
                             styles.inputWrapperFocused,
                             { borderColor: colors.accent },
                           ]
-                        : errors.confirmPassword
+                        : errors.confirmPIN
                         ? [styles.inputWrapperError, { borderColor: '#FF3B30' }]
                         : !isDark
                         ? [styles.inputWrapperLight, { borderColor: '#E8EAED' }]
@@ -326,17 +333,18 @@ const ChangePasswordScreen: React.FC = () => {
                   >
                     <TextInput
                       style={[styles.input, { color: colors.textPrimary }]}
-                      placeholder="Confirm new password"
+                      placeholder="Confirm new PIN"
                       placeholderTextColor={colors.placeholder}
-                      value={confirmPassword}
-                      onChangeText={handleConfirmPasswordChange}
-                      secureTextEntry={!isConfirmPasswordVisible}
-                      onFocus={() => setFocusedInput('confirmPassword')}
+                      value={confirmPIN}
+                      onChangeText={handleConfirmPINChange}
+                      secureTextEntry={!isConfirmPINVisible}
+                      keyboardType="numeric"
+                      onFocus={() => setFocusedInput('confirmPIN')}
                       onBlur={() => setFocusedInput(null)}
                     />
                     <TouchableOpacity
                       onPress={() =>
-                        setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
+                        setIsConfirmPINVisible(!isConfirmPINVisible)
                       }
                       style={styles.eyeIconButton}
                     >
@@ -347,10 +355,8 @@ const ChangePasswordScreen: React.FC = () => {
                       />
                     </TouchableOpacity>
                   </View>
-                  {errors.confirmPassword && (
-                    <Text style={styles.errorText}>
-                      {errors.confirmPassword}
-                    </Text>
+                  {errors.confirmPIN && (
+                    <Text style={styles.errorText}>{errors.confirmPIN}</Text>
                   )}
                 </View>
               </View>
@@ -361,9 +367,9 @@ const ChangePasswordScreen: React.FC = () => {
           </SafeAreaView>
         </View>
 
-        {/* Change Password Button */}
+        {/* Change PIN Button */}
         <View style={styles.buttonContainer}>
-          <GradientButton onPress={handleSubmit} text="Change Password" />
+          <GradientButton onPress={handleSubmit} text="Change PIN" />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -392,15 +398,24 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     paddingHorizontal: wp('9.7%'),
     paddingTop: hp('2%'),
     paddingBottom: hp('2%'),
   },
+  backButtonContainer: {
+    width: wp('11.6%'),
+    height: hp('6%'),
+  },
   backButton: {
-    position: 'relative',
-    top: 0,
-    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  headerButtonContainer: {
+    flex: 1,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerTitle: {
     fontFamily: 'Comfortaa-Medium',
@@ -409,9 +424,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.98,
     flex: 1,
     textAlign: 'center',
-  },
-  headerSpacer: {
-    width: 40,
   },
   content: {
     paddingHorizontal: wp('9.7%'),

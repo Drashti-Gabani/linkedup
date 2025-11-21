@@ -31,19 +31,12 @@ const ChatScreen: React.FC = () => {
   const navigation = useNavigation<ChatScreenNavigationProp>();
   const { colors, isDark } = useTheme();
 
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
-  const handleMessagePress = (messageId: string) => {
+  const handleMessagePress = () => {
     navigation.navigate('Conversation' as never);
   };
 
   const renderMessageItem = ({ item }: { item: (typeof messages)[0] }) => (
-    <TouchableOpacity
-      style={styles.messageItem}
-      onPress={() => handleMessagePress(item.id)}
-    >
+    <TouchableOpacity style={styles.messageItem} onPress={handleMessagePress}>
       <View style={styles.messageContent}>
         <View style={styles.avatarContainer}>
           <Image source={{ uri: item.avatar }} style={styles.avatar} />
@@ -123,37 +116,9 @@ const ChatScreen: React.FC = () => {
 
       {/* Header */}
       <View style={styles.header}>
-        <View style={styles.backButtonContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
-            <View
-              style={[
-                styles.buttonContainer,
-                { backgroundColor: colors.headerButtonBackground },
-              ]}
-            >
-              <Svg width={24} height={24} viewBox="0 0 24 24" fill="none">
-                <Path
-                  d="M15 18L9 12L15 6"
-                  stroke={colors.headerButtonIcon}
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </Svg>
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.headerText}>
-          <Text style={[styles.inboxTitle, { color: colors.heading }]}>
-            Inbox
-          </Text>
-          <Text style={[styles.messageCount, { color: colors.textMuted }]}>
-            33 messages
-          </Text>
-        </View>
-
-        <View style={styles.backButtonContainer} />
+        <Text style={[styles.inboxTitle, { color: colors.heading }]}>
+          Inbox
+        </Text>
       </View>
 
       {/* Search Input */}
@@ -214,43 +179,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: wp('8%'),
-    paddingVertical: hp('1.5%'),
-    marginTop: hp('1%'),
-  },
-  backButtonContainer: {
-    width: wp('11.6%'),
-    height: hp('6%'),
-  },
-  backButton: {
-    width: '100%',
-    height: '100%',
-  },
-  buttonContainer: {
-    flex: 1,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  headerText: {
-    alignItems: 'center',
-    flex: 1,
+    paddingHorizontal: 18,
+    paddingTop: 15,
+    paddingBottom: 20,
   },
   inboxTitle: {
     fontFamily: 'Comfortaa-Bold',
-    fontSize: hp('3.4%'),
-    lineHeight: hp('3.8%'),
+    fontSize: 30,
     letterSpacing: -0.9,
+    lineHeight: 33,
     textAlign: 'center',
-  },
-  messageCount: {
-    fontFamily: 'Sofia Pro',
-    fontSize: hp('1.7%'),
-    fontWeight: '400',
-    lineHeight: hp('2.6%'),
-    letterSpacing: -0.45,
-    textAlign: 'center',
-    marginTop: hp('0.3%'),
   },
   searchContainer: {
     paddingHorizontal: wp('9.7%'),

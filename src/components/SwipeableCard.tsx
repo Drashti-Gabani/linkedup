@@ -93,6 +93,16 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
     });
   };
 
+  // Tap gesture for opening profile on image tap
+  const tapGesture = Gesture.Tap()
+    .maxDistance(10) // Only trigger if finger doesn't move much (actual tap, not swipe)
+    .onEnd(() => {
+      'worklet';
+      if (onViewProfile) {
+        runOnJS(onViewProfile)();
+      }
+    });
+
   // Combined gesture for card swipe and photo navigation
   const panGesture = Gesture.Pan()
     .onStart(() => {
@@ -180,8 +190,11 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
     };
   });
 
+  // Combine tap and pan gestures - tap works for quick taps, pan for swipes
+  const composedGesture = Gesture.Simultaneous(tapGesture, panGesture);
+
   return (
-    <GestureDetector gesture={panGesture}>
+    <GestureDetector gesture={composedGesture}>
       <Animated.View style={[styles.card, animatedStyle]}>
         <ImageBackground
           source={{ uri: user.photos[currentPhotoIndex] }}

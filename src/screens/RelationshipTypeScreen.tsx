@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ImageSourcePropType,
+  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,8 +18,39 @@ import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
+import { relationshipTypeImages } from '../assets/images';
 
 type RelationshipType = 'casual' | 'professional' | 'marriage' | null;
+
+interface RelationshipContent {
+  title: string;
+  description: string;
+  image: ImageSourcePropType;
+}
+
+const relationshipContent: Record<
+  NonNullable<RelationshipType>,
+  RelationshipContent
+> = {
+  casual: {
+    title: 'All are Welcome',
+    description:
+      '- Meet New People, No Pressure – Connect without commitments\n\n- Exciting chats & explore common interests\n\n- Find Friends or Flings\n\n- Coffee? Movie? Casual meetups anytime\n\n- Enjoy the moment without long-term obligations',
+    image: relationshipTypeImages.casual,
+  },
+  professional: {
+    title: 'Build Your Network',
+    description:
+      '- Connect with Industry Professionals – Expand your network\n\n- Career-focused conversations & mentorship opportunities\n\n- Business partnerships & collaborations\n\n- Networking events & professional meetups\n\n- Grow your career with meaningful connections',
+    image: relationshipTypeImages.professional,
+  },
+  marriage: {
+    title: 'Find Your Life Partner',
+    description:
+      '- Serious Commitment – Looking for a lifelong partner\n\n- Deep conversations & shared values\n\n- Family planning & future goals\n\n- Traditional & meaningful connections\n\n- Build a lasting relationship together',
+    image: relationshipTypeImages.marriage,
+  },
+};
 
 const RelationshipTypeScreen: React.FC = () => {
   const { colors, isDark } = useTheme();
@@ -25,10 +58,51 @@ const RelationshipTypeScreen: React.FC = () => {
 
   const [selectedType, setSelectedType] = useState<RelationshipType>('casual');
 
+  // Animation values for smooth transitions
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const indicatorAnim = useRef(new Animated.Value(0)).current;
+
   const handleNext = () => {
     console.log('Selected relationship type:', selectedType);
     navigation.navigate('SignUp');
   };
+
+  const currentContent =
+    selectedType && relationshipContent[selectedType]
+      ? relationshipContent[selectedType]
+      : relationshipContent.casual;
+
+  // Animate content change with fade and scale
+  useEffect(() => {
+    fadeAnim.setValue(0);
+    scaleAnim.setValue(0.95);
+
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        tension: 50,
+        friction: 7,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [selectedType]);
+
+  // Animate indicator bar appearance
+  useEffect(() => {
+    indicatorAnim.setValue(0);
+    Animated.spring(indicatorAnim, {
+      toValue: 1,
+      tension: 50,
+      friction: 7,
+      useNativeDriver: true,
+    }).start();
+  }, [selectedType]);
 
   const renderTypeButton = (
     type: RelationshipType,
@@ -40,55 +114,83 @@ const RelationshipTypeScreen: React.FC = () => {
     const isLast = position === 'right';
 
     return (
-      <TouchableOpacity
-        style={styles.typeButtonWrapper}
-        onPress={() => setSelectedType(type)}
-        activeOpacity={0.8}
-      >
-        {isSelected ? (
-          <LinearGradient
-            colors={gradients.primary}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            angle={46}
+      <View style={styles.typeButtonContainer}>
+        {/* Indicator bar above selected tab with animation */}
+        {isSelected && (
+          <Animated.View
             style={[
-              styles.typeButton,
+              styles.indicatorBarWrapper,
               {
-                borderRightColor: colors.accent,
-                borderColor: colors.accent,
+                opacity: indicatorAnim,
+                transform: [
+                  {
+                    scale: indicatorAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [0.8, 1],
+                    }),
+                  },
+                ],
               },
-              isFirst && styles.typeButtonLeft,
-              isLast && styles.typeButtonRight,
             ]}
           >
-            <Text
-              style={[styles.typeButtonText, { color: colors.iconSelected }]}
-            >
-              {label}
-            </Text>
-          </LinearGradient>
-        ) : (
-          <View
-            style={[
-              styles.typeButton,
-              styles.typeButtonInactive,
-              {
-                borderRightColor: colors.accent,
-                borderColor: colors.accent,
-                backgroundColor: isDark
-                  ? 'rgba(255, 255, 255, 0.1)'
-                  : 'rgba(255, 255, 255, 0.25)',
-              },
-              isFirst && styles.typeButtonLeft,
-              isLast && styles.typeButtonRight,
-            ]}
-          >
-            <Text style={[styles.typeButtonText, { color: colors.accent }]}>
-              {label}
-            </Text>
-          </View>
+            <LinearGradient
+              colors={gradients.primary}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.indicatorBar}
+            />
+          </Animated.View>
         )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.typeButtonWrapper}
+          onPress={() => setSelectedType(type)}
+          activeOpacity={0.7}
+        >
+          {isSelected ? (
+            <LinearGradient
+              colors={gradients.primary}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              angle={46}
+              style={[
+                styles.typeButton,
+                {
+                  borderRightColor: colors.accent,
+                  borderColor: colors.accent,
+                },
+                isFirst && styles.typeButtonLeft,
+                isLast && styles.typeButtonRight,
+              ]}
+            >
+              <Text
+                style={[styles.typeButtonText, { color: colors.iconSelected }]}
+              >
+                {label}
+              </Text>
+            </LinearGradient>
+          ) : (
+            <View
+              style={[
+                styles.typeButton,
+                styles.typeButtonInactive,
+                {
+                  borderRightColor: colors.accent,
+                  borderColor: colors.accent,
+                  backgroundColor: isDark
+                    ? 'rgba(255, 255, 255, 0.1)'
+                    : 'rgba(255, 255, 255, 0.25)',
+                },
+                isFirst && styles.typeButtonLeft,
+                isLast && styles.typeButtonRight,
+              ]}
+            >
+              <Text style={[styles.typeButtonText, { color: colors.accent }]}>
+                {label}
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -125,9 +227,17 @@ const RelationshipTypeScreen: React.FC = () => {
 
           {/* Card Section - flex to fill remaining space, starts at same y as buttons */}
           <View style={styles.cardSection}>
-            <View style={styles.card}>
+            <Animated.View
+              style={[
+                styles.card,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ scale: scaleAnim }],
+                },
+              ]}
+            >
               <Image
-                source={require('../assets/images/relationship-card-bg.png')}
+                source={currentContent.image}
                 style={styles.cardBackground}
                 resizeMode="cover"
               />
@@ -145,7 +255,7 @@ const RelationshipTypeScreen: React.FC = () => {
                     <Text
                       style={[styles.cardTitle, { color: colors.iconSelected }]}
                     >
-                      All are Welcome
+                      {currentContent.title}
                     </Text>
                   </View>
                   <Text
@@ -154,15 +264,11 @@ const RelationshipTypeScreen: React.FC = () => {
                       { color: colors.iconSelected },
                     ]}
                   >
-                    - Meet New People, No Pressure – Connect without commitments
-                    {'\n\n'}- Exciting chats & explore common interests{'\n\n'}-
-                    Find Friends or Flings{'\n\n'}- Coffee? Movie? Casual
-                    meetups anytime
-                    {'\n\n'}- Enjoy the moment without long-term obligations
+                    {currentContent.description}
                   </Text>
                 </View>
               </LinearGradient>
-            </View>
+            </Animated.View>
 
             <Text style={[styles.switchText, { color: colors.textMuted }]}>
               You can switch above options anytime from your Profile
@@ -222,10 +328,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: wp('86.96%'), // 360px width
     height: hp('5.73%'), // 52px height
-    overflow: 'hidden',
+    overflow: 'visible',
     marginBottom: hp('-5.73%'), // Negative margin to overlap with card (same height as buttons)
     alignSelf: 'center',
     zIndex: 5, // Above card
+  },
+  typeButtonContainer: {
+    flex: 1,
+    position: 'relative',
+  },
+  indicatorBarWrapper: {
+    position: 'absolute',
+    top: hp('-1.4%'), // Position above the button
+    left: '15%',
+    right: '15%',
+    height: wp('1.4%'), // Slightly thicker for better visibility
+    zIndex: 6, // Above button
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  indicatorBar: {
+    width: '100%',
+    height: '100%',
+    borderRadius: wp('0.7%'), // Rounded ends
+    // Add subtle shadow for depth
+    shadowColor: '#8239FF',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3, // Android shadow
   },
   typeButtonWrapper: {
     flex: 1,
@@ -269,6 +400,12 @@ const styles = StyleSheet.create({
     borderRadius: wp('4.83%'), // 20px border radius
     overflow: 'hidden',
     position: 'relative',
+    // Subtle shadow for depth
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5, // Android shadow
   },
   cardBackground: {
     width: '100%',

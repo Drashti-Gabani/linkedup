@@ -42,7 +42,6 @@ export type MainStackParamList = {
   Filters: undefined;
   Match: undefined;
   Conversation: undefined;
-  Profile: undefined;
   CommunityGuidelines: undefined;
   ChangePassword: undefined;
   Legal: { type: 'about' | 'privacy' | 'terms' };
@@ -78,11 +77,6 @@ export type OnboardingScreenNavigationProp = NativeStackNavigationProp<
 export type LoginScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
   'Login'
->;
-
-export type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  MainStackParamList,
-  'Profile'
 >;
 
 export type SettingsScreenNavigationProp = CompositeNavigationProp<

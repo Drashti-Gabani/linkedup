@@ -46,6 +46,17 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
   const [religion, setReligion] = useState('Hindu');
   const [height, setHeight] = useState(161);
 
+  // Convert centimeters to feet and inches
+  // Formula: 1 inch = 2.54 cm, 1 foot = 12 inches
+  const cmToFeetInches = (cm: number) => {
+    const totalInches = cm / 2.54;
+    const feet = Math.floor(totalInches / 12);
+    // Calculate remaining inches more precisely to avoid floating point issues
+    const remainingInches = totalInches - feet * 12;
+    const inches = Math.round(remainingInches);
+    return { feet, inches };
+  };
+
   const handleNext = () => {
     console.log('Form Data:', { maritalStatus, hasKids, religion, height });
     (navigation as AuthStackNavigationProp).navigate('HealthAndFood');
@@ -117,20 +128,99 @@ const LifestyleAndBeliefsScreen: React.FC = () => {
                     { backgroundColor: colors.backgroundQuaternary },
                   ]}
                 >
-                  {isDark ? (
-                    <Text
-                      style={[
-                        styles.heightValueText,
-                        { color: colors.textPrimary },
-                      ]}
-                    >
-                      {`${height} cm`}
-                    </Text>
-                  ) : (
-                    <GradientText style={styles.heightValueText}>
-                      {`${height} cm`}
-                    </GradientText>
-                  )}
+                  <View style={styles.heightValueRow}>
+                    {isDark ? (
+                      <>
+                        <View style={styles.heightValueItem}>
+                          <Text
+                            style={[
+                              styles.heightValueLabel,
+                              { color: colors.textMuted },
+                            ]}
+                          >
+                            cm
+                          </Text>
+                          <Text
+                            style={[
+                              styles.heightValueText,
+                              { color: colors.textPrimary },
+                            ]}
+                          >
+                            {height}
+                          </Text>
+                        </View>
+                        <Text
+                          style={[
+                            styles.heightValueSeparator,
+                            { color: colors.textMuted },
+                          ]}
+                        >
+                          {'  •  '}
+                        </Text>
+                        <View style={styles.heightValueItem}>
+                          <Text
+                            style={[
+                              styles.heightValueLabel,
+                              { color: colors.textMuted },
+                            ]}
+                          >
+                            ft/in
+                          </Text>
+                          <Text
+                            style={[
+                              styles.heightValueText,
+                              { color: colors.textPrimary },
+                            ]}
+                          >
+                            {(() => {
+                              const { feet, inches } = cmToFeetInches(height);
+                              return `${feet}'${inches}"`;
+                            })()}
+                          </Text>
+                        </View>
+                      </>
+                    ) : (
+                      <>
+                        <View style={styles.heightValueItem}>
+                          <Text
+                            style={[
+                              styles.heightValueLabel,
+                              { color: colors.textMuted },
+                            ]}
+                          >
+                            cm
+                          </Text>
+                          <GradientText style={styles.heightValueText}>
+                            {height}
+                          </GradientText>
+                        </View>
+                        <Text
+                          style={[
+                            styles.heightValueSeparator,
+                            { color: colors.textMuted },
+                          ]}
+                        >
+                          {'  •  '}
+                        </Text>
+                        <View style={styles.heightValueItem}>
+                          <Text
+                            style={[
+                              styles.heightValueLabel,
+                              { color: colors.textMuted },
+                            ]}
+                          >
+                            ft/in
+                          </Text>
+                          <GradientText style={styles.heightValueText}>
+                            {(() => {
+                              const { feet, inches } = cmToFeetInches(height);
+                              return `${feet}'${inches}"`;
+                            })()}
+                          </GradientText>
+                        </View>
+                      </>
+                    )}
+                  </View>
                 </View>
                 <View
                   style={[
@@ -230,11 +320,33 @@ const styles = StyleSheet.create({
   heightTextGradient: {
     borderRadius: 3,
   },
+  heightValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  heightValueItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heightValueLabel: {
+    fontFamily: 'Sofia Pro',
+    fontSize: 10,
+    fontWeight: '400',
+    letterSpacing: -0.2,
+    marginBottom: 2,
+  },
   heightValueText: {
     fontFamily: 'Sofia Pro',
     fontWeight: '600',
     fontSize: 14,
     letterSpacing: -0.42,
+  },
+  heightValueSeparator: {
+    fontFamily: 'Sofia Pro',
+    fontSize: 12,
+    fontWeight: '400',
   },
   tooltipArrow: {
     width: 0,

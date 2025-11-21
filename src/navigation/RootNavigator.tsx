@@ -174,7 +174,6 @@ const MainNavigator: React.FC = () => {
       />
       <MainStack.Screen name="Match" component={MatchScreen} />
       <MainStack.Screen name="Conversation" component={ConversationScreen} />
-      <MainStack.Screen name="Profile" component={ProfileScreen} />
       <MainStack.Screen
         name="ChangePassword"
         component={ChangePasswordScreen}
@@ -206,7 +205,7 @@ const RootNavigator: React.FC = () => {
 
   return (
     <RootStack.Navigator
-      initialRouteName={isAuthenticated ? 'Main' : 'Auth'}
+      initialRouteName={isAuthenticated ? 'Main' : 'Main'}
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',

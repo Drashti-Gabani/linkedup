@@ -5,13 +5,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import MatchCard from '../components/MatchCard';
 import { MainStackNavigationProp } from '../navigation/types';
-import { hp } from '../utils/responsive';
 
 // Mock data - replace with real data from your API
 const MOCK_LIKES = [
@@ -20,51 +21,58 @@ const MOCK_LIKES = [
     imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
     name: 'Jane',
     age: 19,
-    jobTitle: 'Software Engineer',
+    distance: '4.5 miles',
   },
   {
     id: '2',
     imageUrl: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e',
     name: 'Sarah',
     age: 25,
-    jobTitle: 'Software Engineer',
+    distance: '8 miles',
   },
   {
     id: '3',
     imageUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1',
     name: 'Emma',
     age: 22,
-    jobTitle: 'Software Engineer',
+    distance: '7 miles',
   },
   {
     id: '4',
     imageUrl: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df',
     name: 'Olivia',
     age: 24,
-    jobTitle: 'Software Engineer',
+    distance: '22 miles',
   },
   {
     id: '5',
     imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9',
     name: 'Sophia',
     age: 21,
-    jobTitle: 'Software Engineer',
+    distance: '16 miles',
   },
   {
     id: '6',
     imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
     name: 'Ava',
     age: 23,
-    jobTitle: 'Software Engineer',
+    distance: '8 miles',
   },
 ];
 
 const LikesScreen: React.FC = () => {
   const navigation = useNavigation<MainStackNavigationProp>();
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      edges={['top']}
+    >
+      <StatusBar
+        barStyle={isDark ? 'light-content' : 'dark-content'}
+        backgroundColor={colors.background}
+      />
       {/* Header */}
       <View style={styles.header}>
         {/* Back Button */}
@@ -89,7 +97,7 @@ const LikesScreen: React.FC = () => {
         {/* Title */}
         <View style={styles.headerTextContainer}>
           <Text style={[styles.headerTitle, { color: colors.heading }]}>
-            Liked
+            Re-Match
           </Text>
           <Text style={styles.headerSubtitle}>{MOCK_LIKES.length} Users</Text>
         </View>
@@ -126,12 +134,12 @@ const LikesScreen: React.FC = () => {
             imageUrl={item.imageUrl}
             name={item.name}
             age={item.age}
-            jobTitle={item.jobTitle}
+            distance={item.distance}
             onPress={() => navigation.navigate('UserProfile')}
           />
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -143,9 +151,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 25,
-    paddingTop: hp(8),
-    paddingBottom: hp(4),
+    paddingHorizontal: 18,
+    paddingTop: 15,
+    paddingBottom: 20,
   },
   headerButton: {
     width: 48,

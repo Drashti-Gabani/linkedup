@@ -2970,6 +2970,7 @@ __metadata:
     react: 19.1.0
     react-native: 0.81.4
     react-native-country-picker-modal: ^2.0.0
+    react-native-device-info: ^15.0.1
     react-native-gesture-handler: ^2.29.0
     react-native-image-picker: ^8.2.1
     react-native-linear-gradient: ^2.8.3
@@ -7947,6 +7948,15 @@ __metadata:
     react-native: "*"
     react-native-web: "*"
   checksum: e808169b45c5e8021462a6914f7c3fb28e84ae8d58097ed7b3418fee41efa2bc44012abc09ff3f3bd6ee14427b9efe1b0f8d8b3a19cc01325b2f2cd0137d5d00
+  languageName: node
+  linkType: hard
+
+"react-native-device-info@npm:^15.0.1":
+  version: 15.0.1
+  resolution: "react-native-device-info@npm:15.0.1"
+  peerDependencies:
+    react-native: "*"
+  checksum: e7c20006db07758fcf820e891b979b9d7e87c10b6a38066402d60d85ff1dc8e1ac47e8b57209bf394f20516fb49600cde6688cd6f7cfe7210f285555960a74e4
   languageName: node
   linkType: hard
 

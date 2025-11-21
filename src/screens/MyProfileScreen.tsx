@@ -10,16 +10,15 @@ import {
   Dimensions,
   TextInput,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import { BlurView } from '@react-native-community/blur';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import ProfileStatsCard from '../components/ProfileStatsCard';
 import ProfileSectionCard from '../components/ProfileSectionCard';
+import FullScreenImageViewer from '../components/FullScreenImageViewer';
 import { MainStackNavigationProp } from '../navigation/types';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const MyProfileScreen: React.FC = () => {
   const navigation = useNavigation<MainStackNavigationProp>();
@@ -32,6 +31,8 @@ const MyProfileScreen: React.FC = () => {
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [isEditingBirthdate, setIsEditingBirthdate] = useState(false);
+  const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
+  const [imageViewerIndex, setImageViewerIndex] = useState(0);
 
   const profileData = {
     name: 'Jessica Parker',
@@ -61,6 +62,14 @@ const MyProfileScreen: React.FC = () => {
       'https://images.unsplash.com/photo-1517841905240-472988babdf9',
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb',
     ],
+  };
+
+  // Collect only gallery images for the viewer
+  const allImages = profileData.galleryPhotos;
+
+  const handleImagePress = (index: number) => {
+    setImageViewerIndex(index);
+    setIsImageViewerVisible(true);
   };
 
   return (
@@ -306,34 +315,64 @@ const MyProfileScreen: React.FC = () => {
                 </TouchableOpacity>
               </View>
               <View style={styles.galleryGrid}>
+                <TouchableOpacity
+                  onPress={() => handleImagePress(0)}
+                  activeOpacity={0.9}
+                >
                 <Image
                   source={{ uri: profileData.galleryPhotos[0] }}
                   style={styles.galleryImageLarge}
                 />
+                </TouchableOpacity>
                 <View style={styles.galleryColumn}>
+                  <TouchableOpacity
+                    onPress={() => handleImagePress(1)}
+                    activeOpacity={0.9}
+                  >
                   <Image
                     source={{ uri: profileData.galleryPhotos[1] }}
                     style={styles.galleryImageSmall}
                   />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleImagePress(2)}
+                    activeOpacity={0.9}
+                  >
                   <Image
                     source={{ uri: profileData.galleryPhotos[2] }}
                     style={styles.galleryImageSmall}
                   />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.galleryColumn}>
+                  <TouchableOpacity
+                    onPress={() => handleImagePress(3)}
+                    activeOpacity={0.9}
+                  >
                   <Image
                     source={{ uri: profileData.galleryPhotos[3] }}
                     style={styles.galleryImageSmall}
                   />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleImagePress(4)}
+                    activeOpacity={0.9}
+                  >
                   <Image
                     source={{ uri: profileData.galleryPhotos[4] }}
                     style={styles.galleryImageSmall}
                   />
+                  </TouchableOpacity>
                 </View>
+                <TouchableOpacity
+                  onPress={() => handleImagePress(0)}
+                  activeOpacity={0.9}
+                >
                 <Image
                   source={{ uri: profileData.galleryPhotos[0] }}
                   style={styles.galleryImageLarge}
                 />
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -427,6 +466,14 @@ const MyProfileScreen: React.FC = () => {
           </View>
         </View>
       </ScrollView>
+
+      {/* Full Screen Image Viewer */}
+      <FullScreenImageViewer
+        visible={isImageViewerVisible}
+        images={allImages}
+        initialIndex={imageViewerIndex}
+        onClose={() => setIsImageViewerVisible(false)}
+      />
     </View>
   );
 };
@@ -554,13 +601,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
-  },
-  editText: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 14,
-    fontWeight: '400',
-    lineHeight: 21,
-    letterSpacing: 0.7,
   },
   galleryGrid: {
     flexDirection: 'row',

@@ -60,10 +60,8 @@ const FiltersScreen: React.FC = () => {
   const [ageRange, setAgeRange] = useState({ min: 20, max: 33 });
   const [drinking, setDrinking] = useState<'Yes' | 'No'>('No');
   const [languagePreference, setLanguagePreference] = useState(true);
-  const [heightMin, setHeightMin] = useState({ feet: 5, inches: 0 });
-  const [heightMax, setHeightMax] = useState({ feet: 6, inches: 0 });
-  const [showHeightMinPicker, setShowHeightMinPicker] = useState(false);
-  const [showHeightMaxPicker, setShowHeightMaxPicker] = useState(false);
+  const [heightMinCm, setHeightMinCm] = useState(152); // 5'0" = 152.4 cm, rounded to 152
+  const [heightMaxCm, setHeightMaxCm] = useState(183); // 6'0" = 182.88 cm, rounded to 183
 
   const handleClose = () => {
     navigation.goBack();
@@ -78,28 +76,28 @@ const FiltersScreen: React.FC = () => {
     setAgeRange(value);
   };
 
-  const handleHeightMinChange = (feet: number, inches: number) => {
-    setHeightMin({ feet, inches });
-    // Ensure min doesn't exceed max
-    const minTotal = feet * 12 + inches;
-    const maxTotal = heightMax.feet * 12 + heightMax.inches;
-    if (minTotal > maxTotal) {
-      setHeightMax({ feet, inches });
-    }
+  // Convert centimeters to feet and inches
+  // Formula: 1 inch = 2.54 cm, 1 foot = 12 inches
+  const cmToFeetInches = (cm: number) => {
+    const totalInches = cm / 2.54;
+    const feet = Math.floor(totalInches / 12);
+    // Calculate remaining inches more precisely to avoid floating point issues
+    const remainingInches = totalInches - feet * 12;
+    const inches = Math.round(remainingInches);
+    return { feet, inches };
   };
 
-  const handleHeightMaxChange = (feet: number, inches: number) => {
-    setHeightMax({ feet, inches });
-    // Ensure max doesn't go below min
-    const minTotal = heightMin.feet * 12 + heightMin.inches;
-    const maxTotal = feet * 12 + inches;
-    if (maxTotal < minTotal) {
-      setHeightMin({ feet, inches });
-    }
-  };
-
-  const formatHeight = (feet: number, inches: number) => {
+  const formatHeight = (cm: number) => {
+    const { feet, inches } = cmToFeetInches(cm);
     return `${feet}'${inches}"`;
+  };
+
+  const handleHeightMinChange = (cm: number) => {
+    setHeightMinCm(Math.round(cm));
+  };
+
+  const handleHeightMaxChange = (cm: number) => {
+    setHeightMaxCm(Math.round(cm));
   };
 
   const handleLocationTypeToggle = () => {
@@ -711,100 +709,50 @@ const FiltersScreen: React.FC = () => {
           >
             Height
           </Text>
-          <View style={styles.heightContainer}>
-            {/* Min Height */}
-            <View style={styles.heightSelectorContainer}>
-              <Text
-                style={[
-                  styles.heightSelectorLabel,
-                  { color: colors.textMuted },
-                ]}
-              >
-                Min
-              </Text>
-              <TouchableOpacity
-                style={[
-                  styles.heightSelector,
-                  {
-                    borderColor: '#DFDFDF',
-                    backgroundColor: isDark
-                      ? colors.backgroundCard
-                      : 'transparent',
-                  },
-                ]}
-                onPress={() => setShowHeightMinPicker(true)}
-                activeOpacity={0.7}
-              >
-                <Text
-                  style={[
-                    styles.heightSelectorText,
-                    {
-                      color: isDark
-                        ? colors.textPrimary
-                        : colors.textQuaternary,
-                    },
-                  ]}
-                >
-                  {formatHeight(heightMin.feet, heightMin.inches)}
-                </Text>
-                <Svg width={12} height={8} viewBox="0 0 12 8" fill="none">
-                  <Path
-                    d="M1 1L6 6L11 1"
-                    stroke="#CFCFCF"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </TouchableOpacity>
-            </View>
+          {/* Min Height Slider */}
+          <View style={styles.heightSliderContainer}>
+            <Text
+              style={[
+                styles.heightSliderLabel,
+                { color: colors.textMuted },
+              ]}
+            >
+              Min: {heightMinCm} cm ({formatHeight(heightMinCm)})
+            </Text>
+            <Slider
+              style={styles.heightSlider}
+              minimumValue={130}
+              maximumValue={220}
+              step={1}
+              value={heightMinCm}
+              onValueChange={handleHeightMinChange}
+              minimumTrackTintColor={colors.accent}
+              maximumTrackTintColor={colors.sliderTrack}
+              thumbTintColor={colors.accent}
+            />
+          </View>
 
-            {/* Max Height */}
-            <View style={styles.heightSelectorContainer}>
-              <Text
-                style={[
-                  styles.heightSelectorLabel,
-                  { color: colors.textMuted },
-                ]}
-              >
-                Max
-              </Text>
-              <TouchableOpacity
-                style={[
-                  styles.heightSelector,
-                  {
-                    borderColor: '#DFDFDF',
-                    backgroundColor: isDark
-                      ? colors.backgroundCard
-                      : 'transparent',
-                  },
-                ]}
-                onPress={() => setShowHeightMaxPicker(true)}
-                activeOpacity={0.7}
-              >
-                <Text
-                  style={[
-                    styles.heightSelectorText,
-                    {
-                      color: isDark
-                        ? colors.textPrimary
-                        : colors.textQuaternary,
-                    },
-                  ]}
-                >
-                  {formatHeight(heightMax.feet, heightMax.inches)}
-                </Text>
-                <Svg width={12} height={8} viewBox="0 0 12 8" fill="none">
-                  <Path
-                    d="M1 1L6 6L11 1"
-                    stroke="#CFCFCF"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </TouchableOpacity>
-            </View>
+          {/* Max Height Slider */}
+          <View style={styles.heightSliderContainer}>
+            <Text
+              style={[
+                styles.heightSliderLabel,
+                { color: colors.textMuted },
+              ]}
+            >
+              Max: {heightMaxCm} cm ({formatHeight(heightMaxCm)})
+            </Text>
+            <Slider
+              style={styles.heightSlider}
+              minimumValue={130}
+              maximumValue={220}
+              step={1}
+              value={heightMaxCm}
+              onValueChange={handleHeightMaxChange}
+              minimumTrackTintColor={colors.accent}
+              maximumTrackTintColor={colors.sliderTrack}
+              thumbTintColor={colors.accent}
+            />
           </View>
         </View>
       </ScrollView>
@@ -922,297 +870,6 @@ const FiltersScreen: React.FC = () => {
         </View>
       </Modal>
 
-      {/* Height Min Picker Modal */}
-      <Modal
-        visible={showHeightMinPicker}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowHeightMinPicker(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View
-            style={[
-              styles.heightPickerContent,
-              { backgroundColor: colors.backgroundCard },
-            ]}
-          >
-            <View style={styles.modalHeader}>
-              <Text
-                style={[
-                  styles.modalTitle,
-                  {
-                    color: isDark ? colors.textPrimary : colors.textQuaternary,
-                  },
-                ]}
-              >
-                Select Min Height
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowHeightMinPicker(false)}
-                style={styles.modalCloseButton}
-              >
-                <Svg width={16} height={16} viewBox="0 0 16 16" fill="none">
-                  <Path
-                    d="M1.5 1L14.5 14M1.5 14L14.5 1"
-                    stroke={isDark ? colors.textPrimary : '#333333'}
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.heightPickerBody}>
-              {/* Feet Selector */}
-              <View style={styles.heightPickerColumn}>
-                <Text
-                  style={[
-                    styles.heightPickerColumnLabel,
-                    { color: colors.textMuted },
-                  ]}
-                >
-                  Feet
-                </Text>
-                <ScrollView
-                  style={styles.heightPickerScroll}
-                  showsVerticalScrollIndicator={false}
-                >
-                  {[4, 5, 6, 7].map(feet => (
-                    <TouchableOpacity
-                      key={feet}
-                      style={[
-                        styles.heightPickerOption,
-                        heightMin.feet === feet && {
-                          backgroundColor: colors.accent,
-                        },
-                      ]}
-                      onPress={() => {
-                        handleHeightMinChange(feet, heightMin.inches);
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        style={[
-                          styles.heightPickerOptionText,
-                          {
-                            color:
-                              heightMin.feet === feet
-                                ? '#FFFFFF'
-                                : isDark
-                                ? colors.textPrimary
-                                : colors.textQuaternary,
-                          },
-                        ]}
-                      >
-                        {feet}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-
-              {/* Inches Selector */}
-              <View style={styles.heightPickerColumn}>
-                <Text
-                  style={[
-                    styles.heightPickerColumnLabel,
-                    { color: colors.textMuted },
-                  ]}
-                >
-                  Inches
-                </Text>
-                <ScrollView
-                  style={styles.heightPickerScroll}
-                  showsVerticalScrollIndicator={false}
-                >
-                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(inches => (
-                    <TouchableOpacity
-                      key={inches}
-                      style={[
-                        styles.heightPickerOption,
-                        heightMin.inches === inches && {
-                          backgroundColor: colors.accent,
-                        },
-                      ]}
-                      onPress={() => {
-                        handleHeightMinChange(heightMin.feet, inches);
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        style={[
-                          styles.heightPickerOptionText,
-                          {
-                            color:
-                              heightMin.inches === inches
-                                ? '#FFFFFF'
-                                : isDark
-                                ? colors.textPrimary
-                                : colors.textQuaternary,
-                          },
-                        ]}
-                      >
-                        {inches}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            </View>
-            <GradientButton
-              text="Done"
-              onPress={() => setShowHeightMinPicker(false)}
-              style={styles.heightPickerDoneButton}
-            />
-          </View>
-        </View>
-      </Modal>
-
-      {/* Height Max Picker Modal */}
-      <Modal
-        visible={showHeightMaxPicker}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowHeightMaxPicker(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View
-            style={[
-              styles.heightPickerContent,
-              { backgroundColor: colors.backgroundCard },
-            ]}
-          >
-            <View style={styles.modalHeader}>
-              <Text
-                style={[
-                  styles.modalTitle,
-                  {
-                    color: isDark ? colors.textPrimary : colors.textQuaternary,
-                  },
-                ]}
-              >
-                Select Max Height
-              </Text>
-              <TouchableOpacity
-                onPress={() => setShowHeightMaxPicker(false)}
-                style={styles.modalCloseButton}
-              >
-                <Svg width={16} height={16} viewBox="0 0 16 16" fill="none">
-                  <Path
-                    d="M1.5 1L14.5 14M1.5 14L14.5 1"
-                    stroke={isDark ? colors.textPrimary : '#333333'}
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.heightPickerBody}>
-              {/* Feet Selector */}
-              <View style={styles.heightPickerColumn}>
-                <Text
-                  style={[
-                    styles.heightPickerColumnLabel,
-                    { color: colors.textMuted },
-                  ]}
-                >
-                  Feet
-                </Text>
-                <ScrollView
-                  style={styles.heightPickerScroll}
-                  showsVerticalScrollIndicator={false}
-                >
-                  {[4, 5, 6, 7].map(feet => (
-                    <TouchableOpacity
-                      key={feet}
-                      style={[
-                        styles.heightPickerOption,
-                        heightMax.feet === feet && {
-                          backgroundColor: colors.accent,
-                        },
-                      ]}
-                      onPress={() => {
-                        handleHeightMaxChange(feet, heightMax.inches);
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        style={[
-                          styles.heightPickerOptionText,
-                          {
-                            color:
-                              heightMax.feet === feet
-                                ? '#FFFFFF'
-                                : isDark
-                                ? colors.textPrimary
-                                : colors.textQuaternary,
-                          },
-                        ]}
-                      >
-                        {feet}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-
-              {/* Inches Selector */}
-              <View style={styles.heightPickerColumn}>
-                <Text
-                  style={[
-                    styles.heightPickerColumnLabel,
-                    { color: colors.textMuted },
-                  ]}
-                >
-                  Inches
-                </Text>
-                <ScrollView
-                  style={styles.heightPickerScroll}
-                  showsVerticalScrollIndicator={false}
-                >
-                  {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(inches => (
-                    <TouchableOpacity
-                      key={inches}
-                      style={[
-                        styles.heightPickerOption,
-                        heightMax.inches === inches && {
-                          backgroundColor: colors.accent,
-                        },
-                      ]}
-                      onPress={() => {
-                        handleHeightMaxChange(heightMax.feet, inches);
-                      }}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        style={[
-                          styles.heightPickerOptionText,
-                          {
-                            color:
-                              heightMax.inches === inches
-                                ? '#FFFFFF'
-                                : isDark
-                                ? colors.textPrimary
-                                : colors.textQuaternary,
-                          },
-                        ]}
-                      >
-                        {inches}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            </View>
-            <GradientButton
-              text="Done"
-              onPress={() => setShowHeightMaxPicker(false)}
-              style={styles.heightPickerDoneButton}
-            />
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 };
@@ -1434,34 +1091,19 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     letterSpacing: -0.54,
   },
-  heightContainer: {
-    flexDirection: 'row',
-    gap: 12,
+  heightSliderContainer: {
+    marginBottom: 24,
   },
-  heightSelectorContainer: {
-    flex: 1,
-  },
-  heightSelectorLabel: {
+  heightSliderLabel: {
     fontFamily: 'Sofia Pro',
     fontSize: 14,
     lineHeight: 18,
     letterSpacing: -0.28,
-    marginBottom: 8,
+    marginBottom: 12,
   },
-  heightSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 54,
-    borderRadius: 15,
-    borderWidth: 1,
-    paddingHorizontal: 19,
-  },
-  heightSelectorText: {
-    fontFamily: 'Comfortaa-Medium',
-    fontSize: 18,
-    lineHeight: 20,
-    letterSpacing: -0.54,
+  heightSlider: {
+    width: '100%',
+    height: 40,
   },
   heightPickerContent: {
     borderTopLeftRadius: 30,

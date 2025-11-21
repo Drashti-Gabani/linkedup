@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -7,19 +7,35 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Animated,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import { discoverControls } from '../assets/images';
+import FullScreenImageViewer from '../components/FullScreenImageViewer';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const UserProfileScreen: React.FC = () => {
   const navigation = useNavigation();
   const { colors } = useTheme();
   const [isAboutExpanded, setIsAboutExpanded] = useState(false);
+  const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
+  const [imageViewerIndex, setImageViewerIndex] = useState(0);
+  
+  // Animation values
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const userData = {
     name: 'Jessica Parker',
@@ -64,6 +80,59 @@ const UserProfileScreen: React.FC = () => {
 
   const fullAbout = `My name is Jessica Parker and I enjoy meeting new people and finding ways to help them have an uplifting experience. I enjoy reading and trying new foods. I'm passionate about personal growth and love exploring different cultures.`;
   const shortAbout = `My name is Jessica Parker and I enjoy meeting new people and finding ways to help them have an uplifting experience. I enjoy reading..`;
+
+  // Collect only gallery images for the viewer
+  const allImages = userData.galleryPhotos;
+
+  const handleImagePress = (index: number) => {
+    setImageViewerIndex(index);
+    setIsImageViewerVisible(true);
+  };
+
+  // Handle read more/less with animation
+  const handleToggleAbout = () => {
+    // Configure layout animation
+    LayoutAnimation.configureNext({
+      duration: 300,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+      },
+    });
+
+    // Fade animation for text transition
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 0.95,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+
+    setIsAboutExpanded(!isAboutExpanded);
+  };
 
   return (
     <View style={styles.container}>
@@ -220,17 +289,31 @@ const UserProfileScreen: React.FC = () => {
             <Text style={[styles.sectionTitle, { color: colors.sectionTitle }]}>
               About
             </Text>
-            <Text
-              style={[styles.aboutText, { color: colors.sectionContentMuted }]}
+            <Animated.View
+              style={{
+                opacity: fadeAnim,
+                transform: [{ scale: scaleAnim }],
+              }}
             >
-              {isAboutExpanded ? fullAbout : shortAbout}
-            </Text>
-            <TouchableOpacity
-              onPress={() => setIsAboutExpanded(!isAboutExpanded)}
-            >
-              <Text style={[styles.readMore, { color: colors.readMore }]}>
-                {isAboutExpanded ? 'Read less' : 'Read more'}
+              <Text
+                style={[styles.aboutText, { color: colors.sectionContentMuted }]}
+              >
+                {isAboutExpanded ? fullAbout : shortAbout}
               </Text>
+            </Animated.View>
+            <TouchableOpacity
+              onPress={handleToggleAbout}
+              activeOpacity={0.7}
+            >
+              <Animated.View
+                style={{
+                  opacity: fadeAnim,
+                }}
+              >
+                <Text style={[styles.readMore, { color: colors.readMore }]}>
+                  {isAboutExpanded ? 'Read less' : 'Read more'}
+                </Text>
+              </Animated.View>
             </TouchableOpacity>
           </View>
 
@@ -285,37 +368,67 @@ const UserProfileScreen: React.FC = () => {
             </View>
             <View style={styles.galleryGrid}>
               {/* Left large image */}
-              <Image
-                source={{ uri: userData.galleryPhotos[0] }}
-                style={styles.galleryImageLarge}
-              />
+              <TouchableOpacity
+                onPress={() => handleImagePress(0)}
+                activeOpacity={0.9}
+              >
+                <Image
+                  source={{ uri: userData.galleryPhotos[0] }}
+                  style={styles.galleryImageLarge}
+                />
+              </TouchableOpacity>
               {/* Second column - 2 small images */}
               <View style={styles.galleryColumn}>
-                <Image
-                  source={{ uri: userData.galleryPhotos[1] }}
-                  style={styles.galleryImageSmall}
-                />
-                <Image
-                  source={{ uri: userData.galleryPhotos[2] }}
-                  style={styles.galleryImageSmall}
-                />
+                <TouchableOpacity
+                  onPress={() => handleImagePress(1)}
+                  activeOpacity={0.9}
+                >
+                  <Image
+                    source={{ uri: userData.galleryPhotos[1] }}
+                    style={styles.galleryImageSmall}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleImagePress(2)}
+                  activeOpacity={0.9}
+                >
+                  <Image
+                    source={{ uri: userData.galleryPhotos[2] }}
+                    style={styles.galleryImageSmall}
+                  />
+                </TouchableOpacity>
               </View>
               {/* Third column - 2 small images */}
               <View style={styles.galleryColumn}>
-                <Image
-                  source={{ uri: userData.galleryPhotos[3] }}
-                  style={styles.galleryImageSmall}
-                />
-                <Image
-                  source={{ uri: userData.galleryPhotos[4] }}
-                  style={styles.galleryImageSmall}
-                />
+                <TouchableOpacity
+                  onPress={() => handleImagePress(3)}
+                  activeOpacity={0.9}
+                >
+                  <Image
+                    source={{ uri: userData.galleryPhotos[3] }}
+                    style={styles.galleryImageSmall}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleImagePress(4)}
+                  activeOpacity={0.9}
+                >
+                  <Image
+                    source={{ uri: userData.galleryPhotos[4] }}
+                    style={styles.galleryImageSmall}
+                  />
+                </TouchableOpacity>
               </View>
               {/* Right large image */}
-              <Image
-                source={{ uri: userData.galleryPhotos[0] }}
-                style={styles.galleryImageLarge}
-              />
+              <TouchableOpacity
+                onPress={() => handleImagePress(0)}
+                activeOpacity={0.9}
+              >
+                <Image
+                  source={{ uri: userData.galleryPhotos[0] }}
+                  style={styles.galleryImageLarge}
+                />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -417,6 +530,14 @@ const UserProfileScreen: React.FC = () => {
           <View style={styles.bottomSpacer} />
         </View>
       </ScrollView>
+
+      {/* Full Screen Image Viewer */}
+      <FullScreenImageViewer
+        visible={isImageViewerVisible}
+        images={allImages}
+        initialIndex={imageViewerIndex}
+        onClose={() => setIsImageViewerVisible(false)}
+      />
     </View>
   );
 };
