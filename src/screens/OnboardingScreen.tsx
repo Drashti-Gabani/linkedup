@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,10 @@ import {
   Dimensions,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Image,
   ImageSourcePropType,
   Animated,
 } from 'react-native';
+import { AnimatedAppImage } from '../utils/AppImage';
 import { useNavigation } from '@react-navigation/native';
 import { wp, hp } from '../utils/responsive';
 import LinearGradient from 'react-native-linear-gradient';
@@ -23,6 +23,8 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IMAGE_WIDTH = wp('60%');
 const SPACING = wp('5%');
 const SLIDE_WIDTH = IMAGE_WIDTH + SPACING;
+const AUTO_SCROLL_DURATION = 3000; // 3 seconds per slide
+const SCROLL_ANIMATION_DURATION = 800; // 800ms for smooth scroll animation
 
 interface Slide {
   title: string;
@@ -65,7 +67,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
   return (
     <View style={styles.imageWrapper}>
       <Animated.View style={{ transform: [{ scale }], opacity }}>
-        <Image
+        <AnimatedAppImage
           source={isDark ? slide.imageDark : slide.imageLight}
           style={styles.carouselImage}
           resizeMode="cover"
@@ -78,11 +80,16 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
   const scrollViewRef = useRef<ScrollView>(null);
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const { colors, isDark } = useTheme();
+  const autoScrollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isScrollingRef = useRef(false);
+  const currentScrollIndexRef = useRef(0);
+  const isUserScrollingRef = useRef(false);
+  const manualScrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const slides: Slide[] = [
+  const originalSlides: Slide[] = [
     {
       title: 'Algorithm',
       subtitle:
@@ -106,12 +113,129 @@ const OnboardingScreen: React.FC = () => {
     },
   ];
 
+  // Create infinite loop by duplicating slides
+  const slides: Slide[] = [
+    ...originalSlides,
+    ...originalSlides,
+    ...originalSlides,
+  ];
+
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const slideWidth = IMAGE_WIDTH + SPACING;
+    const slideWidth = SLIDE_WIDTH;
+    
+    // Calculate which slide index we're at based on scroll position
     const index = Math.round(offsetX / slideWidth);
-    setActiveIndex(Math.max(0, Math.min(index, slides.length - 1)));
+    const realIndex = index % originalSlides.length;
+
+    // Update content immediately when index changes - syncs with image position
+    if (realIndex !== activeIndex) {
+      setActiveIndex(realIndex);
+    }
+
+    // Only handle infinite loop reset during auto-scroll, not manual scrolling
+    // This prevents infinite loops when user manually scrolls
+    if (!isUserScrollingRef.current && !isScrollingRef.current) {
+      const resetThreshold = originalSlides.length * 2;
+
+      if (index >= resetThreshold) {
+        // Reset to middle set without animation for seamless loop
+        currentScrollIndexRef.current = originalSlides.length;
+        scrollViewRef.current?.scrollTo({
+          x: currentScrollIndexRef.current * SLIDE_WIDTH,
+          animated: false,
+        });
+        setActiveIndex(0);
+      } else if (index < originalSlides.length) {
+        // If scrolled back to beginning, jump to end of middle set
+        currentScrollIndexRef.current = originalSlides.length * 2 - 1;
+        scrollViewRef.current?.scrollTo({
+          x: currentScrollIndexRef.current * SLIDE_WIDTH,
+          animated: false,
+        });
+        setActiveIndex(originalSlides.length - 1);
+      } else {
+        currentScrollIndexRef.current = index;
+      }
+    } else {
+      // During manual scroll, just update the current index without resetting
+      // Keep it within safe bounds to prevent issues
+      if (index >= originalSlides.length && index < originalSlides.length * 2) {
+        currentScrollIndexRef.current = index;
+      }
+    }
   };
+
+  // Auto-scroll animation with infinite loop
+  useEffect(() => {
+    const startAutoScroll = () => {
+      // Start from the middle set of slides for seamless loop
+      currentScrollIndexRef.current = originalSlides.length;
+      scrollViewRef.current?.scrollTo({
+        x: currentScrollIndexRef.current * SLIDE_WIDTH,
+        animated: false,
+      });
+
+      // Set initial active index
+      setActiveIndex(0);
+
+      const scrollToNext = () => {
+        // Don't auto-scroll if user is manually scrolling
+        if (isScrollingRef.current || isUserScrollingRef.current) return;
+
+        isScrollingRef.current = true;
+        currentScrollIndexRef.current += 1;
+
+        // Calculate the real index for content update
+        const realIndex = currentScrollIndexRef.current % originalSlides.length;
+
+        // Calculate scroll position
+        const scrollPosition = currentScrollIndexRef.current * SLIDE_WIDTH;
+
+        // If we've scrolled past the second set of slides, reset to first set
+        if (currentScrollIndexRef.current >= originalSlides.length * 2) {
+          currentScrollIndexRef.current = originalSlides.length;
+          scrollViewRef.current?.scrollTo({
+            x: currentScrollIndexRef.current * SLIDE_WIDTH,
+            animated: false,
+          });
+          // Update content immediately after reset
+          setActiveIndex(0);
+          setTimeout(() => {
+            isScrollingRef.current = false;
+          }, 100);
+        } else {
+          // Smooth scroll to next position
+          // Content will update via handleScroll callback as image moves
+          scrollViewRef.current?.scrollTo({
+            x: scrollPosition,
+            animated: true,
+          });
+
+          // Reset scrolling flag after animation completes
+          setTimeout(() => {
+            isScrollingRef.current = false;
+          }, SCROLL_ANIMATION_DURATION);
+        }
+      };
+
+      // Auto-scroll every AUTO_SCROLL_DURATION
+      autoScrollTimerRef.current = setInterval(scrollToNext, AUTO_SCROLL_DURATION);
+    };
+
+    // Small delay before starting auto-scroll to ensure layout is ready
+    const initTimer = setTimeout(startAutoScroll, 1000);
+
+    return () => {
+      clearTimeout(initTimer);
+      if (autoScrollTimerRef.current) {
+        clearInterval(autoScrollTimerRef.current);
+      }
+      if (manualScrollTimeoutRef.current) {
+        clearTimeout(manualScrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -123,17 +247,77 @@ const OnboardingScreen: React.FC = () => {
           scrollEventThrottle={16}
           onScroll={Animated.event(
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-            { useNativeDriver: true, listener: handleScroll },
+            { useNativeDriver: false, listener: handleScroll },
           )}
+          onScrollBeginDrag={() => {
+            // User started manual scrolling - pause auto-scroll
+            isUserScrollingRef.current = true;
+            // Clear any pending manual scroll timeout
+            if (manualScrollTimeoutRef.current) {
+              clearTimeout(manualScrollTimeoutRef.current);
+            }
+          }}
+          onScrollEndDrag={(event) => {
+            // User released - will continue with momentum
+            // Don't do anything here, let momentum handle it
+          }}
+          onMomentumScrollEnd={(event) => {
+            // User finished scrolling - snap to nearest and handle loop reset if needed
+            const offsetX = event.nativeEvent.contentOffset.x;
+            const slideWidth = SLIDE_WIDTH;
+            const index = Math.round(offsetX / slideWidth);
+            
+            // Handle loop reset if user scrolled to boundaries
+            const resetThreshold = originalSlides.length * 2;
+            let finalIndex = index;
+            let snapPosition = index * slideWidth;
+            
+            if (index >= resetThreshold) {
+              // Reset to middle set
+              finalIndex = originalSlides.length;
+              snapPosition = finalIndex * slideWidth;
+              currentScrollIndexRef.current = finalIndex;
+              scrollViewRef.current?.scrollTo({
+                x: snapPosition,
+                animated: false,
+              });
+              setActiveIndex(0);
+            } else if (index < originalSlides.length) {
+              // Reset to end of middle set
+              finalIndex = originalSlides.length * 2 - 1;
+              snapPosition = finalIndex * slideWidth;
+              currentScrollIndexRef.current = finalIndex;
+              scrollViewRef.current?.scrollTo({
+                x: snapPosition,
+                animated: false,
+              });
+              setActiveIndex(originalSlides.length - 1);
+            } else {
+              // Normal position - just snap to center
+              currentScrollIndexRef.current = index;
+              scrollViewRef.current?.scrollTo({
+                x: snapPosition,
+                animated: true,
+              });
+            }
+            
+            // Resume auto-scroll after a short delay
+            if (manualScrollTimeoutRef.current) {
+              clearTimeout(manualScrollTimeoutRef.current);
+            }
+            manualScrollTimeoutRef.current = setTimeout(() => {
+              isUserScrollingRef.current = false;
+            }, 500);
+          }}
           bounces={false}
-          decelerationRate="fast"
-          snapToInterval={IMAGE_WIDTH + SPACING}
+          decelerationRate={0.88}
+          snapToInterval={SLIDE_WIDTH}
           snapToAlignment="start"
           contentContainerStyle={styles.scrollContent}
         >
           {slides.map((slide, index) => (
             <CarouselItem
-              key={index}
+              key={`slide-${index}`}
               slide={slide}
               index={index}
               scrollX={scrollX}
@@ -146,7 +330,7 @@ const OnboardingScreen: React.FC = () => {
       <View style={styles.textSection}>
         <View style={styles.headingContainer}>
           <Text style={[styles.titleText, { color: colors.textPrimary }]}>
-            {slides[activeIndex].title}
+            {originalSlides[activeIndex].title}
           </Text>
           {!isDark && (
             <View
@@ -159,12 +343,12 @@ const OnboardingScreen: React.FC = () => {
         </View>
 
         <Text style={[styles.subtext, { color: colors.textSecondary }]}>
-          {slides[activeIndex].subtitle}
+          {originalSlides[activeIndex].subtitle}
         </Text>
       </View>
 
       <View style={styles.paginationContainer}>
-        {slides.map((_, index) => (
+        {originalSlides.map((_, index) => (
           <View
             key={index}
             style={[
@@ -219,6 +403,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: (SCREEN_WIDTH - IMAGE_WIDTH) / 2,
+    paddingRight: (SCREEN_WIDTH - IMAGE_WIDTH) / 2 + SLIDE_WIDTH * 2,
   },
   imageWrapper: {
     width: IMAGE_WIDTH,

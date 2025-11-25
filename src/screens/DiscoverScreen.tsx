@@ -5,8 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   StatusBar,
-  Image,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Svg, { Path } from 'react-native-svg';
@@ -161,7 +161,7 @@ const DiscoverScreen: React.FC = () => {
               onPress={() => navigation.navigate('Likes')}
               activeOpacity={0.7}
             >
-              <Image
+              <AppImage
                 source={discoverControls.reMatch}
                 style={[
                   styles.headerButtonIcon,

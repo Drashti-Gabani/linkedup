@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  ImageBackground,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
+import { AppImageBackground } from '../utils/AppImageBackground';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -196,7 +196,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
   return (
     <GestureDetector gesture={composedGesture}>
       <Animated.View style={[styles.card, animatedStyle]}>
-        <ImageBackground
+        <AppImageBackground
           source={{ uri: user.photos[currentPhotoIndex] }}
           style={styles.photo}
           imageStyle={styles.photoImage}
@@ -257,7 +257,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
             </Svg>
             <Text style={styles.distance}>{user.distance}</Text>
           </View>
-        </ImageBackground>
+        </AppImageBackground>
 
         {/* Control buttons - outside the image */}
         <View style={styles.controls}>
@@ -267,7 +267,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
             onPress={handleReject}
             activeOpacity={0.7}
           >
-            <Image
+            <AppImage
               source={discoverControls.dislike}
               style={styles.smallIcon}
               resizeMode="contain"
@@ -280,7 +280,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
             onPress={handleSuperLike}
             activeOpacity={0.7}
           >
-            <Image
+            <AppImage
               source={discoverControls.like}
               style={styles.superlikeIcon}
               resizeMode="contain"
@@ -293,7 +293,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
             onPress={handleLike}
             activeOpacity={0.7}
           >
-            <Image
+            <AppImage
               source={discoverControls.superlike}
               style={styles.largeIcon}
               resizeMode="contain"

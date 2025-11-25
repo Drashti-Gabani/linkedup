@@ -5,11 +5,11 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
-  ImageBackground,
   Dimensions,
   TextInput,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
+import { AppImageBackground } from '../utils/AppImageBackground';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
@@ -82,10 +82,10 @@ const MyProfileScreen: React.FC = () => {
       >
         {/* Blurred Background Photo */}
         <View style={styles.backgroundContainer}>
-          <ImageBackground
+          <AppImageBackground
             source={{ uri: profileData.backgroundImage }}
             style={styles.backgroundImage}
-            blurRadius={10}
+            imageStyle={{ opacity: 0.5 }}
           />
         </View>
 
@@ -319,7 +319,7 @@ const MyProfileScreen: React.FC = () => {
                   onPress={() => handleImagePress(0)}
                   activeOpacity={0.9}
                 >
-                <Image
+                <AppImage
                   source={{ uri: profileData.galleryPhotos[0] }}
                   style={styles.galleryImageLarge}
                 />
@@ -329,7 +329,7 @@ const MyProfileScreen: React.FC = () => {
                     onPress={() => handleImagePress(1)}
                     activeOpacity={0.9}
                   >
-                  <Image
+                  <AppImage
                     source={{ uri: profileData.galleryPhotos[1] }}
                     style={styles.galleryImageSmall}
                   />
@@ -338,7 +338,7 @@ const MyProfileScreen: React.FC = () => {
                     onPress={() => handleImagePress(2)}
                     activeOpacity={0.9}
                   >
-                  <Image
+                  <AppImage
                     source={{ uri: profileData.galleryPhotos[2] }}
                     style={styles.galleryImageSmall}
                   />
@@ -349,7 +349,7 @@ const MyProfileScreen: React.FC = () => {
                     onPress={() => handleImagePress(3)}
                     activeOpacity={0.9}
                   >
-                  <Image
+                  <AppImage
                     source={{ uri: profileData.galleryPhotos[3] }}
                     style={styles.galleryImageSmall}
                   />
@@ -358,7 +358,7 @@ const MyProfileScreen: React.FC = () => {
                     onPress={() => handleImagePress(4)}
                     activeOpacity={0.9}
                   >
-                  <Image
+                  <AppImage
                     source={{ uri: profileData.galleryPhotos[4] }}
                     style={styles.galleryImageSmall}
                   />
@@ -368,7 +368,7 @@ const MyProfileScreen: React.FC = () => {
                   onPress={() => handleImagePress(0)}
                   activeOpacity={0.9}
                 >
-                <Image
+                <AppImage
                   source={{ uri: profileData.galleryPhotos[0] }}
                   style={styles.galleryImageLarge}
                 />

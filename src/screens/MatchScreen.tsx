@@ -3,11 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   TouchableOpacity,
   StatusBar,
   SafeAreaView,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
 import LinearGradient from 'react-native-linear-gradient';
 import GradientText from '../components/GradientText';
 import { useTheme } from '../hooks/useTheme';
@@ -51,7 +51,7 @@ const MatchScreen: React.FC = () => {
           <View style={styles.profileImagesContainer}>
             {/* Left Profile Image */}
             <View style={[styles.profileImageWrapper, styles.leftProfile]}>
-              <Image
+              <AppImage
                 source={{
                   uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
                 }}
@@ -62,7 +62,7 @@ const MatchScreen: React.FC = () => {
 
             {/* Right Profile Image */}
             <View style={[styles.profileImageWrapper, styles.rightProfile]}>
-              <Image
+              <AppImage
                 source={{
                   uri: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
                 }}
@@ -73,7 +73,7 @@ const MatchScreen: React.FC = () => {
 
             {/* Heart Overlay Image */}
             <View style={styles.heartOverlayContainer}>
-              <Image
+              <AppImage
                 source={
                   isDark
                     ? require('../assets/images/hearts-overlay-dark.png')

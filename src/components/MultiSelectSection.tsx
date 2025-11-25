@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
 import { hp, wp } from '../utils/responsive';
+import { AppImage } from '../utils/AppImage';
 
 /**
  * Icon configuration interface for MultiSelectSection
@@ -71,7 +72,7 @@ const MultiSelectSection: React.FC<MultiSelectSectionProps> = ({
       const tintColor = isSelected ? colors.iconSelected : colors.iconPrimary;
 
       return (
-        <Image
+        <AppImage
           source={iconSource}
           style={[
             styles.optionIcon,

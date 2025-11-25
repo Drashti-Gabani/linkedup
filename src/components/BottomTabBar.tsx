@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
 import { useTheme } from '../hooks/useTheme';
 import { tabIcons } from '../assets/images';
+import { AppImage } from '../utils/AppImage';
 
 interface TabItem {
   id: string;
@@ -74,7 +75,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                 {isActive ? (
                   <MaskedView
                     maskElement={
-                      <Image
+                      <AppImage
                         source={tab.icon}
                         style={[
                           styles.icon,
@@ -93,7 +94,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                         tab.id === 'home' && styles.homeIconGradient,
                       ]}
                     >
-                      <Image
+                      <AppImage
                         source={tab.icon}
                         style={[
                           styles.icon,
@@ -105,7 +106,7 @@ const BottomTabBar: React.FC<BottomTabBarProps> = ({
                     </LinearGradient>
                   </MaskedView>
                 ) : (
-                  <Image
+                  <AppImage
                     source={tab.icon}
                     style={[
                       styles.icon,

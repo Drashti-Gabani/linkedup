@@ -4,11 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   Platform,
   Alert,
   ScrollView,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
@@ -406,7 +406,7 @@ const DraggablePhoto: React.FC<DraggablePhotoProps> = ({
             },
           ]}
         >
-          <Image
+          <AppImage
             source={imageSource}
             style={styles.photoImage}
             resizeMode="cover"

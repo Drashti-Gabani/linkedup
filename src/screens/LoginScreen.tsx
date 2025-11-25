@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Image,
+  Animated,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -21,6 +21,7 @@ import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import ScreenTitle from '../components/ScreenTitle';
 import { onboardingImages } from '../assets/images';
+import { AnimatedAppImage } from '../utils/AppImage';
 
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
@@ -31,9 +32,67 @@ const LoginScreen: React.FC = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
+  // Animated values for horizontal translation
+  const translateX = useRef(new Animated.Value(0)).current;
+
   // Show checkmark when field has value
   const showPhoneCheck = phoneNumber.length > 0;
   const showPasswordCheck = password.length > 0;
+
+  // Calculate screen width and image spacing for train effect
+  const screenWidth = wp('100%');
+  const imageWidth = wp('55%'); // Width of each image
+  const imageSpacing = imageWidth * 0.15; // Reduced spacing between images (15% of image width)
+  const trainUnit = imageWidth + imageSpacing; // Space each image takes in the train
+
+  // Total distance for seamless loop - one full cycle (3 images)
+  const travelDistance = trainUnit * 3;
+
+  // Start horizontal train animation - continuous smooth loop
+  useEffect(() => {
+    translateX.setValue(0);
+
+    // Create a continuous animation that wraps smoothly
+    const animate = () => {
+      translateX.setValue(0);
+      Animated.timing(translateX, {
+        toValue: travelDistance,
+        duration: 20000, // 20 seconds - increased speed (was 30)
+        useNativeDriver: true,
+      }).start(({ finished }) => {
+        if (finished) {
+          // Immediately start next cycle for seamless loop
+          animate();
+        }
+      });
+    };
+
+    animate();
+
+    // Cleanup on unmount
+    return () => {
+      translateX.stopAnimation();
+    };
+  }, [travelDistance]);
+
+  // Interpolate translation values with modulo-like wrapping for seamless loop
+  // Each image cycles through positions: when one exits, it wraps to enter position
+  const getWrappedPosition = (baseOffset: number) => {
+    return translateX.interpolate({
+      inputRange: [0, trainUnit, trainUnit * 2, trainUnit * 3],
+      outputRange: [
+        baseOffset - trainUnit * 2,
+        baseOffset - trainUnit,
+        baseOffset,
+        baseOffset + trainUnit,
+      ],
+      extrapolate: 'clamp',
+    });
+  };
+
+  const translateLeft = getWrappedPosition(0);
+  const translateCenter = getWrappedPosition(trainUnit);
+  const translateRight = getWrappedPosition(trainUnit * 2);
 
   const handleSignUp = () => {
     navigation.navigate('SignUp');
@@ -58,21 +117,48 @@ const LoginScreen: React.FC = () => {
         <View
           style={[styles.container, { backgroundColor: colors.background }]}
         >
-          {/* Profile Photos Section - Overlapping Diagonal Layout */}
+          {/* Profile Photos Section - Horizontal Train Effect */}
           <View style={styles.profilePhotosContainer}>
-            <Image
+            <AnimatedAppImage
               source={onboardingImages.carousel1}
-              style={[styles.profilePhoto, styles.profilePhotoLeft]}
+              style={[
+                styles.profilePhoto,
+                styles.profilePhotoLeft,
+                {
+                  transform: [
+                    { rotate: '-10deg' },
+                    { translateX: translateLeft },
+                  ],
+                },
+              ]}
               resizeMode="cover"
             />
-            <Image
+            <AnimatedAppImage
               source={onboardingImages.carousel3}
-              style={[styles.profilePhoto, styles.profilePhotoCenter]}
+              style={[
+                styles.profilePhoto,
+                styles.profilePhotoCenter,
+                {
+                  transform: [
+                    { rotate: '-10deg' },
+                    { translateX: translateCenter },
+                  ],
+                },
+              ]}
               resizeMode="cover"
             />
-            <Image
+            <AnimatedAppImage
               source={onboardingImages.carousel2}
-              style={[styles.profilePhoto, styles.profilePhotoRight]}
+              style={[
+                styles.profilePhoto,
+                styles.profilePhotoRight,
+                {
+                  transform: [
+                    { rotate: '-10deg' },
+                    { translateX: translateRight },
+                  ],
+                },
+              ]}
               resizeMode="cover"
             />
           </View>
@@ -268,7 +354,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    transform: [{ rotate: '-10deg' }],
     zIndex: 1,
     overflow: 'visible',
   },
@@ -284,19 +369,19 @@ const styles = StyleSheet.create({
   },
   profilePhotoLeft: {
     left: '50%',
-    marginLeft: -wp('90%'),
+    marginLeft: -wp('27.5%'), // Centered, will be animated
     zIndex: 1,
   },
   profilePhotoCenter: {
     left: '50%',
-    marginLeft: -wp('32.5%'),
+    marginLeft: -wp('27.5%'), // Same center point, spacing handled by animation
     zIndex: 3,
-    width: wp('65%'),
-    height: wp('90%'),
+    width: wp('55%'), // Same width as others for train effect
+    height: wp('72%'), // Same height as others
   },
   profilePhotoRight: {
     left: '50%',
-    marginLeft: wp('35%'),
+    marginLeft: -wp('27.5%'), // Same center point, spacing handled by animation
     zIndex: 2,
   },
   content: {

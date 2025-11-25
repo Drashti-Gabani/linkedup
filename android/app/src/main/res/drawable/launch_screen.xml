@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color - white for light mode -->
+    <item android:drawable="@android:color/white" />
+    
+    <!-- Heart icon with gradient centered -->
+    <item
+        android:drawable="@drawable/splash_heart"
+        android:gravity="center" />
+</layer-list>
+

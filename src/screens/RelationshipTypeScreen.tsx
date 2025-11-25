@@ -4,11 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ScrollView,
   ImageSourcePropType,
   Animated,
 } from 'react-native';
+import { AnimatedAppImage } from '../utils/AppImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -236,7 +236,7 @@ const RelationshipTypeScreen: React.FC = () => {
                 },
               ]}
             >
-              <Image
+              <AnimatedAppImage
                 source={currentContent.image}
                 style={styles.cardBackground}
                 resizeMode="cover"

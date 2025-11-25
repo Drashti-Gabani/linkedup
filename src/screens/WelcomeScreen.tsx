@@ -4,9 +4,9 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Image,
   ScrollView,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Svg, { Path } from 'react-native-svg';
@@ -46,7 +46,7 @@ const WelcomeScreen: React.FC = () => {
       >
         {/* Decorative Images */}
         <View style={styles.imagesContainer}>
-          <Image
+          <AppImage
             source={require('../assets/images/relationship-card-bg.png')}
             style={styles.decorativeImage}
             resizeMode="cover"

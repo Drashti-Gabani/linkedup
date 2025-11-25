@@ -5,8 +5,8 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
 import Svg, { Path } from 'react-native-svg';
 import DeviceInfo from 'react-native-device-info';
 import { useTheme } from '../hooks/useTheme';
@@ -69,7 +69,7 @@ export default function SettingsScreen() {
         <View style={styles.scrollContent}>
           {/* Profile Section */}
           <View style={styles.profileSection}>
-            <Image
+            <AppImage
               source={{
                 uri: 'https://images.pexels.com/photos/1391498/pexels-photo-1391498.jpeg?auto=compress&cs=tinysrgb&w=300',
               }}

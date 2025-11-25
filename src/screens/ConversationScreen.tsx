@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Image,
   StatusBar,
   SafeAreaView,
   Modal,
   TouchableWithoutFeedback,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
 import Svg, { Path, Circle } from 'react-native-svg';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
@@ -206,7 +206,7 @@ const ConversationScreen: React.FC = () => {
         </TouchableOpacity>
 
         <View style={styles.userInfo}>
-          <Image
+          <AppImage
             source={{
               uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330',
             }}
@@ -347,7 +347,7 @@ const ConversationScreen: React.FC = () => {
               angle={242}
               style={styles.sendButtonGradient}
             >
-              <Image
+              <AppImage
                 source={require('../assets/icons/send-icon.png')}
                 style={styles.sendIcon}
                 resizeMode="contain"

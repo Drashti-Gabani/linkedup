@@ -205,7 +205,7 @@ const RootNavigator: React.FC = () => {
 
   return (
     <RootStack.Navigator
-      initialRouteName={isAuthenticated ? 'Main' : 'Main'}
+      initialRouteName={isAuthenticated ? 'Auth' : 'Auth'}
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',

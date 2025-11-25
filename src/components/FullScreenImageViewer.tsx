@@ -4,7 +4,6 @@ import {
   Modal,
   StyleSheet,
   TouchableOpacity,
-  Image,
   FlatList,
   Dimensions,
   StatusBar,
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
+import { AppImage } from '../utils/AppImage';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -52,7 +52,7 @@ const FullScreenImageViewer: React.FC<FullScreenImageViewerProps> = ({
 
   const renderImage = ({ item }: { item: string }) => (
     <View style={styles.imageContainer}>
-      <Image source={{ uri: item }} style={styles.image} resizeMode="contain" />
+      <AppImage source={{ uri: item }} style={styles.image} resizeMode="contain" />
     </View>
   );
 

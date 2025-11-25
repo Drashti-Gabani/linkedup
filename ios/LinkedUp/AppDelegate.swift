@@ -29,6 +29,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       launchOptions: launchOptions
     )
 
+    // Keep splash screen visible until React Native is ready
+    if #available(iOS 13.0, *) {
+      window?.backgroundColor = UIColor.systemBackground
+    } else {
+      window?.backgroundColor = UIColor.white
+    }
+
     return true
   }
 }

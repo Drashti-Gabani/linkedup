@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -10,6 +10,7 @@ import BackButton from '../components/BackButton';
 import GradientButton from '../components/GradientButton';
 import { guidelineIcons } from '../assets/images';
 import ScreenTitle from '../components/ScreenTitle';
+import { AppImage } from '../utils/AppImage';
 
 interface GuidelineCardProps {
   iconSource: any;
@@ -68,7 +69,7 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
             end={{ x: 1, y: 0 }}
             style={styles.iconBadgeGradient}
           >
-            <Image
+            <AppImage
               source={iconSource}
               style={styles.iconImage}
               resizeMode="contain"

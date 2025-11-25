@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
+import { AppImage } from '../utils/AppImage';
 
 interface ProfileStatsCardProps {
   name: string;
@@ -45,7 +46,7 @@ const ProfileStatsCard: React.FC<ProfileStatsCardProps> = ({
           </TouchableOpacity>
 
           <View style={styles.profileImageContainer}>
-            <Image source={{ uri: profileImage }} style={styles.profileImage} />
+            <AppImage source={{ uri: profileImage }} style={styles.profileImage} />
           </View>
 
           <TouchableOpacity

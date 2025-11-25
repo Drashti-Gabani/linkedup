@@ -3,11 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  ImageBackground,
   TouchableOpacity,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
+import { AppImageBackground } from '../utils/AppImageBackground';
 
 interface MatchCardProps {
   imageUrl: string;
@@ -34,7 +34,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
       onPress={onPress}
       activeOpacity={0.9}
     >
-      <ImageBackground
+      <AppImageBackground
         source={{ uri: imageUrl }}
         style={styles.image}
         imageStyle={styles.imageStyle}
@@ -66,7 +66,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
           {distance && <Text style={styles.distanceText}>{distance}</Text>}
           {jobTitle && <Text style={styles.jobTitleText}>{jobTitle}</Text>}
         </View>
-      </ImageBackground>
+      </AppImageBackground>
     </TouchableOpacity>
   );
 };

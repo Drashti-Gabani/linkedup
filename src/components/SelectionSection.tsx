@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Svg, { Path, Circle } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
+import { AppImage } from '../utils/AppImage';
 
 /**
  * Icon configuration interface for SelectionSection
@@ -80,7 +81,7 @@ const SelectionSection: React.FC<SelectionSectionProps> = ({
       // Otherwise, treat it as an image source
       // Apply tint color: primary for default, white for selected
       return (
-        <Image
+        <AppImage
           source={iconSource}
           style={[
             styles.optionIcon,

@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  Image,
   StatusBar,
   SafeAreaView,
 } from 'react-native';
+import { AppImage } from '../utils/AppImage';
 import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
@@ -39,7 +39,7 @@ const ChatScreen: React.FC = () => {
     <TouchableOpacity style={styles.messageItem} onPress={handleMessagePress}>
       <View style={styles.messageContent}>
         <View style={styles.avatarContainer}>
-          <Image source={{ uri: item.avatar }} style={styles.avatar} />
+          <AppImage source={{ uri: item.avatar }} style={styles.avatar} />
           {item.hasUnread && <View style={styles.unreadDot} />}
         </View>
         <View style={styles.messageInfo}>
