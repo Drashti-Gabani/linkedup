@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,16 +8,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { AnimatedAppImage } from '../utils/AppImage';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  interpolate,
-  useAnimatedReaction,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
+import { useInfiniteCarousel } from '../hooks/useInfiniteCarousel';
 import { wp, hp } from '../utils/responsive';
 import NextButton from '../components/NextButton';
 import UserIcon from '../components/icons/UserIcon';
@@ -27,7 +21,6 @@ import CheckmarkIcon from '../components/icons/CheckmarkIcon';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import ScreenTitle from '../components/ScreenTitle';
-import { onboardingImages } from '../assets/images';
 import { AppImage } from '../utils/AppImage';
 
 const SignUpScreen: React.FC = () => {
@@ -44,155 +37,9 @@ const SignUpScreen: React.FC = () => {
   const showEmailCheck = email.length > 0;
   const showBirthdateCheck = birthdate.length > 0;
 
-  // Horizontal train animation
-  const translateX = useSharedValue(0);
-
-  // Animation constants
-  const ANIMATION_DURATION = 20000; // 20 seconds for one full cycle
-  const CARD_IMAGES = [
-    onboardingImages.carousel1,
-    onboardingImages.carousel3,
-    onboardingImages.carousel2,
-  ];
-  // Card dimensions (extracted as constants for worklet access)
-  const CARD0_WIDTH = wp('55%');
-  const CARD0_HEIGHT = wp('72%');
-  const CARD1_WIDTH = wp('65%');
-  const CARD1_HEIGHT = wp('90%');
-  const CARD2_WIDTH = wp('55%');
-  const CARD2_HEIGHT = wp('72%');
-  const CARD_SIZES = [
-    { width: CARD0_WIDTH, height: CARD0_HEIGHT },
-    { width: CARD1_WIDTH, height: CARD1_HEIGHT },
-    { width: CARD2_WIDTH, height: CARD2_HEIGHT },
-  ];
-
-  // Calculate spacing and train unit for seamless loop
-  const CARD_SPACING = wp('8%'); // Small gap between cards
-  const TRAIN_UNIT = CARD1_WIDTH + CARD_SPACING; // Average spacing unit
-  const TRAVEL_DISTANCE = TRAIN_UNIT * 3; // Total distance for one cycle
-
-  // Track previous value to detect when we cross the threshold
-  const prevValue = useSharedValue(0);
-
-  // Use animated reaction to extend animation before it resets
-  useAnimatedReaction(
-    () => translateX.value,
-    (currentValue, previousValue) => {
-      'worklet';
-      // When value crosses from below TRAVEL_DISTANCE to at/above it, extend
-      // This prevents any visible reset by continuously incrementing the value
-      if (
-        previousValue !== null &&
-        previousValue < TRAVEL_DISTANCE &&
-        currentValue >= TRAVEL_DISTANCE
-      ) {
-        // Extend by another TRAVEL_DISTANCE - value never resets
-        translateX.value = withTiming(currentValue + TRAVEL_DISTANCE, {
-          duration: ANIMATION_DURATION,
-        });
-      }
-      prevValue.value = currentValue;
-    },
-    [prevValue],
-  );
-
-  // Start the continuous horizontal train animation
-  useEffect(() => {
-    translateX.value = 0;
-    prevValue.value = 0;
-    // Start initial animation
-    translateX.value = withTiming(TRAVEL_DISTANCE, {
-      duration: ANIMATION_DURATION,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Helper function to get wrapped position for seamless loop
-  const getWrappedPosition = (baseOffset: number, progress: number): number => {
-    'worklet';
-    // Use modulo to wrap continuously
-    const wrapped =
-      ((progress % TRAVEL_DISTANCE) + TRAVEL_DISTANCE) % TRAVEL_DISTANCE;
-    return baseOffset + wrapped;
-  };
-
-  // Create animated styles for each card with seamless wrapping
-  const card0AnimatedStyle = useAnimatedStyle(() => {
-    'worklet';
-    // Card 0 starts at leftmost position (-2 units)
-    // When it reaches right side, it wraps to left seamlessly
-    const position = getWrappedPosition(-TRAIN_UNIT * 2, translateX.value);
-
-    // Calculate distance from screen center (0) for effects
-    const distanceFromCenter = Math.abs(position);
-    const maxDistance = TRAIN_UNIT * 1.5;
-    const normalizedDistance = Math.min(distanceFromCenter / maxDistance, 1);
-
-    // Center card (closest to 0) should be in front
-    const zIndex = Math.round(interpolate(normalizedDistance, [0, 1], [3, 1]));
-    const scale = interpolate(normalizedDistance, [0, 1], [1.0, 0.9]);
-    const opacity = interpolate(normalizedDistance, [0, 1], [1.0, 0.85]);
-
-    return {
-      transform: [
-        { translateX: position - CARD0_WIDTH / 2 },
-        { translateY: -CARD0_HEIGHT / 2 },
-        { scale },
-      ],
-      zIndex,
-      opacity,
-    };
-  });
-
-  const card1AnimatedStyle = useAnimatedStyle(() => {
-    'worklet';
-    // Card 1 starts at center-left position (-1 unit)
-    const position = getWrappedPosition(-TRAIN_UNIT, translateX.value);
-
-    const distanceFromCenter = Math.abs(position);
-    const maxDistance = TRAIN_UNIT * 1.5;
-    const normalizedDistance = Math.min(distanceFromCenter / maxDistance, 1);
-
-    const zIndex = Math.round(interpolate(normalizedDistance, [0, 1], [3, 1]));
-    const scale = interpolate(normalizedDistance, [0, 1], [1.0, 0.9]);
-    const opacity = interpolate(normalizedDistance, [0, 1], [1.0, 0.85]);
-
-    return {
-      transform: [
-        { translateX: position - CARD1_WIDTH / 2 },
-        { translateY: -CARD1_HEIGHT / 2 },
-        { scale },
-      ],
-      zIndex,
-      opacity,
-    };
-  });
-
-  const card2AnimatedStyle = useAnimatedStyle(() => {
-    'worklet';
-    // Card 2 starts at center position (0)
-    // When it moves right and wraps, it seamlessly continues from left
-    const position = getWrappedPosition(0, translateX.value);
-
-    const distanceFromCenter = Math.abs(position);
-    const maxDistance = TRAIN_UNIT * 1.5;
-    const normalizedDistance = Math.min(distanceFromCenter / maxDistance, 1);
-
-    const zIndex = Math.round(interpolate(normalizedDistance, [0, 1], [3, 1]));
-    const scale = interpolate(normalizedDistance, [0, 1], [1.0, 0.9]);
-    const opacity = interpolate(normalizedDistance, [0, 1], [1.0, 0.85]);
-
-    return {
-      transform: [
-        { translateX: position - CARD2_WIDTH / 2 },
-        { translateY: -CARD2_HEIGHT / 2 },
-        { scale },
-      ],
-      zIndex,
-      opacity,
-    };
-  });
+  // Infinite carousel animation
+  const { card0Style, card1Style, card2Style, cardImages, cardSizes } =
+    useInfiniteCarousel();
 
   const handleNext = () => {
     navigation.navigate('GenderSelection');
@@ -221,26 +68,20 @@ const SignUpScreen: React.FC = () => {
         <View
           style={[styles.container, { backgroundColor: colors.background }]}
         >
-          {/* Profile Photos Section - Circular Rotation Animation */}
+          {/* Profile Photos Section - Infinite Carousel */}
           <View style={styles.profilePhotosContainer}>
             <Animated.View
               style={[
                 styles.profilePhotoWrapper,
-                {
-                  width: CARD_SIZES[0].width,
-                  height: CARD_SIZES[0].height,
-                },
-                card0AnimatedStyle,
+                { width: cardSizes[0].width, height: cardSizes[0].height },
+                card0Style,
               ]}
             >
               <AppImage
-                source={CARD_IMAGES[0]}
+                source={cardImages[0]}
                 style={[
                   styles.profilePhoto,
-                  {
-                    width: CARD_SIZES[0].width,
-                    height: CARD_SIZES[0].height,
-                  },
+                  { width: cardSizes[0].width, height: cardSizes[0].height },
                 ]}
                 resizeMode="cover"
               />
@@ -248,21 +89,15 @@ const SignUpScreen: React.FC = () => {
             <Animated.View
               style={[
                 styles.profilePhotoWrapper,
-                {
-                  width: CARD_SIZES[1].width,
-                  height: CARD_SIZES[1].height,
-                },
-                card1AnimatedStyle,
+                { width: cardSizes[1].width, height: cardSizes[1].height },
+                card1Style,
               ]}
             >
               <AppImage
-                source={CARD_IMAGES[1]}
+                source={cardImages[1]}
                 style={[
                   styles.profilePhoto,
-                  {
-                    width: CARD_SIZES[1].width,
-                    height: CARD_SIZES[1].height,
-                  },
+                  { width: cardSizes[1].width, height: cardSizes[1].height },
                 ]}
                 resizeMode="cover"
               />
@@ -270,21 +105,15 @@ const SignUpScreen: React.FC = () => {
             <Animated.View
               style={[
                 styles.profilePhotoWrapper,
-                {
-                  width: CARD_SIZES[2].width,
-                  height: CARD_SIZES[2].height,
-                },
-                card2AnimatedStyle,
+                { width: cardSizes[2].width, height: cardSizes[2].height },
+                card2Style,
               ]}
             >
               <AppImage
-                source={CARD_IMAGES[2]}
+                source={cardImages[2]}
                 style={[
                   styles.profilePhoto,
-                  {
-                    width: CARD_SIZES[2].width,
-                    height: CARD_SIZES[2].height,
-                  },
+                  { width: cardSizes[2].width, height: cardSizes[2].height },
                 ]}
                 resizeMode="cover"
               />
