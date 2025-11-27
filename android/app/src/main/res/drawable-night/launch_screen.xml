@@ -6,6 +6,8 @@
     <!-- Heart icon with gradient centered -->
     <item
         android:drawable="@drawable/splash_heart"
-        android:gravity="center" />
+        android:gravity="center"
+        android:width="160dp"
+        android:height="160dp" />
 </layer-list>
 
