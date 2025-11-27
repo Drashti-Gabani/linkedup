@@ -23,7 +23,7 @@ const GradientButton: React.FC<GradientButtonProps> = ({
     <TouchableOpacity
       activeOpacity={0.8}
       onPress={onPress}
-      style={[styles.button, { shadowColor: colors.shadowAccent }, style]}
+      style={[styles.button, style]}
       disabled={disabled}
     >
       <LinearGradient
@@ -44,11 +44,9 @@ const GradientButton: React.FC<GradientButtonProps> = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 12,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
-    elevation: 8,
     paddingHorizontal: wp('13%'),
+    overflow: 'hidden',
+    backgroundColor: 'transparent',
   },
   gradient: {
     justifyContent: 'center',
@@ -58,6 +56,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Comfortaa-Bold',
     fontSize: 20,
+    includeFontPadding: false,
     paddingVertical: 16,
   },
 });

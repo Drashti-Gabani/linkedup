@@ -222,6 +222,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Comfortaa-Bold',
     fontSize: 16,
     flexShrink: 0,
+    includeFontPadding: false,
   },
 });
 

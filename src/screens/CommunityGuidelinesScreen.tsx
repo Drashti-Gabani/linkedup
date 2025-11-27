@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
@@ -10,14 +9,13 @@ import BackButton from '../components/BackButton';
 import GradientButton from '../components/GradientButton';
 import { guidelineIcons } from '../assets/images';
 import ScreenTitle from '../components/ScreenTitle';
-import { AppImage } from '../utils/AppImage';
 
 interface GuidelineCardProps {
   iconSource: any;
   title: string;
   description: string;
+  iconColor: string;
   colors: any;
-  gradients: any;
   isDark: boolean;
 }
 
@@ -25,12 +23,18 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
   iconSource,
   title,
   description,
+  iconColor,
   colors,
-  gradients,
   isDark,
 }) => {
-  const cardBackgroundColor = isDark ? '#2E2E2E' : '#FFFFFF';
-  const cardShadowColor = 'rgba(164, 164, 164, 0.2)';
+  const cardBackgroundColor = isDark
+    ? colors.backgroundCard
+    : colors.background;
+  const cardShadowColor = isDark
+    ? 'rgba(0, 0, 0, 0.3)'
+    : 'rgba(130, 57, 255, 0.1)';
+  // Use a more visible border color for light mode
+  const borderColor = isDark ? colors.borderDark : '#EAEAEA'; // Light gray border that's visible on white
 
   return (
     <View style={styles.cardWrapper}>
@@ -40,13 +44,33 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
           {
             backgroundColor: cardBackgroundColor,
             shadowColor: cardShadowColor,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 1,
-            shadowRadius: 75,
-            elevation: 8,
+            borderWidth: 1,
+            borderColor: borderColor,
           },
         ]}
       >
+        {/* Icon Badge Container - Centered */}
+        <View style={styles.iconBadgeContainer}>
+          <View
+            style={[
+              styles.iconBadge,
+              {
+                backgroundColor: iconColor,
+                shadowColor: iconColor,
+              },
+            ]}
+          >
+            <View style={styles.iconBadgeGradient}>
+              <Image
+                source={iconSource}
+                style={styles.iconImage}
+                resizeMode="contain"
+                tintColor="#FFFFFF"
+              />
+            </View>
+          </View>
+        </View>
+
         <View style={styles.cardContent}>
           <Text style={[styles.cardTitle, { color: colors.accent }]}>
             {title}
@@ -55,26 +79,12 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
             style={[
               styles.cardDescription,
               {
-                color: isDark ? '#C6C6C6' : '#000000',
+                color: isDark ? colors.textSecondary : colors.textPrimary,
               },
             ]}
           >
             {description}
           </Text>
-        </View>
-        <View style={styles.iconBadge}>
-          <LinearGradient
-            colors={gradients.primary}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.iconBadgeGradient}
-          >
-            <AppImage
-              source={iconSource}
-              style={styles.iconImage}
-              resizeMode="contain"
-            />
-          </LinearGradient>
         </View>
       </View>
     </View>
@@ -82,8 +92,11 @@ const GuidelineCard: React.FC<GuidelineCardProps> = ({
 };
 
 const CommunityGuidelinesScreen: React.FC = () => {
-  const { colors, gradients, isDark } = useTheme();
+  const { colors, isDark } = useTheme();
   const navigation = useNavigation<MainStackNavigationProp>();
+
+  // All icons use the same accent color from theme
+  const iconColor = colors.accent;
 
   const guidelines = [
     {
@@ -94,7 +107,7 @@ const CommunityGuidelinesScreen: React.FC = () => {
     {
       iconSource: guidelineIcons.respect,
       title: 'Respect',
-      description: 'Be respectful dnd refrain from using bad language.',
+      description: 'Be respectful and refrain from using bad language.',
     },
     {
       iconSource: guidelineIcons.privacy,
@@ -144,16 +157,16 @@ const CommunityGuidelinesScreen: React.FC = () => {
               iconSource={guidelines[0].iconSource}
               title={guidelines[0].title}
               description={guidelines[0].description}
+              iconColor={iconColor}
               colors={colors}
-              gradients={gradients}
               isDark={isDark}
             />
             <GuidelineCard
               iconSource={guidelines[2].iconSource}
               title={guidelines[2].title}
               description={guidelines[2].description}
+              iconColor={iconColor}
               colors={colors}
-              gradients={gradients}
               isDark={isDark}
             />
           </View>
@@ -162,16 +175,16 @@ const CommunityGuidelinesScreen: React.FC = () => {
               iconSource={guidelines[1].iconSource}
               title={guidelines[1].title}
               description={guidelines[1].description}
+              iconColor={iconColor}
               colors={colors}
-              gradients={gradients}
               isDark={isDark}
             />
             <GuidelineCard
               iconSource={guidelines[3].iconSource}
               title={guidelines[3].title}
               description={guidelines[3].description}
+              iconColor={iconColor}
               colors={colors}
-              gradients={gradients}
               isDark={isDark}
             />
           </View>
@@ -201,84 +214,65 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('20%'),
     position: 'relative',
   },
-  highlight: {
-    position: 'absolute',
-    backgroundColor: '#F2F2F2',
-    width: 96,
-    height: 18,
-    top: 16,
-    zIndex: -1,
-  },
-  title: {
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 32,
-    letterSpacing: -0.64,
-    marginBottom: 16,
-    textAlign: 'center',
-    lineHeight: 47,
-  },
-  subtitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 16,
-    lineHeight: 26,
-    textAlign: 'center',
-    letterSpacing: -0.32,
-    color: '#B2B2B2',
-  },
   cardsGrid: {
     flexDirection: 'row',
     paddingHorizontal: wp('7.5%'),
-    gap: 16,
+    gap: wp('4%'),
     marginBottom: hp('6%'),
   },
   cardsColumn: {
     flex: 1,
-    gap: 16,
+    gap: wp('4%'),
   },
   cardWrapper: {
     position: 'relative',
   },
   card: {
-    borderRadius: 15,
-    minHeight: 140,
-    position: 'relative',
-    marginBottom: 10,
+    borderRadius: wp('4%'),
+    marginBottom: hp('1.2%'),
+    shadowOffset: { width: 0, height: hp('0.25%') },
+    shadowOpacity: 0.1,
+    shadowRadius: wp('2%'),
+    elevation: 3,
   },
-  cardContent: {
-    padding: 20,
-    paddingTop: 24,
-    paddingRight: 16,
-    gap: 10,
-  },
-  cardTitle: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 18,
-    fontWeight: '600',
-    letterSpacing: -0.36,
-    color: '#8239FF',
-    lineHeight: 18,
-    marginBottom: 4,
-  },
-  cardDescription: {
-    fontFamily: 'Sofia Pro',
-    fontSize: 15,
-    fontWeight: '400',
-    lineHeight: 22,
-    letterSpacing: -0.3,
+  iconBadgeContainer: {
+    position: 'absolute',
+    top: hp('-2.5%'),
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 10,
   },
   iconBadge: {
-    position: 'absolute',
-    top: -15,
-    right: -10,
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
+    width: wp('12%'),
+    height: wp('12%'),
+    borderRadius: wp('6%'),
     overflow: 'hidden',
-    shadowColor: '#8239FF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 5,
+    shadowOffset: { width: 0, height: hp('0.4%') },
+    shadowOpacity: 0.25,
+    shadowRadius: wp('2%'),
+    elevation: 6,
+  },
+  cardContent: {
+    padding: wp('2.5%'),
+    gap: hp('1%'),
+    paddingTop: hp('4%'),
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  cardTitle: {
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: wp('4.2%'),
+    letterSpacing: wp('-0.08%'),
+    lineHeight: hp('2.5%'),
+    textAlign: 'center',
+  },
+  cardDescription: {
+    fontFamily: 'Comfortaa-Regular',
+    fontSize: wp('3.5%'),
+    lineHeight: hp('2.5%'),
+    textAlign: 'center',
+    marginBottom: hp('1%'),
   },
   iconBadgeGradient: {
     width: '100%',
@@ -287,8 +281,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconImage: {
-    width: 25,
-    height: 25,
+    width: wp('6%'),
+    height: wp('6%'),
   },
 });
 
