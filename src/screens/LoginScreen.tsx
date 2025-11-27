@@ -188,6 +188,7 @@ const LoginScreen: React.FC = () => {
                         value={phoneNumber}
                         onChangeText={setPhoneNumber}
                         keyboardType="phone-pad"
+                        returnKeyType="done"
                         onFocus={() => setFocusedInput('phoneNumber')}
                         onBlur={() => setFocusedInput(null)}
                       />

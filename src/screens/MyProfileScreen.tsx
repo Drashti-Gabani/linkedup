@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Dimensions,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { AppImage } from '../utils/AppImage';
 import { AppImageBackground } from '../utils/AppImageBackground';
@@ -73,12 +75,20 @@ const MyProfileScreen: React.FC = () => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <KeyboardAvoidingView
+      style={[
+        styles.keyboardAvoidingView,
+        { backgroundColor: colors.background },
+      ]}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         bounces={true}
+        keyboardShouldPersistTaps="handled"
       >
         {/* Blurred Background Photo */}
         <View style={styles.backgroundContainer}>
@@ -319,29 +329,29 @@ const MyProfileScreen: React.FC = () => {
                   onPress={() => handleImagePress(0)}
                   activeOpacity={0.9}
                 >
-                <AppImage
-                  source={{ uri: profileData.galleryPhotos[0] }}
-                  style={styles.galleryImageLarge}
-                />
+                  <AppImage
+                    source={{ uri: profileData.galleryPhotos[0] }}
+                    style={styles.galleryImageLarge}
+                  />
                 </TouchableOpacity>
                 <View style={styles.galleryColumn}>
                   <TouchableOpacity
                     onPress={() => handleImagePress(1)}
                     activeOpacity={0.9}
                   >
-                  <AppImage
-                    source={{ uri: profileData.galleryPhotos[1] }}
-                    style={styles.galleryImageSmall}
-                  />
+                    <AppImage
+                      source={{ uri: profileData.galleryPhotos[1] }}
+                      style={styles.galleryImageSmall}
+                    />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => handleImagePress(2)}
                     activeOpacity={0.9}
                   >
-                  <AppImage
-                    source={{ uri: profileData.galleryPhotos[2] }}
-                    style={styles.galleryImageSmall}
-                  />
+                    <AppImage
+                      source={{ uri: profileData.galleryPhotos[2] }}
+                      style={styles.galleryImageSmall}
+                    />
                   </TouchableOpacity>
                 </View>
                 <View style={styles.galleryColumn}>
@@ -349,29 +359,29 @@ const MyProfileScreen: React.FC = () => {
                     onPress={() => handleImagePress(3)}
                     activeOpacity={0.9}
                   >
-                  <AppImage
-                    source={{ uri: profileData.galleryPhotos[3] }}
-                    style={styles.galleryImageSmall}
-                  />
+                    <AppImage
+                      source={{ uri: profileData.galleryPhotos[3] }}
+                      style={styles.galleryImageSmall}
+                    />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => handleImagePress(4)}
                     activeOpacity={0.9}
                   >
-                  <AppImage
-                    source={{ uri: profileData.galleryPhotos[4] }}
-                    style={styles.galleryImageSmall}
-                  />
+                    <AppImage
+                      source={{ uri: profileData.galleryPhotos[4] }}
+                      style={styles.galleryImageSmall}
+                    />
                   </TouchableOpacity>
                 </View>
                 <TouchableOpacity
                   onPress={() => handleImagePress(0)}
                   activeOpacity={0.9}
                 >
-                <AppImage
-                  source={{ uri: profileData.galleryPhotos[0] }}
-                  style={styles.galleryImageLarge}
-                />
+                  <AppImage
+                    source={{ uri: profileData.galleryPhotos[0] }}
+                    style={styles.galleryImageLarge}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -474,12 +484,12 @@ const MyProfileScreen: React.FC = () => {
         initialIndex={imageViewerIndex}
         onClose={() => setIsImageViewerVisible(false)}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  keyboardAvoidingView: {
     flex: 1,
   },
   scrollView: {
@@ -511,7 +521,7 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     top: 44,
-    left: 40,
+    left: 30,
     width: 52,
     height: 52,
     borderRadius: 15,

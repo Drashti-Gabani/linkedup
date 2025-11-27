@@ -222,6 +222,7 @@ const ChangePasswordScreen: React.FC = () => {
                       onChangeText={handleCurrentPINChange}
                       secureTextEntry={!isCurrentPINVisible}
                       keyboardType="numeric"
+                      returnKeyType="done"
                       onFocus={() => setFocusedInput('currentPIN')}
                       onBlur={() => setFocusedInput(null)}
                     />
@@ -279,6 +280,7 @@ const ChangePasswordScreen: React.FC = () => {
                       onChangeText={handleNewPINChange}
                       secureTextEntry={!isNewPINVisible}
                       keyboardType="numeric"
+                      returnKeyType="done"
                       onFocus={() => setFocusedInput('newPIN')}
                       onBlur={() => setFocusedInput(null)}
                     />
@@ -339,6 +341,7 @@ const ChangePasswordScreen: React.FC = () => {
                       onChangeText={handleConfirmPINChange}
                       secureTextEntry={!isConfirmPINVisible}
                       keyboardType="numeric"
+                      returnKeyType="done"
                       onFocus={() => setFocusedInput('confirmPIN')}
                       onBlur={() => setFocusedInput(null)}
                     />

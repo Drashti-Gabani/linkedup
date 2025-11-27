@@ -29,7 +29,10 @@ export default function SettingsScreen() {
 
   const handleLogout = () => {
     setShowLogoutModal(false);
-    console.log('User logged out');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Auth' }],
+    });
   };
 
   return (

@@ -136,6 +136,7 @@ const OTPVerifyScreen: React.FC = () => {
                           onChangeText={value => handleOtpChange(value, index)}
                           onKeyPress={e => handleKeyPress(e, index)}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           maxLength={1}
                           selectTextOnFocus
                         />
@@ -163,6 +164,7 @@ const OTPVerifyScreen: React.FC = () => {
                           onChangeText={value => handleOtpChange(value, index)}
                           onKeyPress={e => handleKeyPress(e, index)}
                           keyboardType="number-pad"
+                          returnKeyType="done"
                           maxLength={1}
                           selectTextOnFocus
                         />

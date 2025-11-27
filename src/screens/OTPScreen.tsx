@@ -138,7 +138,12 @@ const OTPScreen: React.FC = () => {
                   </View>
                 </LinearGradient>
               </TouchableOpacity>
-              <View style={[styles.phoneInputWrapper, { backgroundColor: colors.fieldBackground }]}>
+              <View
+                style={[
+                  styles.phoneInputWrapper,
+                  { backgroundColor: colors.fieldBackground },
+                ]}
+              >
                 <TextInput
                   style={[styles.phoneInput, { color: colors.fieldText }]}
                   placeholder="800-111-2222"
@@ -146,6 +151,7 @@ const OTPScreen: React.FC = () => {
                   value={phoneNumber}
                   onChangeText={setPhoneNumber}
                   keyboardType="phone-pad"
+                  returnKeyType="done"
                 />
               </View>
             </View>
