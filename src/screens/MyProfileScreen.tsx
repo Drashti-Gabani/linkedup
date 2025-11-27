@@ -18,6 +18,7 @@ import { useTheme } from '../hooks/useTheme';
 import ProfileStatsCard from '../components/ProfileStatsCard';
 import ProfileSectionCard from '../components/ProfileSectionCard';
 import FullScreenImageViewer from '../components/FullScreenImageViewer';
+import DatePickerInput from '../components/DatePickerInput';
 import { MainStackNavigationProp } from '../navigation/types';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -32,7 +33,7 @@ const MyProfileScreen: React.FC = () => {
 
   const [isEditingFirstName, setIsEditingFirstName] = useState(false);
   const [isEditingEmail, setIsEditingEmail] = useState(false);
-  const [isEditingBirthdate, setIsEditingBirthdate] = useState(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [imageViewerIndex, setImageViewerIndex] = useState(0);
 
@@ -239,46 +240,23 @@ const MyProfileScreen: React.FC = () => {
             </View>
 
             <View style={styles.fieldContainer}>
-              <Text style={[styles.fieldLabel, { color: colors.fieldLabel }]}>
-                BIRTHDATE
-              </Text>
-              <View
-                style={[
-                  styles.field,
-                  { backgroundColor: colors.fieldBackground },
-                  isEditingBirthdate && styles.fieldEditing,
-                ]}
-              >
-                <View style={styles.iconContainer}>
-                  <Svg width={12} height={14} viewBox="0 0 12 14" fill="none">
-                    <Path
-                      d="M10.5 1h-1.125V0H8.25v1H3.75V0H2.625v1H1.5C.675 1 0 1.675 0 2.5v10C0 13.325.675 14 1.5 14h9c.825 0 1.5-.675 1.5-1.5v-10c0-.825-.675-1.5-1.5-1.5zm0 11.5h-9v-7h9v7z"
-                      stroke={colors.inputIcon}
-                      strokeWidth={1.5}
-                    />
-                  </Svg>
-                </View>
-                {isEditingBirthdate ? (
-                  <TextInput
-                    style={[styles.fieldInput, { color: colors.fieldText }]}
-                    value={birthdate}
-                    onChangeText={setBirthdate}
-                    placeholder="Birthdate"
-                    placeholderTextColor={colors.placeholder}
-                    autoFocus
-                    onBlur={() => setIsEditingBirthdate(false)}
-                  />
-                ) : (
-                  <Text
-                    style={[styles.fieldInput, { color: colors.fieldText }]}
-                  >
-                    {birthdate}
-                  </Text>
-                )}
-              </View>
+              <DatePickerInput
+                value={birthdate}
+                onChange={setBirthdate}
+                placeholder="dd/mm/yy"
+                label="BIRTHDATE"
+                editable={true}
+                open={isDatePickerOpen}
+                onOpenChange={setIsDatePickerOpen}
+                showLabel={true}
+                containerStyle={styles.datePickerContainer}
+                inputWrapperStyle={styles.datePickerField}
+                labelStyle={styles.datePickerLabel}
+                iconColor={colors.inputIcon}
+              />
               <TouchableOpacity
                 style={styles.fieldEditButton}
-                onPress={() => setIsEditingBirthdate(true)}
+                onPress={() => setIsDatePickerOpen(true)}
               >
                 <Text style={[styles.editText, { color: colors.fieldLabel }]}>
                   Edit
@@ -635,6 +613,22 @@ const styles = StyleSheet.create({
   fieldEditing: {
     borderWidth: 1,
     borderColor: '#8239FF',
+  },
+  datePickerContainer: {
+    minHeight: 72,
+    position: 'relative',
+  },
+  datePickerField: {
+    position: 'absolute',
+    top: 24,
+    left: 0,
+    right: 0,
+  },
+  datePickerLabel: {
+    fontFamily: 'Comfortaa-Medium',
+    fontSize: 10,
+    lineHeight: 15,
+    letterSpacing: 0.5,
   },
 });
 

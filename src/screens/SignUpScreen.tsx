@@ -16,8 +16,8 @@ import { wp, hp } from '../utils/responsive';
 import NextButton from '../components/NextButton';
 import UserIcon from '../components/icons/UserIcon';
 import EmailIcon from '../components/icons/EmailIcon';
-import CalendarIcon from '../components/icons/CalendarIcon';
 import CheckmarkIcon from '../components/icons/CheckmarkIcon';
+import DatePickerInput from '../components/DatePickerInput';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import ScreenTitle from '../components/ScreenTitle';
@@ -248,47 +248,18 @@ const SignUpScreen: React.FC = () => {
 
                   {/* Birthdate Input */}
                   <View style={styles.inputGroup}>
-                    <Text
-                      style={[
-                        styles.labelText,
-                        { color: colors.accentTertiary },
-                      ]}
-                    >
-                      BIRTHDATE
-                    </Text>
-                    <View
-                      style={[
-                        styles.inputWrapper,
-                        { backgroundColor: colors.fieldBackground },
-                        focusedInput === 'birthdate' && [
-                          styles.inputWrapperFocused,
-                          { borderColor: colors.accent },
-                        ],
-                        !isDark &&
-                          focusedInput !== 'birthdate' && [
-                            styles.inputWrapperLight,
-                            { borderColor: colors.borderLight },
-                          ],
-                      ]}
-                    >
-                      <CalendarIcon
-                        width={13}
-                        height={14}
-                        color={colors.inputIcon}
-                      />
-                      <TextInput
-                        style={[styles.input, { color: colors.textPrimary }]}
-                        placeholder="dd/mm/yy"
-                        placeholderTextColor={colors.placeholder}
-                        value={birthdate}
-                        onChangeText={setBirthdate}
-                        onFocus={() => setFocusedInput('birthdate')}
-                        onBlur={() => setFocusedInput(null)}
-                      />
-                      {showBirthdateCheck && (
-                        <CheckmarkIcon width={10} height={8} />
-                      )}
-                    </View>
+                    <DatePickerInput
+                      value={birthdate}
+                      onChange={setBirthdate}
+                      placeholder="dd/mm/yy"
+                      label="BIRTHDATE"
+                      showCheckmark={showBirthdateCheck}
+                      isFocused={focusedInput === 'birthdate'}
+                      onFocus={() => setFocusedInput('birthdate')}
+                      onBlur={() => setFocusedInput(null)}
+                      containerStyle={styles.datePickerContainer}
+                      inputWrapperStyle={styles.datePickerInputWrapper}
+                    />
                   </View>
                 </View>
 
@@ -474,6 +445,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 17.84,
     textAlign: 'left',
+  },
+  datePickerContainer: {
+    height: 72,
+    position: 'relative',
+  },
+  datePickerInputWrapper: {
+    marginTop: 24,
   },
 });
 

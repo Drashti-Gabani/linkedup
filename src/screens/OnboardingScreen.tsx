@@ -331,9 +331,6 @@ const OnboardingScreen: React.FC = () => {
 
       <View style={styles.textSection}>
         <View style={styles.headingContainer}>
-          <Text style={[styles.titleText, { color: colors.textPrimary }]}>
-            {originalSlides[activeIndex].title}
-          </Text>
           {!isDark && (
             <View
               style={[
@@ -342,6 +339,9 @@ const OnboardingScreen: React.FC = () => {
               ]}
             />
           )}
+          <Text style={[styles.titleText, { color: colors.textPrimary }]}>
+            {originalSlides[activeIndex].title}
+          </Text>
         </View>
 
         <Text style={[styles.subtext, { color: colors.textSecondary }]}>
@@ -420,6 +420,8 @@ const styles = StyleSheet.create({
     letterSpacing: -1.05,
   },
   underline: {
+    position: 'absolute',
+    bottom: '0%',
     width: wp('38.6%'),
     height: hp('1.7%'),
     backgroundColor: '#D4BBFF',
