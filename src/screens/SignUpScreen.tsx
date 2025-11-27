@@ -42,7 +42,7 @@ const SignUpScreen: React.FC = () => {
     useInfiniteCarousel();
 
   const handleNext = () => {
-    navigation.navigate('GenderSelection');
+    navigation.navigate('OTP');
   };
 
   const handleLogin = () => {

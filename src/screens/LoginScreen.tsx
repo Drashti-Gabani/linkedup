@@ -253,7 +253,10 @@ const LoginScreen: React.FC = () => {
               {/* Next Button - Fixed at bottom */}
               <NextButton
                 onPress={() => {
-                  navigation.navigate('OTP');
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Main' }],
+                  });
                 }}
                 showText={true}
                 textLabel="Next"

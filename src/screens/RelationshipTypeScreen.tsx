@@ -65,7 +65,7 @@ const RelationshipTypeScreen: React.FC = () => {
 
   const handleNext = () => {
     console.log('Selected relationship type:', selectedType);
-    navigation.navigate('SignUp');
+    navigation.navigate('GenderSelection');
   };
 
   const currentContent =
