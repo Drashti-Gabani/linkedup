@@ -3,13 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Dimensions,
   Animated,
   LayoutAnimation,
   Platform,
   UIManager,
+  Image,
 } from 'react-native';
 import { AppImage } from '../utils/AppImage';
 import { useNavigation } from '@react-navigation/native';
@@ -22,7 +22,10 @@ import FullScreenImageViewer from '../components/FullScreenImageViewer';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // Enable LayoutAnimation on Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
@@ -32,10 +35,15 @@ const UserProfileScreen: React.FC = () => {
   const [isAboutExpanded, setIsAboutExpanded] = useState(false);
   const [isImageViewerVisible, setIsImageViewerVisible] = useState(false);
   const [imageViewerIndex, setImageViewerIndex] = useState(0);
-  
+
   // Animation values
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
+
+  // Scroll tracking for sticky buttons
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const PHOTO_CONTAINER_HEIGHT = 400;
+  const STICKY_THRESHOLD = PHOTO_CONTAINER_HEIGHT - 100; // Show sticky buttons when scrolled past this point
 
   const userData = {
     name: 'Jessica Parker',
@@ -89,6 +97,38 @@ const UserProfileScreen: React.FC = () => {
     setIsImageViewerVisible(true);
   };
 
+  // Render control buttons (reusable component)
+  const renderControlButtons = () => (
+    <>
+      {/* Reject Button */}
+      <TouchableOpacity style={[styles.controlButton, styles.smallButton]}>
+        <Image
+          source={discoverControls.dislike}
+          style={styles.smallIcon}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+
+      {/* Like Button */}
+      <TouchableOpacity style={[styles.controlButton, styles.largeButton]}>
+        <Image
+          source={discoverControls.like}
+          style={styles.superlikeIcon}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+
+      {/* Super Like Button */}
+      <TouchableOpacity style={[styles.controlButton, styles.smallButton]}>
+        <Image
+          source={discoverControls.superlike}
+          style={styles.largeIcon}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+    </>
+  );
+
   // Handle read more/less with animation
   const handleToggleAbout = () => {
     // Configure layout animation
@@ -134,13 +174,56 @@ const UserProfileScreen: React.FC = () => {
     setIsAboutExpanded(!isAboutExpanded);
   };
 
+  // Calculate transform to move buttons from bottom to top
+  // Buttons should follow scroll until they reach top, then stick
+  const safeAreaTop = Platform.OS === 'ios' ? 60 : 20;
+  // Photo container is 415px tall, content overlaps by 30px (starts at 385px)
+  // Original buttons were positioned with bottom: -15 relative to photo container
+  // This positioned them 15px below the photo container bottom (at 430px from top)
+  // But visually, buttons should appear just above where content card starts (385px)
+  // Position buttons in the lower part of the gap, closer to where card starts
+  const contentOverlap = 30; // Content card overlaps photo by 30px
+  const gapStart = PHOTO_CONTAINER_HEIGHT - contentOverlap; // 385px (where card visually starts)
+  const gapCenter = gapStart + contentOverlap / 2; // 400px (center of the 30px gap)
+
+  // Center the largest button (86px tall) in the gap
+  // Position container so the center of the largest button aligns with gap center (400px)
+  const largestButtonHeight = 86;
+  const initialButtonPosition = gapCenter - largestButtonHeight / 2; // 357px - centers button in gap
+
+  // When scrolled, buttons move up with scroll, but stop at top
+  // Before threshold: buttons at initial position
+  // After threshold: buttons stick to top (safeAreaTop)
+  const buttonsTop = scrollY.interpolate({
+    inputRange: [0, STICKY_THRESHOLD],
+    outputRange: [initialButtonPosition, safeAreaTop],
+    extrapolate: 'clamp',
+  });
+
   return (
     <View style={styles.container}>
-      <ScrollView
+      {/* Control Buttons - Positioned absolutely, animated to stick to top when scrolling */}
+      <Animated.View
+        style={[
+          styles.controlsContainer,
+          {
+            top: buttonsTop,
+          },
+        ]}
+      >
+        {renderControlButtons()}
+      </Animated.View>
+
+      <Animated.ScrollView
         style={styles.scrollView}
         showsVerticalScrollIndicator={false}
-        bounces={true}
+        bounces={false}
         contentContainerStyle={styles.scrollContent}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: false },
+        )}
+        scrollEventThrottle={16}
       >
         {/* Main Photo */}
         <View style={styles.photoContainer}>
@@ -165,42 +248,6 @@ const UserProfileScreen: React.FC = () => {
               />
             </Svg>
           </TouchableOpacity>
-
-          {/* Control Buttons - Positioned over image */}
-          <View style={styles.controlsContainer}>
-            {/* Reject Button */}
-            <TouchableOpacity
-              style={[styles.controlButton, styles.smallButton]}
-            >
-              <Image
-                source={discoverControls.dislike}
-                style={styles.smallIcon}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-
-            {/* Like Button */}
-            <TouchableOpacity
-              style={[styles.controlButton, styles.largeButton]}
-            >
-              <Image
-                source={discoverControls.like}
-                style={styles.superlikeIcon}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-
-            {/* Super Like Button */}
-            <TouchableOpacity
-              style={[styles.controlButton, styles.smallButton]}
-            >
-              <Image
-                source={discoverControls.superlike}
-                style={styles.largeIcon}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          </View>
         </View>
 
         {/* Content Container with rounded corners */}
@@ -296,15 +343,15 @@ const UserProfileScreen: React.FC = () => {
               }}
             >
               <Text
-                style={[styles.aboutText, { color: colors.sectionContentMuted }]}
+                style={[
+                  styles.aboutText,
+                  { color: colors.sectionContentMuted },
+                ]}
               >
                 {isAboutExpanded ? fullAbout : shortAbout}
               </Text>
             </Animated.View>
-            <TouchableOpacity
-              onPress={handleToggleAbout}
-              activeOpacity={0.7}
-            >
+            <TouchableOpacity onPress={handleToggleAbout} activeOpacity={0.7}>
               <Animated.View
                 style={{
                   opacity: fadeAnim,
@@ -529,7 +576,7 @@ const UserProfileScreen: React.FC = () => {
 
           <View style={styles.bottomSpacer} />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
 
       {/* Full Screen Image Viewer */}
       <FullScreenImageViewer
@@ -574,7 +621,6 @@ const styles = StyleSheet.create({
   },
   controlsContainer: {
     position: 'absolute',
-    bottom: -15,
     left: 0,
     right: 0,
     flexDirection: 'row',
@@ -582,7 +628,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 9,
     paddingHorizontal: 72,
-    zIndex: 10,
+    zIndex: 1000,
   },
   controlButton: {
     backgroundColor: '#FFFFFF',

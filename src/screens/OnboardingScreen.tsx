@@ -14,11 +14,10 @@ import {
 import { AnimatedAppImage } from '../utils/AppImage';
 import { useNavigation } from '@react-navigation/native';
 import { wp, hp } from '../utils/responsive';
-import LinearGradient from 'react-native-linear-gradient';
 import { useTheme } from '../hooks/useTheme';
-import { gradients } from '../theme/colors';
 import { onboardingImages } from '../assets/images';
 import { AuthStackNavigationProp } from '../navigation/types';
+import GradientButton from '../components/GradientButton';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const IMAGE_WIDTH = wp('60%');
 const SPACING = wp('5%');
@@ -123,7 +122,7 @@ const OnboardingScreen: React.FC = () => {
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const offsetX = event.nativeEvent.contentOffset.x;
     const slideWidth = SLIDE_WIDTH;
-    
+
     // Calculate which slide index we're at based on scroll position
     const index = Math.round(offsetX / slideWidth);
     const realIndex = index % originalSlides.length;
@@ -220,7 +219,10 @@ const OnboardingScreen: React.FC = () => {
       };
 
       // Auto-scroll every AUTO_SCROLL_DURATION
-      autoScrollTimerRef.current = setInterval(scrollToNext, AUTO_SCROLL_DURATION);
+      autoScrollTimerRef.current = setInterval(
+        scrollToNext,
+        AUTO_SCROLL_DURATION,
+      );
     };
 
     // Small delay before starting auto-scroll to ensure layout is ready
@@ -257,21 +259,21 @@ const OnboardingScreen: React.FC = () => {
               clearTimeout(manualScrollTimeoutRef.current);
             }
           }}
-          onScrollEndDrag={(event) => {
+          onScrollEndDrag={event => {
             // User released - will continue with momentum
             // Don't do anything here, let momentum handle it
           }}
-          onMomentumScrollEnd={(event) => {
+          onMomentumScrollEnd={event => {
             // User finished scrolling - snap to nearest and handle loop reset if needed
             const offsetX = event.nativeEvent.contentOffset.x;
             const slideWidth = SLIDE_WIDTH;
             const index = Math.round(offsetX / slideWidth);
-            
+
             // Handle loop reset if user scrolled to boundaries
             const resetThreshold = originalSlides.length * 2;
             let finalIndex = index;
             let snapPosition = index * slideWidth;
-            
+
             if (index >= resetThreshold) {
               // Reset to middle set
               finalIndex = originalSlides.length;
@@ -300,7 +302,7 @@ const OnboardingScreen: React.FC = () => {
                 animated: true,
               });
             }
-            
+
             // Resume auto-scroll after a short delay
             if (manualScrollTimeoutRef.current) {
               clearTimeout(manualScrollTimeoutRef.current);
@@ -362,26 +364,12 @@ const OnboardingScreen: React.FC = () => {
       </View>
 
       <View style={styles.buttonSection}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          style={[styles.createAccountWrapper, { shadowColor: colors.shadow }]}
-          onPress={() => navigation.navigate('SignUp')}
-        >
-          <LinearGradient
-            colors={gradients.primary}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            angle={46}
-            style={styles.createAccountButton}
-          >
-            <Text
-              style={[styles.createAccountText, { color: colors.iconSelected }]}
-            >
-              Create Account
-            </Text>
-          </LinearGradient>
-        </TouchableOpacity>
-
+        <View>
+          <GradientButton
+            onPress={() => navigation.navigate('SignUp')}
+            text="Create Account"
+          />
+        </View>
         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
           <Text style={[styles.signInText, { color: colors.signInText }]}>
             Already have an account?{' '}
@@ -464,18 +452,8 @@ const styles = StyleSheet.create({
   buttonSection: {
     position: 'absolute',
     bottom: hp('5%'),
-    left: wp('9.7%'),
-    right: wp('9.7%'),
-    alignItems: 'center',
-  },
-  createAccountWrapper: {
-    width: wp('80.7%'),
-    height: hp('6.5%'),
-    borderRadius: wp('3.4%'),
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 25,
-    elevation: 8,
+    left: wp('0%'),
+    right: wp('0%'),
   },
   createAccountButton: {
     flex: 1,
