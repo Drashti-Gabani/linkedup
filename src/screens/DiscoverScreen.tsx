@@ -19,6 +19,7 @@ import SwipeableCard from '../components/SwipeableCard';
 import { User } from '../data/mockUsers';
 import { MainTabParamList, MainStackParamList } from '../navigation/types';
 import { discoverControls } from '../assets/images';
+import { wp, hp } from '../utils/responsive';
 
 // TODO: Replace with API data
 const MOCK_USERS: User[] = [
@@ -179,7 +180,12 @@ const DiscoverScreen: React.FC = () => {
               onPress={handleAdjustFilters}
               activeOpacity={0.7}
             >
-              <Svg width={20} height={20} viewBox="0 0 20 20" fill="none">
+              <Svg
+                width={wp(5.3)}
+                height={wp(5.3)}
+                viewBox="0 0 20 20"
+                fill="none"
+              >
                 {/* Filter icon - matches Figma design: two vertical lines with horizontal lines */}
                 <Path
                   d="M6 16L6 0"
@@ -225,7 +231,12 @@ const DiscoverScreen: React.FC = () => {
                   { backgroundColor: colors.headerButtonBackground },
                 ]}
               >
-                <Svg width={80} height={80} viewBox="0 0 80 80" fill="none">
+                <Svg
+                  width={wp(21.3)}
+                  height={wp(21.3)}
+                  viewBox="0 0 80 80"
+                  fill="none"
+                >
                   <Path
                     d="M40 70C40 70 10 50 10 30C10 20 18 12 28 12C34 12 40 16 40 16C40 16 46 12 52 12C62 12 70 20 70 30C70 50 40 70 40 70Z"
                     fill={colors.headerButtonIcon}
@@ -264,8 +275,8 @@ const DiscoverScreen: React.FC = () => {
                 activeOpacity={0.8}
               >
                 <Svg
-                  width={20}
-                  height={20}
+                  width={wp(5.3)}
+                  height={wp(5.3)}
                   viewBox="0 0 22 22"
                   fill="none"
                   style={styles.filterButtonIcon}
@@ -306,24 +317,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 18,
-    paddingTop: 15,
-    paddingBottom: 20,
+    paddingHorizontal: wp(4.8),
+    paddingTop: hp(2),
   },
   title: {
     fontFamily: 'Comfortaa-Bold',
-    fontSize: 30,
+    fontSize: wp(8),
     letterSpacing: -0.9,
-    lineHeight: 33,
+    lineHeight: hp(4.4),
   },
   headerButtons: {
     flexDirection: 'row',
-    gap: 12,
+    gap: wp(3.2),
   },
   headerButton: {
-    width: 50,
-    height: 48,
-    borderRadius: 15,
+    width: wp(13.3),
+    height: hp(6.3),
+    borderRadius: wp(4),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -335,59 +345,59 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: hp(2.6),
   },
   emptyStateContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 40,
-    paddingVertical: 60,
+    paddingHorizontal: wp(10.7),
+    paddingVertical: hp(7.9),
   },
   emptyIconContainer: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
+    width: wp(37.3),
+    height: wp(37.3),
+    borderRadius: wp(18.7),
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: hp(4.2),
   },
   emptyTitle: {
     fontFamily: 'Comfortaa-Bold',
-    fontSize: 28,
+    fontSize: wp(7.5),
     letterSpacing: -0.84,
-    lineHeight: 31,
+    lineHeight: hp(4.1),
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: hp(2.1),
   },
   emptySubtitle: {
     fontFamily: 'Sofia Pro',
-    fontSize: 16,
+    fontSize: wp(4.3),
     fontWeight: '400',
-    lineHeight: 24,
+    lineHeight: hp(3.2),
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: hp(5.3),
   },
   filterButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 28,
-    paddingVertical: 16,
-    borderRadius: 25,
-    gap: 10,
+    paddingHorizontal: wp(7.5),
+    paddingVertical: hp(2.1),
+    borderRadius: wp(6.7),
+    gap: wp(2.7),
     shadowColor: '#8239FF',
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: { width: 0, height: hp(1.1) },
     shadowOpacity: 0.3,
-    shadowRadius: 16,
+    shadowRadius: wp(4.3),
     elevation: 8,
   },
   filterButtonIcon: {
-    marginRight: -2,
+    marginRight: wp(-0.5),
   },
   filterButtonText: {
     fontFamily: 'Comfortaa-SemiBold',
-    fontSize: 16,
+    fontSize: wp(4.3),
     color: '#FFFFFF',
     letterSpacing: -0.32,
   },
