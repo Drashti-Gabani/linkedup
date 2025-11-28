@@ -1,30 +1,29 @@
 import React from 'react';
 import { View, ViewStyle, StyleProp, ImageSourcePropType } from 'react-native';
-import FastImage, { FastImageProps, Source } from 'react-native-fast-image';
 import { AppImage } from './AppImage';
 
 /**
  * AppImageBackground - Wrapper component for ImageBackground using FastImage
- * 
+ *
  * This component provides a centralized way to use image backgrounds throughout the app.
  * If you need to change the image library in the future, you only need to update this file.
- * 
+ *
  * Supports both local images (require) and remote images (uri).
- * 
+ *
  * @example
  * // Local image background
- * <AppImageBackground 
- *   source={require('./bg.png')} 
+ * <AppImageBackground
+ *   source={require('./bg.png')}
  *   style={styles.container}
  *   imageStyle={styles.backgroundImage}
  * >
  *   <Text>Content on top of image</Text>
  * </AppImageBackground>
- * 
+ *
  * @example
  * // Remote image background
- * <AppImageBackground 
- *   source={{ uri: 'https://example.com/bg.jpg' }} 
+ * <AppImageBackground
+ *   source={{ uri: 'https://example.com/bg.jpg' }}
  *   style={styles.container}
  * >
  *   <Text>Content on top of image</Text>
@@ -36,6 +35,9 @@ export interface AppImageBackgroundProps {
   imageStyle?: StyleProp<ViewStyle>;
   resizeMode?: 'contain' | 'cover' | 'stretch' | 'center';
   children?: React.ReactNode;
+  onLoadStart?: () => void;
+  onLoad?: () => void;
+  onError?: () => void;
 }
 
 export const AppImageBackground: React.FC<AppImageBackgroundProps> = ({
@@ -44,6 +46,9 @@ export const AppImageBackground: React.FC<AppImageBackgroundProps> = ({
   imageStyle,
   resizeMode = 'cover',
   children,
+  onLoadStart,
+  onLoad,
+  onError,
 }) => {
   return (
     <View style={style}>
@@ -60,6 +65,9 @@ export const AppImageBackground: React.FC<AppImageBackgroundProps> = ({
           imageStyle,
         ]}
         resizeMode={resizeMode}
+        onLoadStart={onLoadStart}
+        onLoad={onLoad}
+        onError={onError}
       />
       {children}
     </View>
@@ -67,4 +75,3 @@ export const AppImageBackground: React.FC<AppImageBackgroundProps> = ({
 };
 
 export default AppImageBackground;
-

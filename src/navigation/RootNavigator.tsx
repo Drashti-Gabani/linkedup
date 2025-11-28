@@ -12,6 +12,7 @@ import {
 import OnboardingScreen from '../screens/OnboardingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
+import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import OTPScreen from '../screens/OTPScreen';
 import OTPVerifyScreen from '../screens/OTPVerifyScreen';
 import RelationshipTypeScreen from '../screens/RelationshipTypeScreen';
@@ -65,6 +66,10 @@ const AuthNavigator: React.FC = () => {
     >
       <AuthStack.Screen name="Onboarding" component={OnboardingScreen} />
       <AuthStack.Screen name="Login" component={LoginScreen} />
+      <AuthStack.Screen
+        name="ForgotPassword"
+        component={ForgotPasswordScreen}
+      />
       <AuthStack.Screen name="OTP" component={OTPScreen} />
       <AuthStack.Screen name="OTPVerify" component={OTPVerifyScreen} />
       <AuthStack.Screen

@@ -1,5 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 import { AppImage } from '../utils/AppImage';
 import { AppImageBackground } from '../utils/AppImageBackground';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -8,14 +14,17 @@ import Animated, {
   useSharedValue,
   withSpring,
   withTiming,
+  withRepeat,
   runOnJS,
   interpolate,
+  Easing,
 } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
 import { User } from '../data/mockUsers';
 import { discoverControls } from '../assets/images';
 import { wp, hp } from '../utils/responsive';
+import { useTheme } from '../hooks/useTheme';
 
 const SCREEN_WIDTH = wp(100);
 const SWIPE_THRESHOLD = SCREEN_WIDTH * 0.3;
@@ -26,6 +35,7 @@ interface SwipeableCardProps {
   onSwipeRight: () => void;
   onSuperLike: () => void;
   onViewProfile?: () => void;
+  isDark: boolean;
 }
 
 const SwipeableCard: React.FC<SwipeableCardProps> = ({
@@ -34,17 +44,64 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
   onSwipeRight,
   onSuperLike,
   onViewProfile,
+  isDark,
 }) => {
+  const { colors } = useTheme();
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  // Get control button circle style based on isDark
+  const controlButtonCircleStyle = getControlButtonCircleStyle(isDark);
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
   const opacity = useSharedValue(1);
+  const imageOpacity = useSharedValue(0);
+  const shimmerTranslate = useSharedValue(-wp(200));
 
   // Calculate responsive values outside worklets (worklets can't call non-worklet functions)
   const SWIPE_OUT_DISTANCE = wp(150);
   const HALF_SCREEN_WIDTH = wp(50);
   const TAP_MAX_DISTANCE = wp(2.7);
   const VERTICAL_SWIPE_THRESHOLD = hp(6.6);
+
+  // Reset loading state when photo index changes
+  useEffect(() => {
+    setIsImageLoading(true);
+  }, [currentPhotoIndex]);
+
+  // Shimmer animation
+  useEffect(() => {
+    if (isImageLoading) {
+      shimmerTranslate.value = -wp(200);
+      shimmerTranslate.value = withRepeat(
+        withTiming(wp(200), {
+          duration: 1500,
+          easing: Easing.linear,
+        }),
+        -1,
+        false,
+      );
+    } else {
+      shimmerTranslate.value = -wp(200);
+    }
+  }, [isImageLoading, shimmerTranslate]);
+
+  const handleImageLoadStart = () => {
+    setIsImageLoading(true);
+    imageOpacity.value = 0;
+  };
+
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
+    shimmerTranslate.value = -wp(200);
+    imageOpacity.value = withTiming(1, { duration: 300 });
+  };
+
+  const handleImageError = () => {
+    setIsImageLoading(false);
+    shimmerTranslate.value = -wp(200);
+    imageOpacity.value = withTiming(1, { duration: 300 });
+  };
 
   const handlePhotoChange = (direction: 'next' | 'prev') => {
     if (direction === 'next' && currentPhotoIndex < user.photos.length - 1) {
@@ -190,85 +247,154 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
     };
   });
 
+  const shimmerStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: shimmerTranslate.value }],
+    };
+  });
+
+  const imageAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: imageOpacity.value,
+    };
+  });
+
   // Combine tap and pan gestures - tap works for quick taps, pan for swipes
   const composedGesture = Gesture.Simultaneous(tapGesture, panGesture);
 
   return (
     <GestureDetector gesture={composedGesture}>
       <Animated.View style={[styles.card, animatedStyle]}>
-        <AppImageBackground
-          source={{ uri: user.photos[currentPhotoIndex] }}
-          style={styles.photo}
-          imageStyle={styles.photoImage}
-        >
-          {/* Top gradient for location badge visibility */}
-          <LinearGradient
-            colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0)']}
-            locations={[0.3, 1]}
-            style={styles.topGradient}
-          />
-
-          {/* Side page indicators */}
-          <View style={styles.pageIndicators}>
-            {user.photos.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.pageIndicator,
-                  index === currentPhotoIndex && styles.pageIndicatorActive,
-                ]}
-              />
-            ))}
-          </View>
-
-          {/* Gradient overlay */}
-          <LinearGradient
-            colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
-            locations={[0.61, 1]}
-            style={styles.gradient}
-          >
-            <View
-              style={{
-                paddingBottom: hp(6.7),
-                paddingHorizontal: wp(7),
-              }}
+        {/* Loading placeholder with shimmer effect */}
+        {isImageLoading && (
+          <View style={styles.loadingContainer}>
+            <LinearGradient
+              colors={[
+                colors.backgroundCard || '#F5F5F5',
+                colors.backgroundSecondary || '#F2F2F2',
+                colors.backgroundCard || '#F5F5F5',
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.loadingGradient}
+            />
+            <Animated.View
+              style={[styles.shimmerOverlay, shimmerStyle]}
+              pointerEvents="none"
             >
-              {/* User info */}
-              <TouchableOpacity
-                style={styles.userInfo}
-                onPress={onViewProfile}
-                activeOpacity={0.8}
-              >
-                <Text style={styles.name}>{`${user.name}, ${user.age}`}</Text>
-                <Text style={styles.occupation}>{user.occupation}</Text>
-              </TouchableOpacity>
+              <LinearGradient
+                colors={
+                  Platform.select({
+                    ios: [
+                      'transparent',
+                      'rgba(255, 255, 255, 0.3)',
+                      'transparent',
+                    ],
+                    android: [
+                      'transparent',
+                      'rgba(255, 255, 255, 0.5)',
+                      'transparent',
+                    ],
+                  }) || [
+                    'transparent',
+                    'rgba(255, 255, 255, 0.5)',
+                    'transparent',
+                  ]
+                }
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={styles.shimmerGradient}
+              />
+            </Animated.View>
+            {/* Skeleton elements for better UX */}
+            <View style={styles.skeletonContent}>
+              <View style={styles.skeletonTopBar} />
+              <View style={styles.skeletonBottomSection}>
+                <View style={styles.skeletonName} />
+                <View style={styles.skeletonOccupation} />
+              </View>
             </View>
-          </LinearGradient>
-
-          {/* Location badge */}
-          <View style={styles.locationBadge}>
-            <Svg
-              width={wp(3.2)}
-              height={wp(3.2)}
-              viewBox="0 0 12 12"
-              fill="none"
-            >
-              <Path
-                d="M6 1C3.8 1 2 2.8 2 5c0 2.2 4 6 4 6s4-3.8 4-6c0-2.2-1.8-4-4-4zm0 5.5c-.8 0-1.5-.7-1.5-1.5S5.2 3.5 6 3.5 7.5 4.2 7.5 5 6.8 6.5 6 6.5z"
-                fill="#FFFFFF"
-                stroke="#FFFFFF"
-                strokeWidth={2}
-              />
-            </Svg>
-            <Text style={styles.distance}>{user.distance}</Text>
           </View>
-        </AppImageBackground>
+        )}
+
+        <Animated.View style={[styles.photo, imageAnimatedStyle]}>
+          <AppImageBackground
+            source={{ uri: user.photos[currentPhotoIndex] }}
+            style={styles.photo}
+            imageStyle={styles.photoImage}
+            onLoadStart={handleImageLoadStart}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+          >
+            {/* Top gradient for location badge visibility */}
+            <LinearGradient
+              colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0)']}
+              locations={[0.3, 1]}
+              style={styles.topGradient}
+            />
+
+            {/* Side page indicators */}
+            <View style={styles.pageIndicators}>
+              {user.photos.map((_, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.pageIndicator,
+                    index === currentPhotoIndex && styles.pageIndicatorActive,
+                  ]}
+                />
+              ))}
+            </View>
+
+            {/* Gradient overlay */}
+            <LinearGradient
+              colors={['rgba(0,0,0,0)', 'rgba(0,0,0,1)']}
+              locations={[0.61, 1]}
+              style={styles.gradient}
+            >
+              <View
+                style={{
+                  paddingBottom: hp(6.7),
+                  paddingHorizontal: wp(7),
+                }}
+              >
+                {/* User info */}
+                <TouchableOpacity
+                  style={styles.userInfo}
+                  onPress={onViewProfile}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.name}>{`${user.name}, ${user.age}`}</Text>
+                  <Text style={styles.occupation}>{user.occupation}</Text>
+                </TouchableOpacity>
+              </View>
+            </LinearGradient>
+
+            {/* Location badge */}
+            <View style={styles.locationBadge}>
+              <Svg
+                width={wp(3.2)}
+                height={wp(3.2)}
+                viewBox="0 0 12 12"
+                fill="none"
+              >
+                <Path
+                  d="M6 1C3.8 1 2 2.8 2 5c0 2.2 4 6 4 6s4-3.8 4-6c0-2.2-1.8-4-4-4zm0 5.5c-.8 0-1.5-.7-1.5-1.5S5.2 3.5 6 3.5 7.5 4.2 7.5 5 6.8 6.5 6 6.5z"
+                  fill="#FFFFFF"
+                  stroke="#FFFFFF"
+                  strokeWidth={2}
+                />
+              </Svg>
+              <Text style={styles.distance}>{user.distance}</Text>
+            </View>
+          </AppImageBackground>
+        </Animated.View>
 
         {/* Control buttons - outside the image */}
         <View style={styles.controls}>
           {/* Reject Button */}
           <TouchableOpacity
-            style={[styles.controlButtonCircle, styles.smallCircle]}
+            style={[controlButtonCircleStyle, styles.smallCircle]}
             onPress={handleReject}
             activeOpacity={0.7}
           >
@@ -281,7 +407,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
 
           {/* Super Like Button */}
           <TouchableOpacity
-            style={[styles.controlButtonCircle, styles.largeCircle]}
+            style={[controlButtonCircleStyle, styles.largeCircle]}
             onPress={handleSuperLike}
             activeOpacity={0.7}
           >
@@ -294,7 +420,7 @@ const SwipeableCard: React.FC<SwipeableCardProps> = ({
 
           {/* Like Button */}
           <TouchableOpacity
-            style={[styles.controlButtonCircle, styles.smallCircle]}
+            style={[controlButtonCircleStyle, styles.smallCircle]}
             onPress={handleLike}
             activeOpacity={0.7}
           >
@@ -315,11 +441,6 @@ const styles = StyleSheet.create({
     width: wp(87),
     height: hp(65.2),
     borderRadius: wp(8),
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: hp(0.8) },
-    shadowOpacity: 0.15,
-    shadowRadius: wp(4),
-    elevation: 20,
   },
   photo: {
     width: '100%',
@@ -431,16 +552,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: wp(2.7),
     paddingBottom: 0,
-  },
-  controlButtonCircle: {
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#D7D7D7',
-    shadowOffset: { width: 0, height: hp(2.6) },
-    shadowOpacity: 0.5,
-    shadowRadius: wp(6),
-    elevation: 10,
+    zIndex: 10,
   },
   smallCircle: {
     width: wp(15.2),
@@ -464,6 +576,101 @@ const styles = StyleSheet.create({
     width: wp(6.7),
     height: wp(6.7),
   },
+  loadingContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    borderRadius: wp(8),
+    overflow: 'hidden',
+    zIndex: 1,
+  },
+  loadingGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+  },
+  shimmerOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: wp(200), // Wider to ensure full coverage during animation
+    height: '100%',
+    ...Platform.select({
+      android: {
+        elevation: 0,
+        renderToHardwareTextureAndroid: true,
+      },
+    }),
+  },
+  shimmerGradient: {
+    width: '100%',
+    height: '100%',
+    ...Platform.select({
+      android: {
+        opacity: 1,
+      },
+    }),
+  },
+  skeletonContent: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(7),
+    paddingTop: hp(2.6),
+    paddingBottom: hp(6.7),
+  },
+  skeletonTopBar: {
+    width: wp(30),
+    height: hp(3),
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    borderRadius: wp(2.7),
+  },
+  skeletonBottomSection: {
+    gap: hp(0.7),
+  },
+  skeletonName: {
+    width: wp(50),
+    height: hp(4.4),
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: wp(1),
+  },
+  skeletonOccupation: {
+    width: wp(40),
+    height: hp(3.3),
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: wp(1),
+  },
 });
+
+// Helper function to get control button circle style based on isDark
+const getControlButtonCircleStyle = (isDark: boolean) => {
+  return {
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center' as const,
+    alignItems: 'center' as const,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#D7D7D7',
+        shadowOffset: { width: 0, height: hp(2.6) },
+        shadowOpacity: isDark ? 0.5 : 0.9,
+        shadowRadius: isDark ? wp(6) : wp(4),
+      },
+      android: {
+        elevation: 12, // Higher elevation for better visibility on Android
+      },
+    }),
+  };
+};
 
 export default SwipeableCard;

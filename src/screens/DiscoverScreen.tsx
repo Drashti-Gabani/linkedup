@@ -300,6 +300,7 @@ const DiscoverScreen: React.FC = () => {
                 onSwipeRight={handleSwipeRight}
                 onSuperLike={handleSuperLike}
                 onViewProfile={handleViewProfile}
+                isDark={isDark}
               />
             )
           )}
