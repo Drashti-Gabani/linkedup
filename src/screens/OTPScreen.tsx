@@ -115,6 +115,7 @@ const OTPScreen: React.FC = () => {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => setCountryPickerVisible(true)}
+                style={styles.countryCodeButton}
               >
                 <LinearGradient
                   colors={gradients.secondary}
@@ -253,8 +254,10 @@ const styles = StyleSheet.create({
     width: wp('80.7%'), // 334px width
     alignItems: 'center', // Center align items vertically
   },
+  countryCodeButton: {
+    alignSelf: 'flex-start',
+  },
   countryCode: {
-    width: wp('31.4%'), // 130.21px width - back to original
     height: hp('5.91%'), // 52.97px height
     borderRadius: wp('2.9%'), // 12px border radius
     justifyContent: 'center', // Center content vertically
@@ -262,7 +265,6 @@ const styles = StyleSheet.create({
   countryCodeContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
     gap: wp('1.45%'),
     paddingHorizontal: wp('4.54%'),
   },
