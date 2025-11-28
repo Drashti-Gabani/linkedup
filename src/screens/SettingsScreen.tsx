@@ -11,6 +11,7 @@ import Svg, { Path } from 'react-native-svg';
 import DeviceInfo from 'react-native-device-info';
 import { useTheme } from '../hooks/useTheme';
 import LogoutModal from '../components/LogoutModal';
+import DeleteAccountModal from '../components/DeleteAccountModal';
 import { SettingsScreenNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import GradientButton from '../components/GradientButton';
@@ -19,6 +20,7 @@ export default function SettingsScreen() {
   const navigation = useNavigation<SettingsScreenNavigationProp>();
   const [pushNotifications, setPushNotifications] = useState(true);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const [appVersion, setAppVersion] = useState<string>('');
   const { colors, isDark, setMode } = useTheme();
 
@@ -29,6 +31,17 @@ export default function SettingsScreen() {
 
   const handleLogout = () => {
     setShowLogoutModal(false);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Auth' }],
+    });
+  };
+
+  const handleDeleteAccount = () => {
+    setShowDeleteAccountModal(false);
+    // TODO: Implement delete account API call
+    console.log('Account deletion requested');
+    // Navigate to auth screen after account deletion
     navigation.reset({
       index: 0,
       routes: [{ name: 'Auth' }],
@@ -176,6 +189,29 @@ export default function SettingsScreen() {
                 <Path
                   d="M3.59 10.59L8.17 6L3.59 1.41L5 0L11 6L5 12L3.59 10.59Z"
                   fill={isDark ? colors.textPrimary : colors.textQuaternary}
+                />
+              </Svg>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.menuItem}
+              activeOpacity={0.7}
+              onPress={() => setShowDeleteAccountModal(true)}
+            >
+              <Text
+                style={[
+                  styles.menuItemText,
+                  {
+                    color: '#FF3B30',
+                  },
+                ]}
+              >
+                Delete account
+              </Text>
+              <Svg width={12} height={12} viewBox="0 0 12 12" fill="none">
+                <Path
+                  d="M3.59 10.59L8.17 6L3.59 1.41L5 0L11 6L5 12L3.59 10.59Z"
+                  fill="#FF3B30"
                 />
               </Svg>
             </TouchableOpacity>
@@ -355,6 +391,13 @@ export default function SettingsScreen() {
         visible={showLogoutModal}
         onCancel={() => setShowLogoutModal(false)}
         onConfirm={handleLogout}
+      />
+
+      {/* Delete Account Modal */}
+      <DeleteAccountModal
+        visible={showDeleteAccountModal}
+        onCancel={() => setShowDeleteAccountModal(false)}
+        onConfirm={handleDeleteAccount}
       />
     </View>
   );
