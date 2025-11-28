@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -30,12 +30,18 @@ const SignUpScreen: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
   const [birthdate, setBirthdate] = useState('');
+  const [bio, setBio] = useState('');
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+
+  // Refs for scrolling
+  const scrollViewRef = useRef<ScrollView>(null);
+  const bioInputRef = useRef<TextInput>(null);
 
   // Show checkmark when field has value
   const showFirstNameCheck = firstName.length > 0;
   const showEmailCheck = email.length > 0;
   const showBirthdateCheck = birthdate.length > 0;
+  const showBioCheck = bio.length > 0;
 
   // Infinite carousel animation
   const { card0Style, card1Style, card2Style, cardImages, cardSizes } =
@@ -49,6 +55,22 @@ const SignUpScreen: React.FC = () => {
     navigation.navigate('Login');
   };
 
+  const handleBioFocus = () => {
+    setFocusedInput('bio');
+    // Scroll to show bio field above keyboard
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: true });
+    }, 100);
+  };
+
+  const handleBioBlur = () => {
+    setFocusedInput(null);
+  };
+
+  const handleBioSubmit = () => {
+    bioInputRef.current?.blur();
+  };
+
   return (
     <KeyboardAvoidingView
       style={[
@@ -56,9 +78,10 @@ const SignUpScreen: React.FC = () => {
         { backgroundColor: colors.background },
       ]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
     >
       <ScrollView
+        ref={scrollViewRef}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
         keyboardShouldPersistTaps="handled"
@@ -261,6 +284,55 @@ const SignUpScreen: React.FC = () => {
                       inputWrapperStyle={styles.datePickerInputWrapper}
                     />
                   </View>
+
+                  {/* Bio Input */}
+                  <View style={styles.bioInputGroup}>
+                    <Text
+                      style={[
+                        styles.labelText,
+                        { color: colors.accentTertiary },
+                      ]}
+                    >
+                      BIO
+                    </Text>
+                    <View
+                      style={[
+                        styles.bioInputWrapper,
+                        { backgroundColor: colors.fieldBackground },
+                        focusedInput === 'bio' && [
+                          styles.inputWrapperFocused,
+                          { borderColor: colors.accent },
+                        ],
+                        !isDark &&
+                          focusedInput !== 'bio' && [
+                            styles.inputWrapperLight,
+                            { borderColor: colors.borderLight },
+                          ],
+                      ]}
+                    >
+                      <TextInput
+                        ref={bioInputRef}
+                        style={[styles.bioInput, { color: colors.textPrimary }]}
+                        placeholder="Tell us about yourself..."
+                        placeholderTextColor={colors.placeholder}
+                        value={bio}
+                        onChangeText={setBio}
+                        multiline
+                        returnKeyType="done"
+                        blurOnSubmit={true}
+                        numberOfLines={4}
+                        textAlignVertical="top"
+                        onFocus={handleBioFocus}
+                        onBlur={handleBioBlur}
+                        onSubmitEditing={handleBioSubmit}
+                      />
+                      {showBioCheck && (
+                        <View style={styles.bioCheckmark}>
+                          <CheckmarkIcon width={10} height={8} />
+                        </View>
+                      )}
+                    </View>
+                  </View>
                 </View>
 
                 {/* Privacy Notice */}
@@ -401,6 +473,10 @@ const styles = StyleSheet.create({
     height: 72,
     position: 'relative',
   },
+  bioInputGroup: {
+    minHeight: 140,
+    position: 'relative',
+  },
   labelText: {
     fontFamily: 'Comfortaa-Regular',
     fontSize: 11,
@@ -439,6 +515,37 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     paddingVertical: 0,
     flex: 1,
+  },
+  bioInputWrapper: {
+    marginTop: 24,
+    minHeight: 100,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingHorizontal: 18,
+    paddingTop: 14,
+    paddingBottom: 14,
+    gap: 14,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 1,
+    position: 'relative',
+  },
+  bioInput: {
+    fontFamily: 'Comfortaa-SemiBold',
+    fontSize: 16,
+    lineHeight: 20,
+    paddingVertical: 0,
+    paddingTop: 0,
+    flex: 1,
+    minHeight: 72,
+    maxHeight: 120,
+  },
+  bioCheckmark: {
+    position: 'absolute',
+    top: 14,
+    right: 18,
   },
   privacyText: {
     fontFamily: 'Comfortaa-Regular',
