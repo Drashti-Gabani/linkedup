@@ -244,6 +244,19 @@ const LoginScreen: React.FC = () => {
                         />
                       </TouchableOpacity>
                     </View>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('ForgotPassword')}
+                      style={styles.forgotPasswordLink}
+                    >
+                      <Text
+                        style={[
+                          styles.forgotPasswordText,
+                          { color: colors.accentTertiary },
+                        ]}
+                      >
+                        Forgot Password?
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
 
@@ -362,7 +375,7 @@ const styles = StyleSheet.create({
     marginBottom: hp('1.2%'),
   },
   inputGroup: {
-    height: 72,
+    minHeight: 72,
     position: 'relative',
   },
   labelText: {
@@ -406,6 +419,16 @@ const styles = StyleSheet.create({
   },
   eyeIconButton: {
     padding: 4,
+  },
+  forgotPasswordLink: {
+    alignSelf: 'flex-end',
+    marginTop: 8,
+    paddingRight: 4,
+  },
+  forgotPasswordText: {
+    fontFamily: 'Comfortaa-SemiBold',
+    fontSize: 13,
+    lineHeight: 18,
   },
 });
 

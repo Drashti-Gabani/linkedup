@@ -7,6 +7,7 @@ export type AuthStackParamList = {
   Onboarding: undefined;
   Login: undefined;
   SignUp: undefined; // Sign up screen
+  ForgotPassword: undefined;
   OTP: undefined; // Phone number screen
   OTPVerify: undefined;
   RelationshipType: undefined;
