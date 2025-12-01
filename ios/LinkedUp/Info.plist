@@ -32,9 +32,21 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string>LinkedUp uses your location to show you nearby users.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Comfortaa-Regular.ttf</string>
+		<string>Comfortaa-Medium.ttf</string>
+		<string>Comfortaa-SemiBold.ttf</string>
+		<string>Comfortaa-Bold.ttf</string>
+		<string>SofiaPro-Regular.ttf</string>
+		<string>SofiaPro-SemiBold.ttf</string>
+		<string>Sk-Modernist-Regular.ttf</string>
+		<string>Chewy-Regular.ttf</string>
+		<string>Comfortaa-Light.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -49,17 +61,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Comfortaa-Regular.ttf</string>
-		<string>Comfortaa-Medium.ttf</string>
-		<string>Comfortaa-SemiBold.ttf</string>
-		<string>Comfortaa-Bold.ttf</string>
-		<string>SofiaPro-Regular.ttf</string>
-		<string>SofiaPro-SemiBold.ttf</string>
-		<string>Sk-Modernist-Regular.ttf</string>
-		<string>Chewy-Regular.ttf</string>
-		<string>Comfortaa-Light.ttf</string>
-	</array>
 </dict>
 </plist>
