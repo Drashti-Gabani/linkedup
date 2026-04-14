@@ -26,6 +26,7 @@ import { useTheme } from '../hooks/useTheme';
 import { useNavigation } from '@react-navigation/native';
 import RangeSlider from '../components/RangeSlider';
 import GradientButton from '../components/GradientButton';
+import CountryPickerInput from '../components/CountryPickerInput';
 
 const FiltersScreen: React.FC = () => {
   const navigation = useNavigation();
@@ -34,11 +35,10 @@ const FiltersScreen: React.FC = () => {
   const [locationType, setLocationType] = useState<'current' | 'city'>(
     'current',
   );
-  const [radius, setRadius] = useState(25); // Radius in miles - default to 25 for better UX
-  const [countryCode, setCountryCode] = useState<CountryCode>('US');
+  const [radius, setRadius] = useState(25);
+  const [countryCode, setCountryCode] = useState<CountryCode>('IN');
   const [country, setCountry] = useState<Country | null>(null);
   const [selectedCity, setSelectedCity] = useState<string>('');
-  const [showCountryPicker, setShowCountryPicker] = useState(false);
   const [showCityPicker, setShowCityPicker] = useState(false);
 
   // Sample cities - in production, this would come from an API based on selected country
@@ -112,7 +112,6 @@ const FiltersScreen: React.FC = () => {
   const handleCountrySelect = (selectedCountry: Country) => {
     setCountry(selectedCountry);
     setCountryCode(selectedCountry.cca2);
-    setShowCountryPicker(false);
     // Reset city when country changes
     setSelectedCity('');
   };
@@ -346,50 +345,22 @@ const FiltersScreen: React.FC = () => {
           {locationType === 'city' && (
             <View style={styles.cityCountryContainer}>
               {/* Country Picker */}
-              <TouchableOpacity
-                style={[
-                  styles.dropdownInput,
-                  {
-                    borderColor: '#DFDFDF',
-                    backgroundColor: isDark
-                      ? colors.backgroundCard
-                      : 'transparent',
-                  },
-                ]}
-                onPress={() => setShowCountryPicker(true)}
-                activeOpacity={0.7}
-              >
-                <Text
-                  style={[
-                    styles.dropdownText,
-                    {
-                      color: country
-                        ? isDark
-                          ? colors.textPrimary
-                          : colors.textQuaternary
-                        : '#CFCFCF',
-                    },
-                  ]}
-                >
-                  {country
-                    ? typeof country.name === 'object' &&
-                      'common' in country.name
-                      ? country.name.common
-                      : typeof country.name === 'string'
-                      ? country.name
-                      : 'Select Country'
-                    : 'Select Country'}
-                </Text>
-                <Svg width={12} height={8} viewBox="0 0 12 8" fill="none">
-                  <Path
-                    d="M1 1L6 6L11 1"
-                    stroke="#CFCFCF"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </TouchableOpacity>
+              <CountryPickerInput
+                variant="country"
+                countryCode={countryCode}
+                country={country}
+                onSelect={handleCountrySelect}
+                style={styles.dropdownInput}
+                pickerTheme={{
+                  fontFamily: 'Sofia Pro',
+                  fontSize: 16,
+                  backgroundColor: colors.backgroundCard,
+                  onBackgroundTextColor: colors.textPrimary,
+                  primaryColor: colors.accent,
+                  primaryColorVariant: colors.accentSecondary,
+                  filterPlaceholderTextColor: colors.textMuted,
+                }}
+              />
 
               {/* City Picker */}
               <TouchableOpacity
@@ -757,29 +728,7 @@ const FiltersScreen: React.FC = () => {
         </View>
       </ScrollView>
 
-      {/* Country Picker Modal */}
-      <CountryPicker
-        countryCode={countryCode}
-        withFilter
-        withFlag
-        withCountryNameButton={false}
-        withAlphaFilter={false}
-        withCallingCode={false}
-        withEmoji
-        onSelect={handleCountrySelect}
-        visible={showCountryPicker}
-        onClose={() => setShowCountryPicker(false)}
-        containerButtonStyle={{ width: 0, height: 0, opacity: 0 }}
-        theme={{
-          fontFamily: 'Sofia Pro',
-          fontSize: 16,
-          backgroundColor: colors.backgroundCard,
-          onBackgroundTextColor: colors.textPrimary,
-          primaryColor: colors.accent,
-          primaryColorVariant: colors.accentSecondary,
-          filterPlaceholderTextColor: colors.textMuted,
-        }}
-      />
+      {/* Country Picker Modal — rendered inside CountryPickerInput above */}
 
       {/* City Picker Modal */}
       <Modal

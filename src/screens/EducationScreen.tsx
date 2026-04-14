@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import MaskedView from '@react-native-masked-view/masked-view';
@@ -12,6 +12,7 @@ import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
 import GradientButton from '../components/GradientButton';
 import ScreenTitle from '../components/ScreenTitle';
+import AppTextInput from '../components/AppTextInput';
 
 const EDUCATION_LEVELS = [
   'Diploma',
@@ -99,7 +100,7 @@ const EducationScreen: React.FC = () => {
                 { backgroundColor: colors.inputBackground },
               ]}
             >
-              <TextInput
+              <AppTextInput
                 style={[styles.input, { color: colors.fieldText }]}
                 placeholder="Institute name"
                 placeholderTextColor={colors.placeholder}
@@ -160,10 +161,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 4,
-    borderRadius: 16,
     height: 48,
     justifyContent: 'center',
-    paddingHorizontal: 17,
   },
   input: {
     fontFamily: 'Comfortaa-Regular',

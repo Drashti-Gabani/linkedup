@@ -14,11 +14,10 @@ import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import GradientButton from '../components/GradientButton';
-import GradientText from '../components/GradientText';
 import EmailIcon from '../components/icons/EmailIcon';
-import CheckmarkIcon from '../components/icons/CheckmarkIcon';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
+import AppTextInput from '../components/AppTextInput';
 
 interface EmailErrors {
   email?: string;
@@ -146,57 +145,23 @@ const ForgotPasswordScreen: React.FC = () => {
               {/* Input Fields */}
               <View style={styles.inputsContainer}>
                 {/* Email Input */}
-                <View style={styles.inputGroup}>
-                  <GradientText
-                    colors={gradients.secondary}
-                    style={styles.labelText}
-                  >
-                    EMAIL
-                  </GradientText>
-                  <View
-                    style={[
-                      styles.inputWrapper,
-                      {
-                        backgroundColor: isDark
-                          ? colors.inputBackground
-                          : '#F5F7F9',
-                      },
-                      focusedInput === 'email'
-                        ? [
-                            styles.inputWrapperFocused,
-                            { borderColor: colors.accent },
-                          ]
-                        : errors.email
-                        ? [styles.inputWrapperError, { borderColor: '#FF3B30' }]
-                        : !isDark
-                        ? [styles.inputWrapperLight, { borderColor: '#E8EAED' }]
-                        : { borderColor: 'transparent' },
-                    ]}
-                  >
-                    <EmailIcon
-                      width={16}
-                      height={12}
-                      color={colors.inputIcon}
-                    />
-                    <TextInput
-                      style={[styles.input, { color: colors.textPrimary }]}
-                      placeholder="Email address"
-                      placeholderTextColor={colors.placeholder}
-                      value={email}
-                      onChangeText={handleEmailChange}
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      returnKeyType="done"
-                      onFocus={() => setFocusedInput('email')}
-                      onBlur={() => setFocusedInput(null)}
-                    />
-                    {showEmailCheck && <CheckmarkIcon width={10} height={8} />}
-                  </View>
-                  {errors.email && (
-                    <Text style={styles.errorText}>{errors.email}</Text>
-                  )}
-                </View>
+                <AppTextInput
+                  label="EMAIL"
+                  placeholder="Email address"
+                  value={email}
+                  onChangeText={handleEmailChange}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  returnKeyType="done"
+                  leftIcon={<EmailIcon width={16} height={12} color={colors.inputIcon} />}
+                  showCheckmark={showEmailCheck}
+                  isFocused={focusedInput === 'email'}
+                  onFocus={() => setFocusedInput('email')}
+                  onBlur={() => setFocusedInput(null)}
+                  error={errors.email}
+                  containerStyle={styles.inputGroup}
+                />
               </View>
 
               {/* Spacer for Button */}
@@ -280,65 +245,10 @@ const styles = StyleSheet.create({
     marginBottom: hp('1.2%'),
   },
   inputGroup: {
-    minHeight: 72,
     position: 'relative',
-  },
-  labelText: {
-    fontFamily: 'Comfortaa-Medium',
-    fontSize: 10,
-    lineHeight: 15,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    position: 'absolute',
-    top: 0,
-    left: 17,
-    zIndex: 1,
-  },
-  inputWrapper: {
-    marginTop: 24,
-    height: 48,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 18,
-    gap: 14,
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-    position: 'relative',
-  },
-  inputWrapperLight: {
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  inputWrapperFocused: {
-    borderWidth: 1.5,
-  },
-  inputWrapperError: {
-    borderWidth: 1.5,
-  },
-  input: {
-    fontFamily: 'Comfortaa-SemiBold',
-    fontSize: 16,
-    lineHeight: 20,
-    paddingVertical: 0,
-    flex: 1,
-    zIndex: 1,
   },
   buttonContainer: {
     marginBottom: hp('5%'),
-  },
-  errorText: {
-    fontFamily: 'Comfortaa-Regular',
-    fontSize: 12,
-    color: '#FF3B30',
-    marginTop: 4,
-    marginLeft: 17,
   },
   buttonSpacer: {
     height: hp('8%'),

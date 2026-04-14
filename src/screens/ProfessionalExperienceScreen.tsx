@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TextInput,
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,6 +17,7 @@ import SelectionSection from '../components/SelectionSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
 import ScreenTitle from '../components/ScreenTitle';
+import AppTextInput from '../components/AppTextInput';
 
 const EXPERIENCE_RANGES = [
   '0 – 2 years',
@@ -85,7 +85,7 @@ const ProfessionalExperienceScreen: React.FC = () => {
             <Text
               style={[styles.checkboxLabel, { color: colors.textDisabled }]}
             >
-              Don't show
+              Don't show on my profile
             </Text>
           </TouchableOpacity>
 
@@ -114,7 +114,7 @@ const ProfessionalExperienceScreen: React.FC = () => {
                 { backgroundColor: colors.inputBackground },
               ]}
             >
-              <TextInput
+              <AppTextInput
                 style={[styles.input, { color: colors.fieldText }]}
                 placeholder="Enter your role"
                 placeholderTextColor={colors.placeholder}
@@ -193,10 +193,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginTop: 4,
-    borderRadius: 16,
     height: 48,
     justifyContent: 'center',
-    paddingHorizontal: 17,
   },
   input: {
     fontFamily: 'Comfortaa-Regular',

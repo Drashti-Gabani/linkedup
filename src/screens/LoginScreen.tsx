@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
@@ -17,39 +16,86 @@ import { wp, hp } from '../utils/responsive';
 import NextButton from '../components/NextButton';
 import UserIcon from '../components/icons/UserIcon';
 import EyeIcon from '../components/icons/EyeIcon';
-import CheckmarkIcon from '../components/icons/CheckmarkIcon';
+import AppTextInput from '../components/AppTextInput';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import ScreenTitle from '../components/ScreenTitle';
 import { AppImage } from '../utils/AppImage';
 
+// ---------------------------------------------------------------------------
+// Validation helpers
+// ---------------------------------------------------------------------------
+const formatPhoneNumber = (digits: string): string => {
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+};
+
+const validateLogin = (phone: string, password: string) => {
+  const errors: { phone?: string; password?: string } = {};
+  const digits = phone.replace(/\D/g, '');
+  if (!digits) {
+    errors.phone = 'Phone number is required';
+  } else if (digits.length !== 10) {
+    errors.phone = 'Enter a valid 10-digit phone number';
+  }
+  if (!password) {
+    errors.password = 'Password is required';
+  } else if (password.length < 8) {
+    errors.password = 'Password must be at least 8 characters';
+  }
+  return errors;
+};
+
+// ---------------------------------------------------------------------------
+// Screen
+// ---------------------------------------------------------------------------
 const LoginScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{ phone?: string; password?: string }>({});
+  const [submitted, setSubmitted] = useState(false);
 
   // Infinite carousel animation
   const { card0Style, card1Style, card2Style, cardImages, cardSizes } =
     useInfiniteCarousel();
 
-  // Show checkmark when field has value
-  const showPhoneCheck = phoneNumber.length > 0;
-  const showPasswordCheck = password.length > 0;
+  // Show checkmark only when the field is fully valid
+  const showPhoneCheck = phoneNumber.replace(/\D/g, '').length === 10;
+  const showPasswordCheck = password.length >= 8;
 
-  const handleSignUp = () => {
-    navigation.navigate('SignUp');
+  const handlePhoneChange = (text: string) => {
+    const digits = text.replace(/\D/g, '').slice(0, 10);
+    setPhoneNumber(formatPhoneNumber(digits));
+    if (submitted) setErrors(prev => ({ ...prev, phone: undefined }));
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    if (submitted) setErrors(prev => ({ ...prev, password: undefined }));
+  };
+
+  const handleSignUp = () => navigation.navigate('SignUp');
+
+  const handleNext = () => {
+    setSubmitted(true);
+    const validationErrors = validateLogin(phoneNumber, password);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    // TODO: replace with real auth call
+    navigation.navigate('OTPVerify');
   };
 
   return (
     <KeyboardAvoidingView
-      style={[
-        styles.keyboardAvoidingView,
-        { backgroundColor: colors.background },
-      ]}
+      style={[styles.keyboardAvoidingView, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
     >
@@ -60,10 +106,8 @@ const LoginScreen: React.FC = () => {
         showsVerticalScrollIndicator={false}
         bounces={false}
       >
-        <View
-          style={[styles.container, { backgroundColor: colors.background }]}
-        >
-          {/* Profile Photos Section - Infinite Carousel */}
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+          {/* Profile Photos Section */}
           <View style={styles.profilePhotosContainer}>
             <Animated.View
               style={[
@@ -74,10 +118,7 @@ const LoginScreen: React.FC = () => {
             >
               <AppImage
                 source={cardImages[0]}
-                style={[
-                  styles.profilePhoto,
-                  { width: cardSizes[0].width, height: cardSizes[0].height },
-                ]}
+                style={[styles.profilePhoto, { width: cardSizes[0].width, height: cardSizes[0].height }]}
                 resizeMode="cover"
               />
             </Animated.View>
@@ -90,10 +131,7 @@ const LoginScreen: React.FC = () => {
             >
               <AppImage
                 source={cardImages[1]}
-                style={[
-                  styles.profilePhoto,
-                  { width: cardSizes[1].width, height: cardSizes[1].height },
-                ]}
+                style={[styles.profilePhoto, { width: cardSizes[1].width, height: cardSizes[1].height }]}
                 resizeMode="cover"
               />
             </Animated.View>
@@ -106,10 +144,7 @@ const LoginScreen: React.FC = () => {
             >
               <AppImage
                 source={cardImages[2]}
-                style={[
-                  styles.profilePhoto,
-                  { width: cardSizes[2].width, height: cardSizes[2].height },
-                ]}
+                style={[styles.profilePhoto, { width: cardSizes[2].width, height: cardSizes[2].height }]}
                 resizeMode="cover"
               />
             </Animated.View>
@@ -117,32 +152,20 @@ const LoginScreen: React.FC = () => {
 
           <View style={styles.contentWrapper}>
             <SafeAreaView style={styles.safeArea}>
-              {/* Content Section */}
               <View style={styles.content}>
-                {/* Title Section */}
+                {/* Title */}
                 <View style={styles.titleSection}>
                   <ScreenTitle
                     title="Login"
                     titleSize="large"
                     containerMarginBottom={hp('1%')}
                   />
-
                   <View style={styles.signUpWrapper}>
-                    <Text
-                      style={[styles.signUpText, { color: colors.textMuted }]}
-                    >
+                    <Text style={[styles.signUpText, { color: colors.textMuted }]}>
                       Don't have an account?{' '}
                     </Text>
-                    <TouchableOpacity
-                      onPress={handleSignUp}
-                      activeOpacity={0.7}
-                    >
-                      <Text
-                        style={[
-                          styles.signUpLink,
-                          { color: colors.accentTertiary },
-                        ]}
-                      >
+                    <TouchableOpacity onPress={handleSignUp} activeOpacity={0.7}>
+                      <Text style={[styles.signUpLink, { color: colors.accentTertiary }]}>
                         Sign Up
                       </Text>
                     </TouchableOpacity>
@@ -151,127 +174,70 @@ const LoginScreen: React.FC = () => {
 
                 {/* Input Fields */}
                 <View style={styles.inputsContainer}>
-                  {/* Phone Number Input */}
-                  <View style={styles.inputGroup}>
-                    <Text
-                      style={[
-                        styles.labelText,
-                        { color: colors.accentTertiary },
-                      ]}
-                    >
-                      PHONE NUMBER
-                    </Text>
-                    <View
-                      style={[
-                        styles.inputWrapper,
-                        { backgroundColor: colors.fieldBackground },
-                        focusedInput === 'phoneNumber' && [
-                          styles.inputWrapperFocused,
-                          { borderColor: colors.accent },
-                        ],
-                        !isDark &&
-                          focusedInput !== 'phoneNumber' && [
-                            styles.inputWrapperLight,
-                            { borderColor: colors.borderLight },
-                          ],
-                      ]}
-                    >
-                      <UserIcon
-                        width={13}
-                        height={14}
-                        color={colors.inputIcon}
-                      />
-                      <TextInput
-                        style={[styles.input, { color: colors.textPrimary }]}
-                        placeholder="Phone number"
-                        placeholderTextColor={colors.placeholder}
-                        value={phoneNumber}
-                        onChangeText={setPhoneNumber}
-                        keyboardType="phone-pad"
-                        returnKeyType="done"
-                        onFocus={() => setFocusedInput('phoneNumber')}
-                        onBlur={() => setFocusedInput(null)}
-                      />
-                      {showPhoneCheck && (
-                        <CheckmarkIcon width={10} height={8} />
-                      )}
-                    </View>
-                  </View>
+                  {/* Phone Number */}
+                  <AppTextInput
+                    label="Phone Number"
+                    placeholder="800-111-2222"
+                    value={phoneNumber}
+                    onChangeText={handlePhoneChange}
+                    keyboardType="phone-pad"
+                    returnKeyType="next"
+                    maxLength={12}
+                    leftIcon={<UserIcon width={13} height={14} color={colors.inputIcon} />}
+                    showCheckmark={showPhoneCheck}
+                    isFocused={focusedInput === 'phone'}
+                    onFocus={() => setFocusedInput('phone')}
+                    onBlur={() => setFocusedInput(null)}
+                    error={errors.phone}
+                    containerStyle={styles.inputGroup}
+                  />
 
-                  {/* Password Input */}
-                  <View style={styles.inputGroup}>
-                    <Text
-                      style={[
-                        styles.labelText,
-                        { color: colors.accentTertiary },
-                      ]}
-                    >
-                      PASSWORD
-                    </Text>
-                    <View
-                      style={[
-                        styles.inputWrapper,
-                        { backgroundColor: colors.fieldBackground },
-                        focusedInput === 'password' && [
-                          styles.inputWrapperFocused,
-                          { borderColor: colors.accent },
-                        ],
-                        !isDark &&
-                          focusedInput !== 'password' && [
-                            styles.inputWrapperLight,
-                            { borderColor: colors.borderLight },
-                          ],
-                      ]}
-                    >
-                      <TextInput
-                        style={[styles.input, { color: colors.textPrimary }]}
-                        placeholder="Password"
-                        placeholderTextColor={colors.placeholder}
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry={!isPasswordVisible}
-                        onFocus={() => setFocusedInput('password')}
-                        onBlur={() => setFocusedInput(null)}
-                      />
-                      <TouchableOpacity
-                        onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                        style={styles.eyeIconButton}
-                      >
-                        <EyeIcon
-                          width={24}
-                          height={24}
-                          color={colors.inputIconSecondary}
-                        />
-                      </TouchableOpacity>
-                    </View>
+                  {/* Password */}
+                  <View style={styles.passwordGroup}>
+                    <AppTextInput
+                      label="Password"
+                      placeholder="Password"
+                      value={password}
+                      onChangeText={handlePasswordChange}
+                      secureTextEntry={!isPasswordVisible}
+                      returnKeyType="done"
+                      showCheckmark={showPasswordCheck}
+                      isFocused={focusedInput === 'password'}
+                      onFocus={() => setFocusedInput('password')}
+                      onBlur={() => setFocusedInput(null)}
+                      error={errors.password}
+                      containerStyle={styles.inputGroup}
+                      rightElement={
+                        <TouchableOpacity
+                          onPress={() => setIsPasswordVisible(v => !v)}
+                          style={styles.eyeIconButton}
+                          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                        >
+                          <EyeIcon
+                            width={24}
+                            height={24}
+                            color={colors.inputIconSecondary}
+                          />
+                        </TouchableOpacity>
+                      }
+                    />
                     <TouchableOpacity
                       onPress={() => navigation.navigate('ForgotPassword')}
                       style={styles.forgotPasswordLink}
                     >
-                      <Text
-                        style={[
-                          styles.forgotPasswordText,
-                          { color: colors.accentTertiary },
-                        ]}
-                      >
+                      <Text style={[styles.forgotPasswordText, { color: colors.accentTertiary }]}>
                         Forgot Password?
                       </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
 
-                {/* Spacer for Next Button */}
                 <View style={styles.buttonSpacer} />
               </View>
 
-              {/* Next Button - Fixed at bottom */}
+              {/* Next Button */}
               <NextButton
-                onPress={() => {
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Main' }],
-                  });
-                }}
+                onPress={handleNext}
                 showText={true}
                 textLabel="Next"
                 size="medium"
@@ -284,6 +250,9 @@ const LoginScreen: React.FC = () => {
   );
 };
 
+// ---------------------------------------------------------------------------
+// Styles
+// ---------------------------------------------------------------------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -375,47 +344,10 @@ const styles = StyleSheet.create({
     marginBottom: hp('1.2%'),
   },
   inputGroup: {
-    minHeight: 72,
     position: 'relative',
   },
-  labelText: {
-    fontFamily: 'Comfortaa-Regular',
-    fontSize: 11,
-    textTransform: 'uppercase',
-    position: 'absolute',
-    top: 0,
-    left: 17,
-    zIndex: 1,
-  },
-  inputWrapper: {
-    marginTop: 24,
-    height: 48,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 18,
-    gap: 14,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  inputWrapperLight: {
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  inputWrapperFocused: {
-    borderWidth: 1.5,
-  },
-  input: {
-    fontFamily: 'Comfortaa-SemiBold',
-    fontSize: 16,
-    lineHeight: 20,
-    paddingVertical: 0,
-    flex: 1,
+  passwordGroup: {
+    position: 'relative',
   },
   eyeIconButton: {
     padding: 4,

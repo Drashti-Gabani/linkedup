@@ -15,9 +15,9 @@ import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import GradientButton from '../components/GradientButton';
 import EyeIcon from '../components/icons/EyeIcon';
-import GradientText from '../components/GradientText';
 import { SettingsScreenNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
+import AppTextInput from '../components/AppTextInput';
 
 interface PINErrors {
   currentPIN?: string;
@@ -187,49 +187,23 @@ const ChangePasswordScreen: React.FC = () => {
               {/* Input Fields */}
               <View style={styles.inputsContainer}>
                 {/* Current PIN Input */}
-                <View style={styles.inputGroup}>
-                  <GradientText
-                    colors={gradients.secondary}
-                    style={styles.labelText}
-                  >
-                    CURRENT PIN
-                  </GradientText>
-                  <View
-                    style={[
-                      styles.inputWrapper,
-                      {
-                        backgroundColor: isDark
-                          ? colors.inputBackground
-                          : '#F5F7F9',
-                      },
-                      focusedInput === 'currentPIN'
-                        ? [
-                            styles.inputWrapperFocused,
-                            { borderColor: colors.accent },
-                          ]
-                        : errors.currentPIN
-                        ? [styles.inputWrapperError, { borderColor: '#FF3B30' }]
-                        : !isDark
-                        ? [styles.inputWrapperLight, { borderColor: '#E8EAED' }]
-                        : { borderColor: 'transparent' },
-                    ]}
-                  >
-                    <TextInput
-                      style={[styles.input, { color: colors.textPrimary }]}
-                      placeholder="Current PIN"
-                      placeholderTextColor={colors.placeholder}
-                      value={currentPIN}
-                      onChangeText={handleCurrentPINChange}
-                      secureTextEntry={!isCurrentPINVisible}
-                      keyboardType="numeric"
-                      returnKeyType="done"
-                      onFocus={() => setFocusedInput('currentPIN')}
-                      onBlur={() => setFocusedInput(null)}
-                    />
+                {/* Current PIN Input */}
+                <AppTextInput
+                  label="CURRENT PIN"
+                  placeholder="Current PIN"
+                  value={currentPIN}
+                  onChangeText={handleCurrentPINChange}
+                  secureTextEntry={!isCurrentPINVisible}
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  isFocused={focusedInput === 'currentPIN'}
+                  onFocus={() => setFocusedInput('currentPIN')}
+                  onBlur={() => setFocusedInput(null)}
+                  error={errors.currentPIN}
+                  containerStyle={styles.inputGroup}
+                  rightElement={
                     <TouchableOpacity
-                      onPress={() =>
-                        setIsCurrentPINVisible(!isCurrentPINVisible)
-                      }
+                      onPress={() => setIsCurrentPINVisible(!isCurrentPINVisible)}
                       style={styles.eyeIconButton}
                     >
                       <EyeIcon
@@ -238,66 +212,38 @@ const ChangePasswordScreen: React.FC = () => {
                         color={colors.inputIconSecondary}
                       />
                     </TouchableOpacity>
-                  </View>
-                  {errors.currentPIN && (
-                    <Text style={styles.errorText}>{errors.currentPIN}</Text>
-                  )}
-                </View>
+                  }
+                />
 
                 {/* New PIN Input */}
-                <View style={styles.inputGroup}>
-                  <GradientText
-                    colors={gradients.secondary}
-                    style={styles.labelText}
-                  >
-                    NEW PIN
-                  </GradientText>
-                  <View
-                    style={[
-                      styles.inputWrapper,
-                      {
-                        backgroundColor: isDark
-                          ? colors.inputBackground
-                          : '#F5F7F9',
-                      },
-                      focusedInput === 'newPIN'
-                        ? [
-                            styles.inputWrapperFocused,
-                            { borderColor: colors.accent },
-                          ]
-                        : errors.newPIN
-                        ? [styles.inputWrapperError, { borderColor: '#FF3B30' }]
-                        : !isDark
-                        ? [styles.inputWrapperLight, { borderColor: '#E8EAED' }]
-                        : { borderColor: 'transparent' },
-                    ]}
-                  >
-                    <TextInput
-                      style={[styles.input, { color: colors.textPrimary }]}
-                      placeholder="New PIN"
-                      placeholderTextColor={colors.placeholder}
-                      value={newPIN}
-                      onChangeText={handleNewPINChange}
-                      secureTextEntry={!isNewPINVisible}
-                      keyboardType="numeric"
-                      returnKeyType="done"
-                      onFocus={() => setFocusedInput('newPIN')}
-                      onBlur={() => setFocusedInput(null)}
-                    />
-                    <TouchableOpacity
-                      onPress={() => setIsNewPINVisible(!isNewPINVisible)}
-                      style={styles.eyeIconButton}
-                    >
-                      <EyeIcon
-                        width={24}
-                        height={24}
-                        color={colors.inputIconSecondary}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                  {errors.newPIN && (
-                    <Text style={styles.errorText}>{errors.newPIN}</Text>
-                  )}
+                {/* New PIN Input */}
+                <View style={styles.inputGroupWrapper}>
+                  <AppTextInput
+                    label="NEW PIN"
+                    placeholder="New PIN"
+                    value={newPIN}
+                    onChangeText={handleNewPINChange}
+                    secureTextEntry={!isNewPINVisible}
+                    keyboardType="numeric"
+                    returnKeyType="done"
+                    isFocused={focusedInput === 'newPIN'}
+                    onFocus={() => setFocusedInput('newPIN')}
+                    onBlur={() => setFocusedInput(null)}
+                    error={errors.newPIN}
+                    containerStyle={styles.inputGroup}
+                    rightElement={
+                      <TouchableOpacity
+                        onPress={() => setIsNewPINVisible(!isNewPINVisible)}
+                        style={styles.eyeIconButton}
+                      >
+                        <EyeIcon
+                          width={24}
+                          height={24}
+                          color={colors.inputIconSecondary}
+                        />
+                      </TouchableOpacity>
+                    }
+                  />
                   {!errors.newPIN && newPIN.length > 0 && (
                     <Text style={styles.helperText}>
                       Must be at least 4 digits
@@ -306,49 +252,23 @@ const ChangePasswordScreen: React.FC = () => {
                 </View>
 
                 {/* Confirm PIN Input */}
-                <View style={styles.inputGroup}>
-                  <GradientText
-                    colors={gradients.secondary}
-                    style={styles.labelText}
-                  >
-                    CONFIRM NEW PIN
-                  </GradientText>
-                  <View
-                    style={[
-                      styles.inputWrapper,
-                      {
-                        backgroundColor: isDark
-                          ? colors.inputBackground
-                          : '#F5F7F9',
-                      },
-                      focusedInput === 'confirmPIN'
-                        ? [
-                            styles.inputWrapperFocused,
-                            { borderColor: colors.accent },
-                          ]
-                        : errors.confirmPIN
-                        ? [styles.inputWrapperError, { borderColor: '#FF3B30' }]
-                        : !isDark
-                        ? [styles.inputWrapperLight, { borderColor: '#E8EAED' }]
-                        : { borderColor: 'transparent' },
-                    ]}
-                  >
-                    <TextInput
-                      style={[styles.input, { color: colors.textPrimary }]}
-                      placeholder="Confirm new PIN"
-                      placeholderTextColor={colors.placeholder}
-                      value={confirmPIN}
-                      onChangeText={handleConfirmPINChange}
-                      secureTextEntry={!isConfirmPINVisible}
-                      keyboardType="numeric"
-                      returnKeyType="done"
-                      onFocus={() => setFocusedInput('confirmPIN')}
-                      onBlur={() => setFocusedInput(null)}
-                    />
+                {/* Confirm PIN Input */}
+                <AppTextInput
+                  label="CONFIRM NEW PIN"
+                  placeholder="Confirm new PIN"
+                  value={confirmPIN}
+                  onChangeText={handleConfirmPINChange}
+                  secureTextEntry={!isConfirmPINVisible}
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  isFocused={focusedInput === 'confirmPIN'}
+                  onFocus={() => setFocusedInput('confirmPIN')}
+                  onBlur={() => setFocusedInput(null)}
+                  error={errors.confirmPIN}
+                  containerStyle={styles.inputGroup}
+                  rightElement={
                     <TouchableOpacity
-                      onPress={() =>
-                        setIsConfirmPINVisible(!isConfirmPINVisible)
-                      }
+                      onPress={() => setIsConfirmPINVisible(!isConfirmPINVisible)}
                       style={styles.eyeIconButton}
                     >
                       <EyeIcon
@@ -357,11 +277,8 @@ const ChangePasswordScreen: React.FC = () => {
                         color={colors.inputIconSecondary}
                       />
                     </TouchableOpacity>
-                  </View>
-                  {errors.confirmPIN && (
-                    <Text style={styles.errorText}>{errors.confirmPIN}</Text>
-                  )}
-                </View>
+                  }
+                />
               </View>
 
               {/* Spacer for Button */}
@@ -436,70 +353,17 @@ const styles = StyleSheet.create({
     gap: 12,
     marginBottom: hp('1.2%'),
   },
+  inputGroupWrapper: {
+    position: 'relative',
+  },
   inputGroup: {
-    minHeight: 72,
     position: 'relative',
-  },
-  labelText: {
-    fontFamily: 'Comfortaa-Medium',
-    fontSize: 10,
-    lineHeight: 15,
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
-    position: 'absolute',
-    top: 0,
-    left: 17,
-    zIndex: 1,
-  },
-  inputWrapper: {
-    marginTop: 24,
-    height: 48,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 18,
-    gap: 14,
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-    position: 'relative',
-  },
-  inputWrapperLight: {
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  inputWrapperFocused: {
-    borderWidth: 1.5,
-  },
-  inputWrapperError: {
-    borderWidth: 1.5,
-  },
-  input: {
-    fontFamily: 'Comfortaa-SemiBold',
-    fontSize: 16,
-    lineHeight: 20,
-    paddingVertical: 0,
-    flex: 1,
-    zIndex: 1,
   },
   eyeIconButton: {
     padding: 4,
-    zIndex: 1,
   },
   buttonContainer: {
     marginBottom: hp('5%'),
-  },
-  errorText: {
-    fontFamily: 'Comfortaa-Regular',
-    fontSize: 12,
-    color: '#FF3B30',
-    marginTop: 4,
-    marginLeft: 17,
   },
   helperText: {
     fontFamily: 'Comfortaa-Regular',

@@ -2,58 +2,62 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
-  TouchableOpacity,
   ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaskedView from '@react-native-masked-view/masked-view';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import CountryPicker, {
-  CountryCode,
-  Country,
-} from 'react-native-country-picker-modal';
+import { Country, CountryCode } from 'react-native-country-picker-modal';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
-import DropdownArrowIcon from '../components/icons/DropdownArrowIcon';
 import GradientButton from '../components/GradientButton';
-
-// Helper function to convert country code to flag emoji
-const getFlagEmoji = (countryCode: CountryCode): string => {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split('')
-    .map(char => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
-};
+import CountryPickerInput from '../components/CountryPickerInput';
+import AppTextInput from '../components/AppTextInput';
 
 const OTPScreen: React.FC = () => {
   const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
 
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [countryCode, setCountryCode] = useState<CountryCode>('US');
+  const [countryCode, setCountryCode] = useState<CountryCode>('IN');
   const [country, setCountry] = useState<Country | null>(null);
-  const [countryPickerVisible, setCountryPickerVisible] = useState(false);
+  const [error, setError] = useState('');
 
   const onSelectCountry = (selectedCountry: Country) => {
     setCountryCode(selectedCountry.cca2);
     setCountry(selectedCountry);
-    setCountryPickerVisible(false);
   };
 
-  const getCallingCode = () => {
-    const code = country?.callingCode?.[0] || '1';
-    return `+${code}`;
+  // Format digits as xxx-xxx-xxxx
+  const formatPhoneNumber = (digits: string): string => {
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+    return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
   };
 
-  const getCountryFlag = () => {
-    // Use the current country code to get flag emoji
-    return getFlagEmoji(countryCode);
+  const handlePhoneChange = (text: string) => {
+    // Strip everything except digits
+    const digits = text.replace(/\D/g, '').slice(0, 10);
+    setPhoneNumber(formatPhoneNumber(digits));
+
+    // Clear error as user types
+    if (error) setError('');
+  };
+
+  const getRawDigits = () => phoneNumber.replace(/\D/g, '');
+
+  const isValid = getRawDigits().length === 10;
+
+  const handleNext = () => {
+    if (!isValid) {
+      setError('Please enter a valid 10-digit phone number');
+      return;
+    }
+    navigation.navigate('OTPVerify');
   };
 
   return (
@@ -112,49 +116,25 @@ const OTPScreen: React.FC = () => {
           <View style={styles.middleSection}>
             {/* Phone Number Input */}
             <View style={styles.numberField}>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => setCountryPickerVisible(true)}
-                style={styles.countryCodeButton}
-              >
-                <LinearGradient
-                  colors={gradients.secondary}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  angle={242}
-                  style={styles.countryCode}
-                >
-                  <View style={styles.countryCodeContent}>
-                    <Text style={styles.flag}>{getCountryFlag()}</Text>
-                    <Text
-                      style={[styles.codeText, { color: colors.iconSelected }]}
-                    >
-                      {getCallingCode()}
-                    </Text>
-                    <DropdownArrowIcon
-                      width={wp('2.66%')}
-                      height={wp('1.33%')}
-                      color={colors.iconSelected}
-                    />
-                  </View>
-                </LinearGradient>
-              </TouchableOpacity>
-              <View
-                style={[
-                  styles.phoneInputWrapper,
-                  { backgroundColor: colors.fieldBackground },
-                ]}
-              >
-                <TextInput
-                  style={[styles.phoneInput, { color: colors.fieldText }]}
-                  placeholder="800-111-2222"
-                  placeholderTextColor={colors.placeholder}
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                  keyboardType="phone-pad"
-                  returnKeyType="done"
-                />
-              </View>
+              {/* Locked to India — disabled until worldwide release */}
+              <CountryPickerInput
+                variant="phone"
+                countryCode={countryCode}
+                country={country}
+                onSelect={onSelectCountry}
+                disabled
+              />
+              <AppTextInput
+                value={phoneNumber}
+                onChangeText={handlePhoneChange}
+                placeholder="800-111-2222"
+                keyboardType="phone-pad"
+                returnKeyType="done"
+                maxLength={12}
+                error={error}
+                inputWrapperStyle={styles.phoneInputWrapper}
+                containerStyle={styles.phoneInputContainer}
+              />
             </View>
 
             {/* Privacy Note */}
@@ -173,32 +153,12 @@ const OTPScreen: React.FC = () => {
         </View>
 
         <GradientButton
-          onPress={() => navigation.navigate('OTPVerify')}
+          onPress={handleNext}
           text="Next"
+          disabled={!isValid}
         />
 
-        {/* Country Picker Modal */}
-        <CountryPicker
-          {...{
-            countryCode,
-            withFilter: true,
-            withFlag: true,
-            withFlagButton: false, // Disable default flag button
-            withCountryNameButton: false,
-            withAlphaFilter: false,
-            withCallingCode: true,
-            withEmoji: true,
-            withModal: true, // Ensure it only shows as modal
-            onSelect: onSelectCountry,
-            visible: countryPickerVisible,
-            onClose: () => setCountryPickerVisible(false),
-            theme: undefined, // Use default theme, colors handled by app theme
-          }}
-          modalProps={{
-            animationType: 'slide',
-          }}
-          containerButtonStyle={{ width: 0, height: 0, opacity: 0 }} // Hide any container button
-        />
+
       </ScrollView>
     </SafeAreaView>
   );
@@ -249,60 +209,28 @@ const styles = StyleSheet.create({
   },
   numberField: {
     flexDirection: 'row',
-    height: hp('6.65%'), // 60px height
-    gap: wp('2.9%'), // Gap between country code and input
-    width: wp('80.7%'), // 334px width
-    alignItems: 'center', // Center align items vertically
+    gap: wp('2.9%'),
+    width: wp('80.7%'),
+    alignItems: 'flex-start', // allow error message to flow below
   },
-  countryCodeButton: {
-    alignSelf: 'flex-start',
-  },
-  countryCode: {
-    height: hp('5.91%'), // 52.97px height
-    borderRadius: wp('2.9%'), // 12px border radius
-    justifyContent: 'center', // Center content vertically
-  },
-  countryCodeContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: wp('1.45%'),
-    paddingHorizontal: wp('4.54%'),
-  },
-  flag: {
-    fontSize: wp('5.31%'),
-  },
-  codeGradient: {
+
+
+  phoneInputContainer: {
     flex: 1,
-    justifyContent: 'center',
-  },
-  codeText: {
-    fontFamily: 'Poppins',
-    fontWeight: '600',
-    fontSize: wp('4.35%'), // 18px
-  },
-  dropdownIcon: {
-    fontSize: wp('2.66%'),
-    // color will be set dynamically
   },
   phoneInputWrapper: {
-    flex: 1,
-    height: hp('5.91%'), // Match country code height (52.97px)
-    borderRadius: wp('2.9%'), // 12px border radius to match country code
-    paddingHorizontal: wp('4.35%'), // ~18px horizontal padding
+    marginTop: 0,       // no label so no top offset needed
+    height: hp('5.91%'),
+    borderRadius: wp('2.9%'),
+    paddingHorizontal: wp('4.35%'),
     justifyContent: 'center',
-  },
-  phoneInput: {
-    flex: 1,
-    fontFamily: 'Poppins',
-    fontWeight: '400',
-    fontSize: wp('5.31%'), // 22px
-    paddingVertical: 0,
   },
   privacyNote: {
     fontFamily: 'Comfortaa-Regular',
-    marginTop: hp('2.5%'), // ~22px spacing from number field (90px in Figma)
-    width: wp('80.7%'), // 334px width
+    marginTop: hp('2.5%'),
+    width: wp('80.7%'),
   },
 });
+
 
 export default OTPScreen;

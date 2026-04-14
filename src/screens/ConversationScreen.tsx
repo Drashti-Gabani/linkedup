@@ -5,11 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  TextInput,
-  StatusBar,
-  SafeAreaView,
   Modal,
   TouchableWithoutFeedback,
+  StatusBar,
+  SafeAreaView,
 } from 'react-native';
 import { AppImage } from '../utils/AppImage';
 import Svg, { Path, Circle } from 'react-native-svg';
@@ -20,6 +19,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import AppTextInput from '../components/AppTextInput';
 
 interface Message {
   id: string;
@@ -327,7 +327,8 @@ const ConversationScreen: React.FC = () => {
             },
           ]}
         >
-          <TextInput
+          <AppTextInput
+            variant="unstyled"
             style={[
               styles.textInput,
               { color: isDark ? colors.inputText : colors.fieldText },

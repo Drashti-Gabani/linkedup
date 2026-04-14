@@ -7,12 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Svg, { Polygon } from 'react-native-svg';
 import { useNavigation } from '@react-navigation/native';
-import CountryPicker, {
-  Country,
-  CountryCode,
-} from 'react-native-country-picker-modal';
+import { Country, CountryCode } from 'react-native-country-picker-modal';
 import { useTheme } from '../hooks/useTheme';
 import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
@@ -20,6 +16,7 @@ import SelectionSection from '../components/SelectionSection';
 import BackButton from '../components/BackButton';
 import NextButton from '../components/NextButton';
 import ScreenTitle from '../components/ScreenTitle';
+import CountryPickerInput from '../components/CountryPickerInput';
 
 const SALARY_RANGES = [
   'Below 50,000',
@@ -39,13 +36,14 @@ const MonthlyEarningScreen: React.FC = () => {
     'Below 50,000',
   );
   const [dontShow, setDontShow] = useState(false);
-  const [showCurrencyPicker, setShowCurrencyPicker] = useState(false);
-  const [countryCode, setCountryCode] = useState<CountryCode>('US');
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [countryCode, setCountryCode] = useState<CountryCode>('IN');
+  const [country, setCountry] = useState<Country | null>(null);
+  const [selectedCurrency, setSelectedCurrency] = useState('INR');
 
-  const handleCurrencySelect = (country: Country) => {
-    setCountryCode(country.cca2);
-    setSelectedCurrency(country.currency?.[0] || country.cca2);
+  const handleCurrencySelect = (selected: Country) => {
+    setCountryCode(selected.cca2);
+    setCountry(selected);
+    setSelectedCurrency(selected.currency?.[0] || selected.cca2);
   };
 
   const handleNext = () => {
@@ -76,27 +74,15 @@ const MonthlyEarningScreen: React.FC = () => {
             highlightWidth={88}
           />
 
-          {/* Currency Selector */}
-          <TouchableOpacity
-            style={[
-              styles.currencySelector,
-              { backgroundColor: colors.inputBackground },
-            ]}
-            onPress={() => setShowCurrencyPicker(true)}
-            activeOpacity={0.7}
-          >
-            <Text
-              style={[
-                styles.currencySelectorText,
-                { color: colors.inputIconSecondary },
-              ]}
-            >
-              {selectedCurrency || 'Select Currency'}
-            </Text>
-            <Svg width={15} height={14} viewBox="0 0 15 14">
-              <Polygon points="7.5,14 0,0 15,0" fill={colors.fieldText} />
-            </Svg>
-          </TouchableOpacity>
+          {/* Currency locked to INR — disabled until worldwide release */}
+          <CountryPickerInput
+            variant="currency"
+            countryCode={countryCode}
+            country={country}
+            onSelect={handleCurrencySelect}
+            disabled
+            style={styles.currencyPicker}
+          />
 
           {/* Salary Range Selection */}
 
@@ -121,7 +107,7 @@ const MonthlyEarningScreen: React.FC = () => {
             <Text
               style={[styles.checkboxLabel, { color: colors.textDisabled }]}
             >
-              Don't show
+              Don't show on my profile
             </Text>
           </TouchableOpacity>
         </View>
@@ -134,30 +120,6 @@ const MonthlyEarningScreen: React.FC = () => {
         />
       </ScrollView>
 
-      {/* Currency Picker Modal */}
-      <CountryPicker
-        countryCode={countryCode}
-        withFilter
-        withFlag
-        withCurrency={true}
-        withCountryNameButton={false}
-        withAlphaFilter={false}
-        withCallingCode={false}
-        withEmoji
-        onSelect={abc => console.log('country selected', abc)}
-        visible={showCurrencyPicker}
-        onClose={() => setShowCurrencyPicker(false)}
-        containerButtonStyle={styles.pickerButton}
-        theme={{
-          fontFamily: 'Sofia Pro',
-          fontSize: 16,
-          backgroundColor: colors.inputBackground,
-          onBackgroundTextColor: colors.fieldText,
-          primaryColor: colors.accent,
-          primaryColorVariant: colors.accentSecondary,
-          filterPlaceholderTextColor: colors.placeholder,
-        }}
-      />
     </SafeAreaView>
   );
 };
@@ -173,25 +135,8 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: wp('10%'),
   },
-  currencySelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 48,
-    borderRadius: 6,
-    paddingHorizontal: 16,
+  currencyPicker: {
     marginBottom: hp('2%'),
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 7 },
-    shadowOpacity: 0.07,
-    shadowRadius: 64,
-    elevation: 5,
-  },
-  currencySelectorText: {
-    fontFamily: 'Comfortaa-Regular',
-    fontSize: 15,
-    lineHeight: 20,
-    color: '#D0C9D6',
   },
   checkboxContainer: {
     flexDirection: 'row',

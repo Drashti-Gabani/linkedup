@@ -16,12 +16,51 @@ import { wp, hp } from '../utils/responsive';
 import NextButton from '../components/NextButton';
 import UserIcon from '../components/icons/UserIcon';
 import EmailIcon from '../components/icons/EmailIcon';
-import CheckmarkIcon from '../components/icons/CheckmarkIcon';
 import DatePickerInput from '../components/DatePickerInput';
 import { AuthStackNavigationProp } from '../navigation/types';
 import { useNavigation } from '@react-navigation/native';
 import ScreenTitle from '../components/ScreenTitle';
 import { AppImage } from '../utils/AppImage';
+import AppTextInput from '../components/AppTextInput';
+
+// ---------------------------------------------------------------------------
+// Validation helpers
+// ---------------------------------------------------------------------------
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const NAME_REGEX = /^[a-zA-Z\s'-]+$/;
+
+type SignUpErrors = {
+  firstName?: string;
+  email?: string;
+  birthdate?: string;
+  bio?: string;
+};
+
+const validateSignUp = (
+  firstName: string,
+  email: string,
+  birthdate: string,
+  bio: string,
+): SignUpErrors => {
+  const errors: SignUpErrors = {};
+  if (!firstName.trim()) {
+    errors.firstName = 'First name is required';
+  } else if (!NAME_REGEX.test(firstName.trim())) {
+    errors.firstName = 'First name can only contain letters';
+  }
+  if (!email.trim()) {
+    errors.email = 'Email is required';
+  } else if (!EMAIL_REGEX.test(email.trim())) {
+    errors.email = 'Enter a valid email address';
+  }
+  if (!birthdate) {
+    errors.birthdate = 'Date of birth is required';
+  }
+  if (!bio.trim()) {
+    errors.bio = 'Tell us a little about yourself';
+  }
+  return errors;
+};
 
 const SignUpScreen: React.FC = () => {
   const navigation = useNavigation<AuthStackNavigationProp>();
@@ -32,44 +71,50 @@ const SignUpScreen: React.FC = () => {
   const [birthdate, setBirthdate] = useState('');
   const [bio, setBio] = useState('');
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
+  const [errors, setErrors] = useState<SignUpErrors>({});
+  const [submitted, setSubmitted] = useState(false);
 
   // Refs for scrolling
   const scrollViewRef = useRef<ScrollView>(null);
   const bioInputRef = useRef<TextInput>(null);
 
-  // Show checkmark when field has value
-  const showFirstNameCheck = firstName.length > 0;
-  const showEmailCheck = email.length > 0;
+  // Checkmarks only when field is genuinely valid
+  const showFirstNameCheck = firstName.trim().length > 0 && NAME_REGEX.test(firstName.trim());
+  const showEmailCheck = EMAIL_REGEX.test(email.trim());
   const showBirthdateCheck = birthdate.length > 0;
-  const showBioCheck = bio.length > 0;
+  const showBioCheck = bio.trim().length > 0;
 
   // Infinite carousel animation
   const { card0Style, card1Style, card2Style, cardImages, cardSizes } =
     useInfiniteCarousel();
 
+  // Clear error for a field as the user types (only after first submit attempt)
+  const clearError = (field: keyof SignUpErrors) => {
+    if (submitted) setErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
   const handleNext = () => {
+    setSubmitted(true);
+    const validationErrors = validateSignUp(firstName, email, birthdate, bio);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
     navigation.navigate('OTP');
   };
 
-  const handleLogin = () => {
-    navigation.navigate('Login');
-  };
+  const handleLogin = () => navigation.navigate('Login');
 
   const handleBioFocus = () => {
     setFocusedInput('bio');
-    // Scroll to show bio field above keyboard
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd({ animated: true });
     }, 100);
   };
 
-  const handleBioBlur = () => {
-    setFocusedInput(null);
-  };
+  const handleBioBlur = () => setFocusedInput(null);
 
-  const handleBioSubmit = () => {
-    bioInputRef.current?.blur();
-  };
+  const handleBioSubmit = () => bioInputRef.current?.blur();
 
   return (
     <KeyboardAvoidingView
@@ -178,102 +223,42 @@ const SignUpScreen: React.FC = () => {
                 {/* Input Fields */}
                 <View style={styles.inputsContainer}>
                   {/* First Name Input */}
-                  <View style={styles.inputGroup}>
-                    <Text
-                      style={[
-                        styles.labelText,
-                        { color: colors.accentTertiary },
-                      ]}
-                    >
-                      FIRST NAME
-                    </Text>
-                    <View
-                      style={[
-                        styles.inputWrapper,
-                        { backgroundColor: colors.fieldBackground },
-                        focusedInput === 'firstName' && [
-                          styles.inputWrapperFocused,
-                          { borderColor: colors.accent },
-                        ],
-                        !isDark &&
-                          focusedInput !== 'firstName' && [
-                            styles.inputWrapperLight,
-                            { borderColor: colors.borderLight },
-                          ],
-                      ]}
-                    >
-                      <UserIcon
-                        width={13}
-                        height={14}
-                        color={colors.inputIcon}
-                      />
-                      <TextInput
-                        style={[styles.input, { color: colors.textPrimary }]}
-                        placeholder="Name"
-                        placeholderTextColor={colors.placeholder}
-                        value={firstName}
-                        onChangeText={setFirstName}
-                        onFocus={() => setFocusedInput('firstName')}
-                        onBlur={() => setFocusedInput(null)}
-                      />
-                      {showFirstNameCheck && (
-                        <CheckmarkIcon width={10} height={8} />
-                      )}
-                    </View>
-                  </View>
+                  <AppTextInput
+                    label="FIRST NAME"
+                    placeholder="First Name"
+                    value={firstName}
+                    onChangeText={v => { setFirstName(v); clearError('firstName'); }}
+                    leftIcon={<UserIcon width={13} height={14} color={colors.inputIcon} />}
+                    showCheckmark={showFirstNameCheck}
+                    isFocused={focusedInput === 'firstName'}
+                    onFocus={() => setFocusedInput('firstName')}
+                    onBlur={() => setFocusedInput(null)}
+                    error={errors.firstName}
+                    containerStyle={styles.inputGroup}
+                  />
 
                   {/* Email Input */}
-                  <View style={styles.inputGroup}>
-                    <Text
-                      style={[
-                        styles.labelText,
-                        { color: colors.accentTertiary },
-                      ]}
-                    >
-                      EMAIL
-                    </Text>
-                    <View
-                      style={[
-                        styles.inputWrapper,
-                        { backgroundColor: colors.fieldBackground },
-                        focusedInput === 'email' && [
-                          styles.inputWrapperFocused,
-                          { borderColor: colors.accent },
-                        ],
-                        !isDark &&
-                          focusedInput !== 'email' && [
-                            styles.inputWrapperLight,
-                            { borderColor: colors.borderLight },
-                          ],
-                      ]}
-                    >
-                      <EmailIcon
-                        width={16}
-                        height={12}
-                        color={colors.inputIcon}
-                      />
-                      <TextInput
-                        style={[styles.input, { color: colors.textPrimary }]}
-                        placeholder="jordan@defects.cc"
-                        placeholderTextColor={colors.placeholder}
-                        value={email}
-                        onChangeText={setEmail}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        onFocus={() => setFocusedInput('email')}
-                        onBlur={() => setFocusedInput(null)}
-                      />
-                      {showEmailCheck && (
-                        <CheckmarkIcon width={10} height={8} />
-                      )}
-                    </View>
-                  </View>
+                  <AppTextInput
+                    label="EMAIL"
+                    placeholder="jordan@defects.cc"
+                    value={email}
+                    onChangeText={v => { setEmail(v); clearError('email'); }}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    leftIcon={<EmailIcon width={16} height={12} color={colors.inputIcon} />}
+                    showCheckmark={showEmailCheck}
+                    isFocused={focusedInput === 'email'}
+                    onFocus={() => setFocusedInput('email')}
+                    onBlur={() => setFocusedInput(null)}
+                    error={errors.email}
+                    containerStyle={styles.inputGroup}
+                  />
 
                   {/* Birthdate Input */}
                   <View style={styles.inputGroup}>
                     <DatePickerInput
                       value={birthdate}
-                      onChange={setBirthdate}
+                      onChange={v => { setBirthdate(v); clearError('birthdate'); }}
                       placeholder="dd/mm/yy"
                       label="BIRTHDATE"
                       showCheckmark={showBirthdateCheck}
@@ -282,57 +267,31 @@ const SignUpScreen: React.FC = () => {
                       onBlur={() => setFocusedInput(null)}
                       containerStyle={styles.datePickerContainer}
                       inputWrapperStyle={styles.datePickerInputWrapper}
+                      error={errors.birthdate}
                     />
                   </View>
 
                   {/* Bio Input */}
-                  <View style={styles.bioInputGroup}>
-                    <Text
-                      style={[
-                        styles.labelText,
-                        { color: colors.accentTertiary },
-                      ]}
-                    >
-                      BIO
-                    </Text>
-                    <View
-                      style={[
-                        styles.bioInputWrapper,
-                        { backgroundColor: colors.fieldBackground },
-                        focusedInput === 'bio' && [
-                          styles.inputWrapperFocused,
-                          { borderColor: colors.accent },
-                        ],
-                        !isDark &&
-                          focusedInput !== 'bio' && [
-                            styles.inputWrapperLight,
-                            { borderColor: colors.borderLight },
-                          ],
-                      ]}
-                    >
-                      <TextInput
-                        ref={bioInputRef}
-                        style={[styles.bioInput, { color: colors.textPrimary }]}
-                        placeholder="Tell us about yourself..."
-                        placeholderTextColor={colors.placeholder}
-                        value={bio}
-                        onChangeText={setBio}
-                        multiline
-                        returnKeyType="done"
-                        blurOnSubmit={true}
-                        numberOfLines={4}
-                        textAlignVertical="top"
-                        onFocus={handleBioFocus}
-                        onBlur={handleBioBlur}
-                        onSubmitEditing={handleBioSubmit}
-                      />
-                      {showBioCheck && (
-                        <View style={styles.bioCheckmark}>
-                          <CheckmarkIcon width={10} height={8} />
-                        </View>
-                      )}
-                    </View>
-                  </View>
+                  <AppTextInput
+                    ref={bioInputRef}
+                    label="BIO"
+                    placeholder="Tell us about yourself..."
+                    value={bio}
+                    onChangeText={v => { setBio(v); clearError('bio'); }}
+                    multiline
+                    maxLength={300}
+                    returnKeyType="done"
+                    blurOnSubmit={true}
+                    numberOfLines={4}
+                    textAlignVertical="top"
+                    showCheckmark={showBioCheck}
+                    isFocused={focusedInput === 'bio'}
+                    onFocus={handleBioFocus}
+                    onBlur={handleBioBlur}
+                    onSubmitEditing={handleBioSubmit}
+                    error={errors.bio}
+                    containerStyle={styles.bioInputGroup}
+                  />
                 </View>
 
                 {/* Privacy Notice */}
@@ -470,82 +429,10 @@ const styles = StyleSheet.create({
     marginBottom: hp('1.2%'),
   },
   inputGroup: {
-    height: 72,
     position: 'relative',
   },
   bioInputGroup: {
-    minHeight: 140,
     position: 'relative',
-  },
-  labelText: {
-    fontFamily: 'Comfortaa-Regular',
-    fontSize: 11,
-    textTransform: 'uppercase',
-    position: 'absolute',
-    top: 0,
-    left: 17,
-    zIndex: 1,
-  },
-  inputWrapper: {
-    marginTop: 24,
-    height: 48,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 18,
-    gap: 14,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  inputWrapperLight: {
-    borderWidth: 1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  inputWrapperFocused: {
-    borderWidth: 1.5,
-  },
-  input: {
-    fontFamily: 'Comfortaa-SemiBold',
-    fontSize: 16,
-    lineHeight: 20,
-    paddingVertical: 0,
-    flex: 1,
-  },
-  bioInputWrapper: {
-    marginTop: 24,
-    minHeight: 100,
-    borderRadius: 10,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingHorizontal: 18,
-    paddingTop: 14,
-    paddingBottom: 14,
-    gap: 14,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-    position: 'relative',
-  },
-  bioInput: {
-    fontFamily: 'Comfortaa-SemiBold',
-    fontSize: 16,
-    lineHeight: 20,
-    paddingVertical: 0,
-    paddingTop: 0,
-    flex: 1,
-    minHeight: 72,
-    maxHeight: 120,
-  },
-  bioCheckmark: {
-    position: 'absolute',
-    top: 14,
-    right: 18,
   },
   privacyText: {
     fontFamily: 'Comfortaa-Regular',
@@ -554,12 +441,12 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   datePickerContainer: {
-    height: 72,
     position: 'relative',
   },
   datePickerInputWrapper: {
     marginTop: 24,
   },
 });
+
 
 export default SignUpScreen;

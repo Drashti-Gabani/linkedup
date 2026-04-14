@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
@@ -16,13 +15,14 @@ import { wp, hp } from '../utils/responsive';
 import { AuthStackNavigationProp } from '../navigation/types';
 import BackButton from '../components/BackButton';
 import GradientButton from '../components/GradientButton';
+import AppTextInput from '../components/AppTextInput';
 
 const OTPVerifyScreen: React.FC = () => {
   const { colors, gradients } = useTheme();
   const navigation = useNavigation<AuthStackNavigationProp>();
 
   const [otp, setOtp] = useState(['', '', '', '']);
-  const inputRefs = useRef<Array<TextInput | null>>([]);
+  const inputRefs = useRef<Array<any>>([]);
 
   const handleOtpChange = (value: string, index: number) => {
     if (value.length > 1) {
@@ -49,7 +49,7 @@ const OTPVerifyScreen: React.FC = () => {
     // Handle OTP verification logic
     console.log('OTP:', otp.join(''));
     // Navigate to RelationshipType screen after verification
-    navigation.navigate('RelationshipType');
+    navigation.navigate('GenderSelection');
   };
 
   const handleResend = () => {
@@ -124,7 +124,8 @@ const OTPVerifyScreen: React.FC = () => {
                         angle={242}
                         style={[styles.otpBox, styles.otpBoxFilled]}
                       >
-                        <TextInput
+                        <AppTextInput
+                          variant="unstyled"
                           ref={ref => {
                             inputRefs.current[index] = ref;
                           }}
@@ -152,7 +153,8 @@ const OTPVerifyScreen: React.FC = () => {
                           },
                         ]}
                       >
-                        <TextInput
+                        <AppTextInput
+                          variant="unstyled"
                           ref={ref => {
                             inputRefs.current[index] = ref;
                           }}

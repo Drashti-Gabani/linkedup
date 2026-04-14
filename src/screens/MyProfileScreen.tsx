@@ -5,10 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
+  Dimensions,
 } from 'react-native';
 import { AppImage } from '../utils/AppImage';
 import { AppImageBackground } from '../utils/AppImageBackground';
@@ -19,6 +18,7 @@ import ProfileStatsCard from '../components/ProfileStatsCard';
 import ProfileSectionCard from '../components/ProfileSectionCard';
 import FullScreenImageViewer from '../components/FullScreenImageViewer';
 import DatePickerInput from '../components/DatePickerInput';
+import AppTextInput from '../components/AppTextInput';
 import { MainStackNavigationProp } from '../navigation/types';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -162,7 +162,8 @@ const MyProfileScreen: React.FC = () => {
                   </Svg>
                 </View>
                 {isEditingFirstName ? (
-                  <TextInput
+                  <AppTextInput
+                    variant="unstyled"
                     style={[styles.fieldInput, { color: colors.fieldText }]}
                     value={firstName}
                     onChangeText={setFirstName}
@@ -210,11 +211,12 @@ const MyProfileScreen: React.FC = () => {
                   </Svg>
                 </View>
                 {isEditingEmail ? (
-                  <TextInput
+                  <AppTextInput
+                    variant="unstyled"
                     style={[styles.fieldInput, { color: colors.fieldText }]}
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="Email"
+                    placeholder="Personal Email"
                     placeholderTextColor={colors.placeholder}
                     keyboardType="email-address"
                     autoCapitalize="none"

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   Platform,
@@ -14,6 +13,7 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 import { useTheme } from '../hooks/useTheme';
 import CalendarIcon from './icons/CalendarIcon';
+import AppTextInput from './AppTextInput';
 import CheckmarkIcon from './icons/CheckmarkIcon';
 
 interface DatePickerInputProps {
@@ -34,6 +34,8 @@ interface DatePickerInputProps {
   showLabel?: boolean;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /** Validation error message — shows red border + text below the input */
+  error?: string;
 }
 
 const DatePickerInput: React.FC<DatePickerInputProps> = ({
@@ -54,6 +56,7 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
   showLabel = true,
   open,
   onOpenChange,
+  error,
 }) => {
   const { colors, isDark } = useTheme();
   const [showPicker, setShowPicker] = useState(false);
@@ -223,8 +226,9 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
               styles.inputWrapperFocused,
               { borderColor: colors.accent },
             ],
+            error && { borderWidth: 1.5, borderColor: '#FF4D4D' },
             !isDark &&
-              !isFocused && [
+              !isFocused && !error && [
                 styles.inputWrapperLight,
                 { borderColor: colors.borderLight },
               ],
@@ -236,7 +240,8 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
             height={14}
             color={iconColor || colors.inputIcon}
           />
-          <TextInput
+          <AppTextInput
+            variant="unstyled"
             style={[styles.input, { color: colors.textPrimary }, inputStyle]}
             placeholder={placeholder}
             placeholderTextColor={colors.placeholder}
@@ -327,6 +332,10 @@ const DatePickerInput: React.FC<DatePickerInputProps> = ({
           accentColor={colors.textPrimary}
         />
       )}
+      {/* Error message */}
+      {error ? (
+        <Text style={styles.errorText}>{error}</Text>
+      ) : null}
     </View>
   );
 };
@@ -401,6 +410,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 4,
     paddingHorizontal: 8,
+  },
+  errorText: {
+    fontFamily: 'Comfortaa-Regular',
+    fontSize: 12,
+    color: '#FF4D4D',
+    marginTop: 4,
+    paddingLeft: 4,
   },
 });
 
